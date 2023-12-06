@@ -1,0 +1,6 @@
+devel_space: /home/dominik/drl_ws/devel
+install: false
+install_space: /home/dominik/drl_ws/install
+profile: default
+source_space: /home/dominik/drl_ws/src
+workspace: /home/dominik/drl_ws

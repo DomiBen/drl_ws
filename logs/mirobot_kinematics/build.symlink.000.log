@@ -1,0 +1,3 @@
+Symlinking /home/dominik/drl_ws/devel/lib/pkgconfig/mirobot_kinematics.pc
+Symlinking /home/dominik/drl_ws/devel/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig.cmake
+Symlinking /home/dominik/drl_ws/devel/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig-version.cmake

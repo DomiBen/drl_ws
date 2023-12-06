@@ -1,0 +1,5 @@
+[31m[1mCMake Error[0m at /home/dominik/drl_ws/src/trajectory_planner/CMakeLists.txt:59 (add_service_files):
+  Unknown CMake command "add_service_files".
+
+
+make: *** [Makefile:670: cmake_check_build_system] Fehler 1

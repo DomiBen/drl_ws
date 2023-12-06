@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/dominik/drl_ws/devel/.private/mirobot_setup/setup.sh

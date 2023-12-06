@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/dominik/drl_ws/devel/include/**",
+        "/home/dominik/mujoco_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/dominik/drl_ws/src/mirobot_kinematics/include/**",
+        "/home/dominik/mujoco_ws/src/mujoco_ros/include/**",
+        "/home/dominik/mujoco_ws/src/mujoco_ros_control/include/**",
+        "/home/dominik/mujoco_ws/src/mujoco_ros_mocap_control_plugin-master/include/**",
+        "/home/dominik/mujoco_ws/src/mujoco_ros_sensors/include/**",
+        "/home/dominik/drl_ws/src/trajectory_planner/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

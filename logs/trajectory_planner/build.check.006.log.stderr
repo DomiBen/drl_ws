@@ -1,0 +1,5 @@
+[31m[1mCMake Error[0m at /home/dominik/drl_ws/src/trajectory_planner/CMakeLists.txt:197 (gensrv):
+  Unknown CMake command "gensrv".
+
+
+make: *** [Makefile:670: cmake_check_build_system] Fehler 1
