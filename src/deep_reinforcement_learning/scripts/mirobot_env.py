@@ -31,7 +31,7 @@ class MirobotEnv(gym.Env):
         self.action_space = spaces.Box(low=np.append(min_angles_deg, [0]), 
                                        high=np.append(max_angles_deg, [2000]), dtype=np.float32)
         # Observation Space: all Values between the minimum and maximum angles Are possible; Box with diffent sized Vectors
-        self.observation_space = spaces.Box(low=np.array(min_angles_deg, dtype=np.float32),
+        self.observation_space = spaces.Box(low=np.array(min_angles_deg, dtype=np.float32), #TODO wrong values
                                             high=np.array(max_angles_deg, dtype=np.float32), dtype=np.float32)
         while(mirobot.current_pose == None): 
             sleep(1)
@@ -48,6 +48,7 @@ class MirobotEnv(gym.Env):
             self.done = False
         # creating reward -> NOT FINISHED needs more feature engineering
         self.reward = self.getReward()
+        self.score = self.score + self.reward
         info = {}
         return self.observation, self.reward, info, self.done, mirobot.average_force, mirobot.average_torque #terminated, truncated
 
