@@ -7,7 +7,7 @@ import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Pose
-from std_msgs.msg import Duration, Header
+#from std_msgs.msg import Duration, Header
 from trajectory_planner.srv import *
 from tf.transformations import euler_from_quaternion
 
@@ -82,14 +82,14 @@ class ServiceServer():
     def execute_movement(self, msg):
         iteration = 0
         if self.joint_angles_legal(msg):
-            print("Start with the execution of the movement")
+            print("[MirobotServer] Start with the execution of the movement")
             while self.wait_until_reached(msg):
                 if iteration < self.max_interation_until_timeout:
                     self.pub.publish(msg)
                     self.rate.sleep()
                     iteration = iteration+1
                 else:
-                    print("Timeout while executing movement!")
+                    print("[MirobotServer] Timeout while executing movement!")
                     return 0
             return 1
         return 0
@@ -100,15 +100,15 @@ class ServiceServer():
         for current, goal in zip(mirobot.current_joint_states_rad, target.points[0].positions):
             if abs(current - goal) > 0.1:
                 return True
-        print("Goal reached:", mirobot.current_pose, "!")
+        print("[MirobotServer] Goal reached:", mirobot.current_pose, "!")
         return False
 
     def joint_angles_legal(self, msg):
         for i in range(len(msg.points[0].positions)):
             if msg.points[0].positions[i] < mirobot.min_angles_rad[i] or msg.points[0].positions[i] > mirobot.max_angles_rad[i]:
-                print("Joint angles not allowed: Terminating movement!")
+                print("[MirobotServer] Joint angles not allowed: Terminating movement!")
                 return False
-        print("Joint angles allowed: Proceed to execution!")
+        print("[MirobotServer] Joint angles allowed: Proceed to execution!")
         return True
 
 class Mirobot():

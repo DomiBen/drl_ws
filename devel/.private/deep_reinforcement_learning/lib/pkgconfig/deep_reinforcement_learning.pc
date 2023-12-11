@@ -1,0 +1,8 @@
+prefix=/home/dominik/drl_ws/devel/.private/deep_reinforcement_learning
+
+Name: deep_reinforcement_learning
+Description: Description of deep_reinforcement_learning
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
