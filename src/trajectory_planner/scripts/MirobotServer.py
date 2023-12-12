@@ -19,7 +19,7 @@ class ServiceServer():
         self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
         #Setting up Services
-        self.setJointSrv = rospy.Service('/MirobotServer/SetJointAbsolutCmd', SetJointCmd, self.set_joint_angles)
+        self.setJointSrv = rospy.Service('/MirobotServer/SetJointAbsoluteCmd', SetJointCmd, self.set_joint_angles)
         self.setHomeSrv = rospy.Service('/MirobotServer/SetHomeCmd', SetHomeCmd, self.home_robot)
         self.moveJointSrv = rospy.Service('/MirobotServer/SetJointRelativeCmd', SetJointCmd, self.move_joints)
         self.getposeSrv = rospy.Service('/MirobotServer/GetPoseCmd', GetPoseCmd, self.get_pose)

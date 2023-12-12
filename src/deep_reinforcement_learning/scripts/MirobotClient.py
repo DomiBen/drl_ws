@@ -67,7 +67,7 @@ class MirobotClient():
         self.record = True
         #Service call
         try:
-            set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsolutCmd", SetJointCmd)
+            set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
             req = SetJointCmdRequest()
             # type(action) > np.ndarray
             req.jointAngle_1 = action[0]
