@@ -1,22 +1,22 @@
 from mirobot_env import *
+from stable_baselines3.common.env_checker import check_env
 import numpy as np
 
 env = MirobotEnv()
-env.reset()
-print(env)
 
-t_list = []
-f_list = []
+#check_env(env)
+
+env.reset()
+print("ENV: ",env)
+
+r_list = []
+
 i = 0
 while(i < 2):
     a  = env.action_space.sample()
     print(a)
-    a, b, c, d, f, t = env.step(a)
-    t_list.insert(i, t)
-    f_list.insert(i, f)
+    obs, reward, terminated, truncated, info = env.step(a)
+    r_list.insert(i, r)
     i = i+1
     
 print(env.score)
-
-#print(t_list)
-#print(f_list)

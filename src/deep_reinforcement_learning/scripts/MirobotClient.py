@@ -31,7 +31,8 @@ class MirobotClient():
         #rospy setup 
         rospy.init_node(NAME)
         rospy.wait_for_service("/MirobotServer/SetJointRelativeCmd")
-        print("[MirobotClient] /MirobotServer/SetJointRelativeCmd available")
+        rospy.wait_for_service("/MirobotServer/SetJointAbsoluteCmd")
+        #print("[MirobotClient] /MirobotServer/SetJointRelativeCmd available")
     
     def force_callback(self, data): 
         if self.record:
@@ -66,6 +67,7 @@ class MirobotClient():
     def executeAction(self, action):
         self.record = True
         #Service call
+        print("[MirobotClient] Calling Service")
         try:
             set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
             req = SetJointCmdRequest()
