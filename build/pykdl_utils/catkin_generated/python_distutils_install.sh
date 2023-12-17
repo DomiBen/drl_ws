@@ -13,21 +13,21 @@ fi
 
 echo_and_run() { echo "+ $@" ; "$@" ; }
 
-echo_and_run cd "/home/dominik/drl_ws/src/hrl-kdl/pykdl_utils"
+echo_and_run cd "/home/domi/drl_ws/src/hrl-kdl/pykdl_utils"
 
 # ensure that Python install destination exists
-echo_and_run mkdir -p "$DESTDIR/home/dominik/drl_ws/install/lib/python3/dist-packages"
+echo_and_run mkdir -p "$DESTDIR/home/domi/drl_ws/install/lib/python3/dist-packages"
 
 # Note that PYTHONPATH is pulled from the environment to support installing
 # into one location when some dependencies were installed in another
 # location, #123.
 echo_and_run /usr/bin/env \
-    PYTHONPATH="/home/dominik/drl_ws/install/lib/python3/dist-packages:/home/dominik/drl_ws/build/pykdl_utils/lib/python3/dist-packages:$PYTHONPATH" \
-    CATKIN_BINARY_DIR="/home/dominik/drl_ws/build/pykdl_utils" \
+    PYTHONPATH="/home/domi/drl_ws/install/lib/python3/dist-packages:/home/domi/drl_ws/build/pykdl_utils/lib/python3/dist-packages:$PYTHONPATH" \
+    CATKIN_BINARY_DIR="/home/domi/drl_ws/build/pykdl_utils" \
     "/usr/bin/python3" \
-    "/home/dominik/drl_ws/src/hrl-kdl/pykdl_utils/setup.py" \
+    "/home/domi/drl_ws/src/hrl-kdl/pykdl_utils/setup.py" \
      \
-    build --build-base "/home/dominik/drl_ws/build/pykdl_utils" \
+    build --build-base "/home/domi/drl_ws/build/pykdl_utils" \
     install \
     --root="${DESTDIR-/}" \
-    --install-layout=deb --prefix="/home/dominik/drl_ws/install" --install-scripts="/home/dominik/drl_ws/install/bin"
+    --install-layout=deb --prefix="/home/domi/drl_ws/install" --install-scripts="/home/domi/drl_ws/install/bin"

@@ -1,4 +1,4 @@
-prefix=/home/dominik/drl_ws/install
+prefix=/home/domi/drl_ws/install
 
 Name: pykdl_utils
 Description: Description of pykdl_utils

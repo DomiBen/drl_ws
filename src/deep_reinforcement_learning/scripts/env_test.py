@@ -12,10 +12,11 @@ print("ENV: ",env)
 r_list = []
 
 i = 0
-while(i < 2):
+while(i < 10):
     a  = env.action_space.sample()
     print(a)
     obs, reward, terminated, truncated, info = env.step(a)
+    print(obs, reward, terminated, truncated)
     r_list.insert(i, r)
     i = i+1
     

@@ -1,1 +1,0 @@
-/home/dominik/drl_ws/devel/.private/trajectory_planner/lib/trajectory_planner/trajectory_planner_node.py

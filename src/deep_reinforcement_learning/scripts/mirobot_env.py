@@ -20,7 +20,6 @@ mirobot = MirobotClient()
 robot = URDF.from_parameter_server()
 kdl_kin = KDLKinematics(robot, "base_link", "link6")
 
-N_DISCRETE_ACTIONS = 2
 
 # Custom Environment that follows gym interface
 class MirobotEnv(gym.Env):
@@ -36,13 +35,14 @@ class MirobotEnv(gym.Env):
             sleep(1)
 
     def step(self, action):
-        print("[MirobotEnv] [step]      beginning step")
+        #print("[MirobotEnv] [step]      beginning step")
         mirobot.reset_ft_record()
-        mirobot.executeAction(action)
+        action_response = mirobot.executeAction(action)
         # observe outcome and check if goal is reached
         observation = mirobot.getObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
         # check if terminated 
         if self.goalReached(observation):
+            print('[MirobotEnv] [goalReached] Goal was reached')
             self.terminated = True
         else: 
             self.terminated = False
@@ -50,7 +50,7 @@ class MirobotEnv(gym.Env):
         self.reward = self.getReward()
         self.score = self.score + self.reward
         # check if Truncated
-        if observation[2] < 1:
+        if observation[2] < 1 or action_response == -1:
             self.truncated = True
         else: 
             self.truncated = False
@@ -66,7 +66,7 @@ class MirobotEnv(gym.Env):
         self.cart_goal = np.array(self.generateGoal(), dtype=np.float32) # random values for x, y, z, r, p, y
         pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
-        self.previous_orientation_diff = math.sqrt(sum([pow(x,2) for x in pose_diff[3:]])) # euclidean distance -> TODO: check if other solution could be smart
+        self.previous_orientation_diff =sum(pose_diff[3:])# euclidean distance
         #observation
         observation = mirobot.getObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
         mirobot.reset_ft_record()
@@ -84,7 +84,7 @@ class MirobotEnv(gym.Env):
         pose = kdl_kin.forward(rand_joint_states)
         linear = translation_from_matrix(pose)
         euler = euler_from_matrix(pose)
-        goal = [linear[0]*1000, linear[1]*1000, linear[2]*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi/60]
+        goal = [linear[0]*1000, linear[1]*1000, linear[2]*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
         #print("[MirbotEnv][generateGoal] goal: ", goal)
         return goal
     
@@ -96,10 +96,10 @@ class MirobotEnv(gym.Env):
         orientation_diff = sum(pose_diff[3:]) # sum of angle differcences
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
-        force = (mirobot.average_force + mirobot.peak_force) * 10/2
-        torque = (mirobot.average_torque + mirobot.peak_torque) * 200/2
-        #print('[MirobotEnv] [getReward] Individual rewards  :', distance_change, orientation_change, force, torque)
-        print('[MirobotEnv] [getReward] Overall rewards     :', distance_change + orientation_change/distance - force - torque)
+        force = (mirobot.average_force + mirobot.peak_force)
+        torque = (mirobot.average_torque + mirobot.peak_torque) * 5
+        print('[MirobotEnv] [getReward] Individual rewards  :', distance_change, orientation_change, force, torque)
+        #print('[MirobotEnv] [getReward] Overall rewards     :', distance_change + orientation_change/distance - force - torque)
         if distance > 10.0:
             return  distance_change + orientation_change/distance - force - torque
         return  distance_change + orientation_change - force - torque 
@@ -119,11 +119,11 @@ class MirobotEnv(gym.Env):
         torque = mirobot.average_torque + mirobot.peak_force
 
         reward_array = np.array([distance_change, orientation_change/(distance/10), force, torque]) # for a high distance to the goal position, orientation doesn't matter
-        #print('[MirobotEnv] [getNormalizedReward] Individual rewards:', reward_array)
+        print('[MirobotEnv] [getNormalizedReward] Individual rewards:', reward_array)
         normalized_reward_array = preprocessing.normalize(reward_array)
 
-        reward = np.sum(normalized_reward_array[:2]) - np.sum(normalized_reward_array[2:])
-        #print('[MirobotEnv] [getNormalizedReward] Overall reward    :', reward)
+        reward = sum(normalized_reward_array[:2]) - sum(normalized_reward_array[2:])
+        print('[MirobotEnv] [getNormalizedReward] Overall reward    :', reward)
         return reward
 
     def goalReached(self, obs):
