@@ -1,5 +1,0 @@
-[31m[1mCMake Error[0m at /home/dominik/drl_ws/src/trajectory_planner/CMakeLists.txt:52 (add_message_files):
-  Unknown CMake command "add_message_files".
-
-
-make: *** [Makefile:670: cmake_check_build_system] Fehler 1

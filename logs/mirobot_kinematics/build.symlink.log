@@ -1,5 +1,5 @@
-Linked: (/home/dominik/drl_ws/devel/.private/mirobot_kinematics/lib/mirobot_kinematics/cmake.lock, /home/dominik/drl_ws/devel/lib/mirobot_kinematics/cmake.lock)
-Linked: (/home/dominik/drl_ws/devel/.private/mirobot_kinematics/lib/mirobot_kinematics/forward_kinematics_node.py, /home/dominik/drl_ws/devel/lib/mirobot_kinematics/forward_kinematics_node.py)
-Linked: (/home/dominik/drl_ws/devel/.private/mirobot_kinematics/lib/pkgconfig/mirobot_kinematics.pc, /home/dominik/drl_ws/devel/lib/pkgconfig/mirobot_kinematics.pc)
-Linked: (/home/dominik/drl_ws/devel/.private/mirobot_kinematics/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig.cmake, /home/dominik/drl_ws/devel/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig.cmake)
-Linked: (/home/dominik/drl_ws/devel/.private/mirobot_kinematics/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig-version.cmake, /home/dominik/drl_ws/devel/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig-version.cmake)
+Symlinking /home/domi/drl_ws/devel/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig-version.cmake
+Symlinking /home/domi/drl_ws/devel/share/mirobot_kinematics/cmake/mirobot_kinematicsConfig.cmake
+Symlinking /home/domi/drl_ws/devel/lib/mirobot_kinematics/forward_kinematics_node.py
+Symlinking /home/domi/drl_ws/devel/lib/mirobot_kinematics/cmake.lock
+Symlinking /home/domi/drl_ws/devel/lib/pkgconfig/mirobot_kinematics.pc

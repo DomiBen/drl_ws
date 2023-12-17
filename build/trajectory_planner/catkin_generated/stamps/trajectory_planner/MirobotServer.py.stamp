@@ -2,7 +2,6 @@
 NAME = 'MirobotServer'
 
 import math
-import queue
 import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from sensor_msgs.msg import JointState
@@ -19,15 +18,15 @@ class ServiceServer():
         self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
         #Setting up Services
-        self.setJointSrv = rospy.Service('/MirobotServer/SetJointAbsolutCmd', SetJointCmd, self.set_joint_angles)
+        self.setJointSrv = rospy.Service('/MirobotServer/SetJointAbsoluteCmd', SetJointCmd, self.set_joint_angles)
         self.setHomeSrv = rospy.Service('/MirobotServer/SetHomeCmd', SetHomeCmd, self.home_robot)
         self.moveJointSrv = rospy.Service('/MirobotServer/SetJointRelativeCmd', SetJointCmd, self.move_joints)
         self.getposeSrv = rospy.Service('/MirobotServer/GetPoseCmd', GetPoseCmd, self.get_pose)
 
-        self.max_interation_until_timeout = 50
+        self.max_interation_until_timeout = 500
 
         rospy.init_node(NAME)
-        self.rate = rospy.Rate(10)
+        self.rate = rospy.Rate(1000)
         rospy.spin()
     
     def move_joints(self, req):
@@ -39,7 +38,7 @@ class ServiceServer():
         return self.execute_movement(msg)
         
     def home_robot(self, req):
-        msg = self.get_JointTrajectory(0.0, 0.0, 0.0, 0.0, -1.57, 0.0, 10)
+        msg = self.get_JointTrajectory(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10)
         return self.execute_movement(msg)
 
     def set_joint_angles(self, req):
@@ -87,18 +86,19 @@ class ServiceServer():
                 if iteration < self.max_interation_until_timeout:
                     self.pub.publish(msg)
                     self.rate.sleep()
+                    print("[MirobotServer] Sending msg: ", iteration)
                     iteration = iteration+1
                 else:
                     print("[MirobotServer] Timeout while executing movement!")
-                    return 0
+                    return -1
             return 1
-        return 0
+        return -1
 
     def wait_until_reached(self, target):
         if mirobot.current_joint_states_rad is None:
             return True
         for current, goal in zip(mirobot.current_joint_states_rad, target.points[0].positions):
-            if abs(current - goal) > 0.1:
+            if abs(current - goal) > 0.2:
                 return True
         print("[MirobotServer] Goal reached:", mirobot.current_pose, "!")
         return False

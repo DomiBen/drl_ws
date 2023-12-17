@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dominik/drl_ws/src/deep_reinforcement_learning
+CMAKE_SOURCE_DIR = /home/domi/drl_ws/src/deep_reinforcement_learning
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dominik/drl_ws/build/deep_reinforcement_learning
+CMAKE_BINARY_DIR = /home/domi/drl_ws/build/deep_reinforcement_learning
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/dominik/drl_ws/build/deep_reinforcement_learning && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dominik/drl_ws/src/deep_reinforcement_learning /home/dominik/drl_ws/src/deep_reinforcement_learning /home/dominik/drl_ws/build/deep_reinforcement_learning /home/dominik/drl_ws/build/deep_reinforcement_learning /home/dominik/drl_ws/build/deep_reinforcement_learning/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/domi/drl_ws/build/deep_reinforcement_learning && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/domi/drl_ws/src/deep_reinforcement_learning /home/domi/drl_ws/src/deep_reinforcement_learning /home/domi/drl_ws/build/deep_reinforcement_learning /home/domi/drl_ws/build/deep_reinforcement_learning /home/domi/drl_ws/build/deep_reinforcement_learning/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 

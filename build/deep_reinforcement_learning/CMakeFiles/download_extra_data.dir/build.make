@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dominik/drl_ws/src/deep_reinforcement_learning
+CMAKE_SOURCE_DIR = /home/domi/drl_ws/src/deep_reinforcement_learning
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dominik/drl_ws/build/deep_reinforcement_learning
+CMAKE_BINARY_DIR = /home/domi/drl_ws/build/deep_reinforcement_learning
 
 # Utility rule file for download_extra_data.
 
@@ -67,6 +67,6 @@ CMakeFiles/download_extra_data.dir/clean:
 .PHONY : CMakeFiles/download_extra_data.dir/clean
 
 CMakeFiles/download_extra_data.dir/depend:
-	cd /home/dominik/drl_ws/build/deep_reinforcement_learning && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dominik/drl_ws/src/deep_reinforcement_learning /home/dominik/drl_ws/src/deep_reinforcement_learning /home/dominik/drl_ws/build/deep_reinforcement_learning /home/dominik/drl_ws/build/deep_reinforcement_learning /home/dominik/drl_ws/build/deep_reinforcement_learning/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/domi/drl_ws/build/deep_reinforcement_learning && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/domi/drl_ws/src/deep_reinforcement_learning /home/domi/drl_ws/src/deep_reinforcement_learning /home/domi/drl_ws/build/deep_reinforcement_learning /home/domi/drl_ws/build/deep_reinforcement_learning /home/domi/drl_ws/build/deep_reinforcement_learning/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/download_extra_data.dir/depend
 

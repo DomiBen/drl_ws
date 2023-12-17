@@ -1,4 +1,4 @@
-prefix=/home/dominik/drl_ws/install
+prefix=/home/domi/drl_ws/install
 
 Name: catkin_tools_prebuild
 Description: Description of catkin_tools_prebuild

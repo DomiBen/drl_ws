@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dominik/drl_ws/src/trajectory_planner
+CMAKE_SOURCE_DIR = /home/domi/drl_ws/src/trajectory_planner
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dominik/drl_ws/build/trajectory_planner
+CMAKE_BINARY_DIR = /home/domi/drl_ws/build/trajectory_planner
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/dominik/drl_ws/build/trajectory_planner && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dominik/drl_ws/src/trajectory_planner /home/dominik/drl_ws/src/trajectory_planner /home/dominik/drl_ws/build/trajectory_planner /home/dominik/drl_ws/build/trajectory_planner /home/dominik/drl_ws/build/trajectory_planner/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/domi/drl_ws/build/trajectory_planner && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/domi/drl_ws/src/trajectory_planner /home/domi/drl_ws/src/trajectory_planner /home/domi/drl_ws/build/trajectory_planner /home/domi/drl_ws/build/trajectory_planner /home/domi/drl_ws/build/trajectory_planner/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 

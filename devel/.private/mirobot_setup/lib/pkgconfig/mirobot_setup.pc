@@ -1,8 +1,0 @@
-prefix=/home/dominik/drl_ws/devel/.private/mirobot_setup
-
-Name: mirobot_setup
-Description: Description of mirobot_setup
-Version: 0.3.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

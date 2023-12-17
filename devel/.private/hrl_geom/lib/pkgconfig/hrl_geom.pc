@@ -1,4 +1,4 @@
-prefix=/home/dominik/drl_ws/devel/.private/hrl_geom
+prefix=/home/domi/drl_ws/devel/.private/hrl_geom
 
 Name: hrl_geom
 Description: Description of hrl_geom

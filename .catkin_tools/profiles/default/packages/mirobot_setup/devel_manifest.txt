@@ -1,5 +1,0 @@
-mirobot_setup
-/home/dominik/drl_ws/devel/.private/mirobot_setup/cmake.lock /home/dominik/drl_ws/devel/./cmake.lock
-/home/dominik/drl_ws/devel/.private/mirobot_setup/lib/pkgconfig/mirobot_setup.pc /home/dominik/drl_ws/devel/lib/pkgconfig/mirobot_setup.pc
-/home/dominik/drl_ws/devel/.private/mirobot_setup/share/mirobot_setup/cmake/mirobot_setupConfig-version.cmake /home/dominik/drl_ws/devel/share/mirobot_setup/cmake/mirobot_setupConfig-version.cmake
-/home/dominik/drl_ws/devel/.private/mirobot_setup/share/mirobot_setup/cmake/mirobot_setupConfig.cmake /home/dominik/drl_ws/devel/share/mirobot_setup/cmake/mirobot_setupConfig.cmake

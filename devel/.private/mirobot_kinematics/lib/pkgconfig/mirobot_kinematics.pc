@@ -1,4 +1,4 @@
-prefix=/home/dominik/drl_ws/devel/.private/mirobot_kinematics
+prefix=/home/domi/drl_ws/devel/.private/mirobot_kinematics
 
 Name: mirobot_kinematics
 Description: Description of mirobot_kinematics

@@ -67,7 +67,7 @@ class MirobotClient():
     def executeAction(self, action):
         self.record = True
         #Service call
-        print("[MirobotClient] Calling Service")
+        #print("[MirobotClient] Calling Service")
         try:
             set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
             req = SetJointCmdRequest()
@@ -81,7 +81,7 @@ class MirobotClient():
             req.speed = round(action[6])
             response = set_joint_service(req)
             self.record = False
-            print("[MirobotClient] Executed action call sucessfully! ", response)
+            #print("[MirobotClient] Executed action call sucessfully! ", response)
             #print("[MirobotClient] avg force: %s \t peak force: %s \n[MirobotClient] avg torque: %s \t peak torque: %s " % (self.average_force, self.peak_force, self.average_torque, self.peak_torque))
             return response
         except rospy.ServiceException as e:
