@@ -1,5 +1,5 @@
 from mirobot_env import *
-from stable_baselines3 import DSAC
+from sb3_contrib import DSAC
 import os
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise

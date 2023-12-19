@@ -28,9 +28,9 @@ action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.1 
 
 model = DDPG(policy=TD3Policy,
              env=env,
-             batch_size=64,
+             batch_size=128,
              learning_rate=0.01,
-             gamma=1.5,
+             gamma=1.75,
              buffer_size= 256,
              #tau=0.005,
              action_noise = action_noise,
