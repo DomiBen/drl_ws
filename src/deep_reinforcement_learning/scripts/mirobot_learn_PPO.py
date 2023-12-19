@@ -8,7 +8,7 @@ from stable_baselines3.common.policies import ActorCriticPolicy
 TIMESTEPS = 1000 # probably 100000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"ReccurrentPPO_{current_time}_OrnsteinUhlenbeck_lr001_entcoef005_batchsize64_gamma15"
+MODELNAME = f"ReccurrentPPO_{current_time}_OrnsteinUhlenbeck_lr0_01_entcoef0_05_batchsize64_gamma1_5_buffer256_128steps"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -28,11 +28,13 @@ action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.1 
 
 model = PPO(policy=ActorCriticPolicy, 
             env=env, 
-            action_noise=action_noise, #Alternativ: SDE 
+            #clip_range=0.2,
+            n_steps=128,
             learning_rate=0.01,
             ent_coef=0.05,
             batch_size= 64,
             gamma= 1.5,
+            action_noise=action_noise, #Alternativ: SDE 
             verbose = 1,
             tensorboard_log=logdir)
 try:

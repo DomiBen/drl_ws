@@ -8,7 +8,7 @@ from stable_baselines3.sac.policies import SACPolicy
 TIMESTEPS = 1000 # probably 100000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"SAC_{current_time}_OrnsteinUhlenbeckNoise_lr001_batchsize64_gamma15_buffer256_entcoef005"
+MODELNAME = f"SAC_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_batchsize64_gamma1_5_buffer256_entcoef0_05"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -32,6 +32,8 @@ model = SAC(policy=SACPolicy,
             action_noise=action_noise,
             learning_rate=0.01,
             gamma=1.5,
+            #tau=0.005,
+            #target_entropy="auto",
             buffer_size=256,
             ent_coef=0.05,
             verbose = 1,

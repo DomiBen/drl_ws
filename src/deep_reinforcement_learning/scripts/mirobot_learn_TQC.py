@@ -1,5 +1,5 @@
 from mirobot_env import *
-from stable_baselines3 import TQC  # Changed import
+from sb3_contrib import TQC  # Changed import
 import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
@@ -7,7 +7,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 1000 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TQC_{current_time}_OrnsteinUhlenbeckNoise_lr001_batchsize64_gamma15_buffer256"  # Changed model name prefix
+MODELNAME = f"TQC_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_batchsize64_gamma1_5_buffer256_ncritics4"  # Changed model name prefix
 
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs"
@@ -30,7 +30,11 @@ model = TQC("MlpPolicy",  # Changed model to TQC
             batch_size=64,
             learning_rate=0.01,
             gamma=1.5,
+            #tau=0.005,
             buffer_size=256,
+            #target_entropy=-1,
+            n_critics=4, #default 2 
+            #use_automatic_entropy_tuning=True,
             verbose=1,
             tensorboard_log=logdir)
 

@@ -8,7 +8,7 @@ from stable_baselines3.sac.policies import SACPolicy
 TIMESTEPS = 1000 # probably 100000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"DSAC_{current_time}_OrnsteinUhlenbeckNoise_lr001_batchsize64_gamma15_buffer256_entcoef005"
+MODELNAME = f"DSAC_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_batchsize64_gamma1_5_buffer256_entcoef0_05"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -29,11 +29,12 @@ action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.1 
 
 model = DSAC(policy=SACPolicy,
             env=env,
-            action_noise=action_noise,
             learning_rate=0.01,
             gamma=1.5,
             buffer_size=256,
             ent_coef=0.05,
+            #tau=0.005,
+            action_noise=action_noise,
             verbose = 1,
             tensorboard_log=logdir)
 
