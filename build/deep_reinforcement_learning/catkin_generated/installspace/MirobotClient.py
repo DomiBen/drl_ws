@@ -8,7 +8,7 @@ from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
 from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
-from threading import Thread
+from sensor_logger_node.py import write_to_csv
 
 class MirobotClient():
     def __init__(self):
@@ -67,7 +67,7 @@ class MirobotClient():
     def executeAction(self, action):
         self.record = True
         #Service call
-        print("[MirobotClient] Calling Service")
+        #print("[MirobotClient] Calling Service")
         try:
             set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
             req = SetJointCmdRequest()
@@ -81,7 +81,7 @@ class MirobotClient():
             req.speed = round(action[6])
             response = set_joint_service(req)
             self.record = False
-            print("[MirobotClient] Executed action call sucessfully! ", response)
+            #print("[MirobotClient] Executed action call sucessfully! ", response)
             #print("[MirobotClient] avg force: %s \t peak force: %s \n[MirobotClient] avg torque: %s \t peak torque: %s " % (self.average_force, self.peak_force, self.average_torque, self.peak_torque))
             return response
         except rospy.ServiceException as e:
@@ -93,3 +93,4 @@ class MirobotClient():
         self.average_force = 0
         self.peak_torque = 0
         self.average_torque = 0
+        write_to_csv(self.peak_force, self.average_force, self.peak_torque, self.average_torque)

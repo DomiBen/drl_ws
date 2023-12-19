@@ -9,6 +9,7 @@ from urdf_parser_py.urdf import URDF
 from MirobotClient import *
 import random as r
 from sklearn import preprocessing
+import sensor_logger_node
 
 min_angles_deg = [-110, -35, -120, -180, -200, -360]
 min_angles_rad = [i*math.pi/180 for i in min_angles_deg]
@@ -26,7 +27,7 @@ class MirobotEnv(gym.Env):
     def __init__(self):
         super(MirobotEnv, self).__init__()
         # Define action and observation space -> must be gym space object 
-        self.action_space = spaces.Box(low=np.append(min_angles_deg, [0]), 
+        self.action_space = spaces.Box(low=np.append(min_angles_deg, [100]), 
                                        high=np.append(max_angles_deg, [2000]), dtype=np.float32)
         # Observation Space: all Values between the minimum and maximum angles Are possible; Box with diffent sized Vectors
         self.observation_space = spaces.Box(high=np.array([326, 246, 429, 360, 360, 360], dtype=np.float32),
@@ -36,28 +37,34 @@ class MirobotEnv(gym.Env):
 
     def step(self, action):
         #print("[MirobotEnv] [step]      beginning step")
-        mirobot.reset_ft_record()
         action_response = mirobot.executeAction(action)
-        # observe outcome and check if goal is reached
         observation = mirobot.getObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
+        
+        # creating reward
+        self.reward = self.getReward()
+        self.score = self.score + self.reward
+        
         # check if terminated 
         if self.goalReached(observation):
             print('[MirobotEnv] [goalReached] Goal was reached')
             self.terminated = True
+            self.reward = self.reward + 1000
         else: 
             self.terminated = False
-        # creating reward
-        self.reward = self.getReward()
-        self.score = self.score + self.reward
+        
         # check if Truncated
-        if observation[2] < 1 or action_response == -1:
+        if observation[2] < 0 or action_response == -1:
             self.truncated = True
+            self.reward = self.reward - 100
         else: 
             self.truncated = False
+            
         info = {}
+        self.previous_action = action
         return observation, self.reward, self.terminated, self.truncated, info
 
     def reset(self, seed=None, options=None):
+        self.previous_action = None
         # reset initiates Environment variables
         self.terminated = False
         self.truncated = False
@@ -66,7 +73,7 @@ class MirobotEnv(gym.Env):
         self.cart_goal = np.array(self.generateGoal(), dtype=np.float32) # random values for x, y, z, r, p, y
         pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
-        self.previous_orientation_diff =sum(pose_diff[3:])# euclidean distance
+        self.previous_orientation_diff = sum(pose_diff[3:])# euclidean distance
         #observation
         observation = mirobot.getObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
         mirobot.reset_ft_record()
@@ -85,7 +92,7 @@ class MirobotEnv(gym.Env):
         linear = translation_from_matrix(pose)
         euler = euler_from_matrix(pose)
         goal = [linear[0]*1000, linear[1]*1000, linear[2]*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
-        #print("[MirbotEnv][generateGoal] goal: ", goal)
+        print("[MirbotEnv][generateGoal] goal: ", goal)
         return goal
     
     def getReward(self): 
@@ -93,16 +100,40 @@ class MirobotEnv(gym.Env):
         distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
+        
         orientation_diff = sum(pose_diff[3:]) # sum of angle differcences
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
-        force = (mirobot.average_force + mirobot.peak_force)
-        torque = (mirobot.average_torque + mirobot.peak_torque) * 5
-        print('[MirobotEnv] [getReward] Individual rewards  :', distance_change, orientation_change, force, torque)
-        #print('[MirobotEnv] [getReward] Overall rewards     :', distance_change + orientation_change/distance - force - torque)
+        # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
+        force = mirobot.average_force*3.33 + mirobot.peak_force
+        torque = mirobot.average_torque*67 + mirobot.peak_torque*15
+        
+        ft_reward = (force + torque)/2
+        dist_reward = pow(distance_change, 2) - distance
+        orientation_reward = orientation_change/max(distance * 0.05, 1)
+        sensor_logger_node.add_data_to_csv(distance, ft_reward, distance_change, orientation_change, dist_reward, orientation_reward, dist_reward + orientation_reward - ft_reward)
+
+        reward = dist_reward + orientation_reward - ft_reward
+        return  reward
+    
+    '''def getReward(self): 
+        pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
+        distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
+        distance_change = self.previous_distance - distance
+        self.previous_distance = distance
+        
+        orientation_diff = sum(pose_diff[3:]) # sum of angle differcences
+        orientation_change = self.previous_orientation_diff - orientation_diff
+        self.previous_orientation_diff = orientation_diff
+        # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
+        force = mirobot.average_force*3.33 + mirobot.peak_force
+        torque = mirobot.average_torque*67 + mirobot.peak_torque*15
+        
+        sensor_logger_node.write_dist(distance, distance_change, orientation_change)
+        
         if distance > 10.0:
             return  distance_change + orientation_change/distance - force - torque
-        return  distance_change + orientation_change - force - torque 
+        return  distance_change + orientation_change - force - torque '''
 
     def getNormalizedReward(self): 
         pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
@@ -128,6 +159,7 @@ class MirobotEnv(gym.Env):
 
     def goalReached(self, obs):
         for current, goal in zip(obs, self.cart_goal):
-            if abs(current - goal) > 0.5:
+            if abs(current - goal) < 0.5:
+                print('[MirobotEnv] [goalReached] Goal reached!')
                 return True
             return False

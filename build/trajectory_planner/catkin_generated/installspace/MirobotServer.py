@@ -23,10 +23,10 @@ class ServiceServer():
         self.moveJointSrv = rospy.Service('/MirobotServer/SetJointRelativeCmd', SetJointCmd, self.move_joints)
         self.getposeSrv = rospy.Service('/MirobotServer/GetPoseCmd', GetPoseCmd, self.get_pose)
 
-        self.max_interation_until_timeout = 500
+        self.max_interation_until_timeout = 50
 
         rospy.init_node(NAME)
-        self.rate = rospy.Rate(1000)
+        self.rate = rospy.Rate(10)
         rospy.spin()
     
     def move_joints(self, req):
@@ -81,12 +81,12 @@ class ServiceServer():
     def execute_movement(self, msg):
         iteration = 0
         if self.joint_angles_legal(msg):
-            print("[MirobotServer] Start with the execution of the movement")
+            #print("[MirobotServer] Start with the execution of the movement")
             while self.wait_until_reached(msg):
                 if iteration < self.max_interation_until_timeout:
                     self.pub.publish(msg)
                     self.rate.sleep()
-                    print("[MirobotServer] Sending msg: ", iteration)
+                    #print("[MirobotServer] Sending msg: ", iteration)
                     iteration = iteration+1
                 else:
                     print("[MirobotServer] Timeout while executing movement!")
