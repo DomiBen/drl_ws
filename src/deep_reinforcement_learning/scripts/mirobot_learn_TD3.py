@@ -8,7 +8,7 @@ from stable_baselines3.td3.policies import TD3Policy
 TIMESTEPS = 1000 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise_lr001_batchsize64_gamma15_buffer256"
+MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_batchsize64_gamma1_5_buffer256"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -31,8 +31,10 @@ model = TD3(policy=TD3Policy,
             action_noise=action_noise,
             batch_size=64,
             learning_rate=0.01,
+            #tau=0.005,
             gamma=1.5,
             buffer_size=256,
+            #policy_delay=2,
             verbose = 1,
             tensorboard_log=logdir)
 

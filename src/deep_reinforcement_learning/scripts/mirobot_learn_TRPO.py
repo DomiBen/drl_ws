@@ -1,5 +1,5 @@
 from mirobot_env import *
-from stable_baselines3 import TRPO
+from sb3_contrib import TRPO
 import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
@@ -8,7 +8,7 @@ from stable_baselines3.td3.policies import TD3Policy
 TIMESTEPS = 1000 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_{current_time}_OrnsteinUhlenbeckNoise_lr001_batchsize64_gamma15_buffer256"
+MODELNAME = f"TRPO_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_batchsize64_gamma1_5_buffer256_entcoef0_05"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -32,7 +32,10 @@ model = TRPO(policy=TD3Policy,
             batch_size=64,
             learning_rate=0.01,
             gamma=1.5,
+            ent_coef=0.05,
             buffer_size=256,
+            #max_kl=0.01,
+            #cg_iters=10,
             verbose = 1,
             tensorboard_log=logdir)
 
