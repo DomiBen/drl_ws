@@ -21,7 +21,6 @@ mirobot = MirobotClient()
 robot = URDF.from_parameter_server()
 kdl_kin = KDLKinematics(robot, "base_link", "link6")
 
-
 # Custom Environment that follows gym interface
 class MirobotEnv(gym.Env):
     def __init__(self):
@@ -36,14 +35,11 @@ class MirobotEnv(gym.Env):
             sleep(1)
 
     def step(self, action):
-        #print("[MirobotEnv] [step]      beginning step")
         action_response = mirobot.executeAction(action)
         observation = mirobot.getObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
-        
         # creating reward
         self.reward = self.getReward()
         self.score = self.score + self.reward
-        
         # check if terminated 
         if self.goalReached(observation):
             print('[MirobotEnv] [goalReached] Goal was reached')
@@ -51,14 +47,12 @@ class MirobotEnv(gym.Env):
             self.reward = self.reward + 1000
         else: 
             self.terminated = False
-        
         # check if Truncated
         if observation[2] < 0 or action_response == -1:
             self.truncated = True
             self.reward = self.reward - 100
         else: 
             self.truncated = False
-            
         info = {}
         self.previous_action = action
         return observation, self.reward, self.terminated, self.truncated, info
@@ -69,9 +63,10 @@ class MirobotEnv(gym.Env):
         self.terminated = False
         self.truncated = False
         self.score = 0
-        # generate new goal
-        self.cart_goal = np.array(self.generateGoal(), dtype=np.float32) # random values for x, y, z, r, p, y
-        pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
+        # generate new goal with random values for x, y, z, r, p, y
+        self.goal = np.array(self.generateGoal(), dtype=np.float32)
+        # initialize previous distance and orientation difference for the reward function 
+        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         self.previous_orientation_diff = sum(pose_diff[3:])# euclidean distance
         #observation
@@ -84,9 +79,8 @@ class MirobotEnv(gym.Env):
     
     def generateGoal(self):
         #first pick random values for the joint angles, between theire minumum and maximum constraints
-        rand_joint_states = [r.uniform(min_angles_rad[0], max_angles_rad[0]), r.uniform(min_angles_rad[1], max_angles_rad[1]), 
-                             r.uniform(min_angles_rad[2], max_angles_rad[2]), r.uniform(min_angles_rad[3], max_angles_rad[3]), 
-                             r.uniform(min_angles_rad[4], max_angles_rad[4]), r.uniform(min_angles_rad[5], max_angles_rad[5])]
+        rand_joint_states = [r.uniform(min_angles_rad[0], max_angles_rad[0]), r.uniform(min_angles_rad[1], max_angles_rad[1]), r.uniform(min_angles_rad[2], max_angles_rad[2]), 
+                             r.uniform(min_angles_rad[3], max_angles_rad[3]), r.uniform(min_angles_rad[4], max_angles_rad[4]), r.uniform(min_angles_rad[5], max_angles_rad[5])]
         # then convert them to cartesian coordinates -> therefore we won't generate unreachable points
         pose = kdl_kin.forward(rand_joint_states)
         linear = translation_from_matrix(pose)
@@ -96,7 +90,7 @@ class MirobotEnv(gym.Env):
         return goal
     
     def getReward(self): 
-        pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
+        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
@@ -117,7 +111,7 @@ class MirobotEnv(gym.Env):
         return  reward
     
     '''def getReward(self): 
-        pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
+        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
@@ -136,7 +130,7 @@ class MirobotEnv(gym.Env):
         return  distance_change + orientation_change - force - torque '''
 
     def getNormalizedReward(self): 
-        pose_diff = [g-c for g, c in zip(self.cart_goal, mirobot.current_pose)]
+        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         
         distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         distance_change = self.previous_distance - distance
@@ -158,7 +152,7 @@ class MirobotEnv(gym.Env):
         return reward
 
     def goalReached(self, obs):
-        for current, goal in zip(obs, self.cart_goal):
+        for current, goal in zip(obs, self.goal):
             if abs(current - goal) < 0.5:
                 print('[MirobotEnv] [goalReached] Goal reached!')
                 return True
