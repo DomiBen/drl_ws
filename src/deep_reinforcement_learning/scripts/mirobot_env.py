@@ -44,13 +44,13 @@ class MirobotEnv(gym.Env):
         if self.goalReached(observation):
             print('[MirobotEnv] [goalReached] Goal was reached')
             self.terminated = True
-            self.reward = self.reward + 1000
+            self.reward = self.reward + 100000
         else: 
             self.terminated = False
         # check if Truncated
         if observation[2] < 0 or action_response == -1:
             self.truncated = True
-            self.reward = self.reward - 100
+            self.reward = self.reward - 100000
         else: 
             self.truncated = False
         info = {}
@@ -102,13 +102,13 @@ class MirobotEnv(gym.Env):
         force = mirobot.average_force*3.33 + mirobot.peak_force
         torque = mirobot.average_torque*67 + mirobot.peak_torque*15
         
-        ft_reward = (force + torque)/2
-        dist_reward = pow(distance_change, 2) - distance
+        ft_reward = (force + torque) * (abs(force + torque)*0.25)
+        dist_reward = (distance_change * abs(distance_change)) - distance*(0.25*distance)
         orientation_reward = orientation_change/max(distance * 0.05, 1)
         sensor_logger_node.add_data_to_csv(distance, ft_reward, distance_change, orientation_change, dist_reward, orientation_reward, dist_reward + orientation_reward - ft_reward)
 
         reward = dist_reward + orientation_reward - ft_reward
-        return  reward
+        return reward
     
     '''def getReward(self): 
         pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
