@@ -3,13 +3,13 @@ from stable_baselines3 import PPO
 import os 
 
 ### 
-TIMESTEPS = 100 # probably 10000
-EPISODES = 10   # probably auch so 1000 
+TIMESTEPS = 1000 # probably 10000
+EPISODES = 1000000   # probably auch so 1000 
 MODELNAME = "PPO"
 ###
 
-models_dir = "/drl_ws/src/deep_reinforcement_learning/models/"+MODELNAME
-logdir = "/drl_ws/src/deep_reinforcement_learning/rllogs"
+models_dir = "drlsaves/models/"+MODELNAME
+logdir = "drlsaves/rllogs"
 print(models_dir) 
 
 if not os.path.exists(models_dir):

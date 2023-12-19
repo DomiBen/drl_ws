@@ -1,38 +1,38 @@
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/trajectory_planner-srv.asd
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/SetJointCmd.lisp
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package_SetHomeCmd.lisp
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package_GetPoseCmd.lisp
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package.lisp
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/GetPoseCmd.lisp
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package_SetJointCmd.lisp
-Symlinking /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/SetHomeCmd.lisp
-Symlinking /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/_index.js
-Symlinking /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/SetHomeCmd.js
-Symlinking /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/GetPoseCmd.js
-Symlinking /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/_index.js
-Symlinking /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/SetJointCmd.js
-Symlinking /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_plannerConfig-version.cmake
-Symlinking /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_plannerConfig.cmake
-Symlinking /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_planner-msg-paths.cmake
-Symlinking /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_planner-msg-extras.cmake
-Symlinking /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/manifest.l
-Symlinking /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/srv/SetHomeCmd.l
-Symlinking /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/srv/GetPoseCmd.l
-Symlinking /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/srv/SetJointCmd.l
-Symlinking /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/__init__.py
-Symlinking /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/_SetHomeCmd.py
-Symlinking /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/_SetJointCmd.py
-Symlinking /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/_GetPoseCmd.py
-Symlinking /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/__init__.py
-Symlinking /home/domi/drl_ws/devel/lib/trajectory_planner/cmake.lock
-Symlinking /home/domi/drl_ws/devel/lib/trajectory_planner/MirobotServer.py
-Symlinking /home/domi/drl_ws/devel/lib/pkgconfig/trajectory_planner.pc
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/SetJointCmd.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/SetHomeCmd.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/GetPoseCmd.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/SetJointCmdRequest.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/SetHomeCmdResponse.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/GetPoseCmdResponse.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/GetPoseCmdRequest.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/SetJointCmdResponse.h
-Symlinking /home/domi/drl_ws/devel/include/trajectory_planner/SetHomeCmdRequest.h
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/trajectory_planner-srv.asd, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/trajectory_planner-srv.asd)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/SetJointCmd.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/SetJointCmd.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/_package_SetHomeCmd.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package_SetHomeCmd.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/_package_GetPoseCmd.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package_GetPoseCmd.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/_package.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/GetPoseCmd.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/GetPoseCmd.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/_package_SetJointCmd.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/_package_SetJointCmd.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/common-lisp/ros/trajectory_planner/srv/SetHomeCmd.lisp, /home/domi/drl_ws/devel/share/common-lisp/ros/trajectory_planner/srv/SetHomeCmd.lisp)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/_index.js, /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/_index.js)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetHomeCmd.js, /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/SetHomeCmd.js)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/GetPoseCmd.js, /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/GetPoseCmd.js)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/_index.js, /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/_index.js)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetJointCmd.js, /home/domi/drl_ws/devel/share/gennodejs/ros/trajectory_planner/srv/SetJointCmd.js)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/trajectory_planner/cmake/trajectory_plannerConfig-version.cmake, /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_plannerConfig-version.cmake)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/trajectory_planner/cmake/trajectory_plannerConfig.cmake, /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_plannerConfig.cmake)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/trajectory_planner/cmake/trajectory_planner-msg-paths.cmake, /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_planner-msg-paths.cmake)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/trajectory_planner/cmake/trajectory_planner-msg-extras.cmake, /home/domi/drl_ws/devel/share/trajectory_planner/cmake/trajectory_planner-msg-extras.cmake)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/roseus/ros/trajectory_planner/manifest.l, /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/manifest.l)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/roseus/ros/trajectory_planner/srv/SetHomeCmd.l, /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/srv/SetHomeCmd.l)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/roseus/ros/trajectory_planner/srv/GetPoseCmd.l, /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/srv/GetPoseCmd.l)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/share/roseus/ros/trajectory_planner/srv/SetJointCmd.l, /home/domi/drl_ws/devel/share/roseus/ros/trajectory_planner/srv/SetJointCmd.l)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/python3/dist-packages/trajectory_planner/__init__.py, /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/__init__.py)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/python3/dist-packages/trajectory_planner/srv/_SetHomeCmd.py, /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/_SetHomeCmd.py)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/python3/dist-packages/trajectory_planner/srv/_SetJointCmd.py, /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/_SetJointCmd.py)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/python3/dist-packages/trajectory_planner/srv/_GetPoseCmd.py, /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/_GetPoseCmd.py)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/python3/dist-packages/trajectory_planner/srv/__init__.py, /home/domi/drl_ws/devel/lib/python3/dist-packages/trajectory_planner/srv/__init__.py)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/trajectory_planner/cmake.lock, /home/domi/drl_ws/devel/lib/trajectory_planner/cmake.lock)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/trajectory_planner/MirobotServer.py, /home/domi/drl_ws/devel/lib/trajectory_planner/MirobotServer.py)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/lib/pkgconfig/trajectory_planner.pc, /home/domi/drl_ws/devel/lib/pkgconfig/trajectory_planner.pc)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/SetJointCmd.h, /home/domi/drl_ws/devel/include/trajectory_planner/SetJointCmd.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/SetHomeCmd.h, /home/domi/drl_ws/devel/include/trajectory_planner/SetHomeCmd.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/GetPoseCmd.h, /home/domi/drl_ws/devel/include/trajectory_planner/GetPoseCmd.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/SetJointCmdRequest.h, /home/domi/drl_ws/devel/include/trajectory_planner/SetJointCmdRequest.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/SetHomeCmdResponse.h, /home/domi/drl_ws/devel/include/trajectory_planner/SetHomeCmdResponse.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/GetPoseCmdResponse.h, /home/domi/drl_ws/devel/include/trajectory_planner/GetPoseCmdResponse.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/GetPoseCmdRequest.h, /home/domi/drl_ws/devel/include/trajectory_planner/GetPoseCmdRequest.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/SetJointCmdResponse.h, /home/domi/drl_ws/devel/include/trajectory_planner/SetJointCmdResponse.h)
+Linked: (/home/domi/drl_ws/devel/.private/trajectory_planner/include/trajectory_planner/SetHomeCmdRequest.h, /home/domi/drl_ws/devel/include/trajectory_planner/SetHomeCmdRequest.h)
