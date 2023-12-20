@@ -8,7 +8,7 @@ from stable_baselines3.td3.policies import TD3Policy
 TIMESTEPS = 500 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise"
+MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise_gamma0_7"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -32,7 +32,7 @@ model = TD3(policy=TD3Policy,
             #batch_size=64,
             #learning_rate=0.01,
             #tau=0.005,
-            #gamma=0.9,
+            gamma=0.7,
             #buffer_size=256,
             #policy_delay=2,
             verbose = 1,
