@@ -24,12 +24,12 @@ env.reset()
 print("[mirobot_env] environment: ", env)
 
 n_actions = env.action_space.shape[-1]
-#action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
+action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
 
 
 model = SAC("MlpPolicy",
             env=env,
-            #action_noise=action_noise,
+            action_noise=action_noise,
             #learning_rate=0.01,
             #gamma=0.9,
             #tau=0.005,
