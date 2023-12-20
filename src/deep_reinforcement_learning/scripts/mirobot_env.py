@@ -29,8 +29,8 @@ class MirobotEnv(gym.Env):
         self.action_space = spaces.Box(low=np.append(min_angles_deg, [100]), 
                                        high=np.append(max_angles_deg, [2000]), dtype=np.float32)
         # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
-        self.observation_space = spaces.Box(high=np.array([330, 437, 326, 246, 429, 360, 360, 360], dtype=np.float32),
-                                            low=np.array([-330, -473, -230, -246, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
+        self.observation_space = spaces.Box(high=np.array([330, 437, 555, 492, 460, 360, 360, 360,  326, 246, 429, 360, 360, 360], dtype=np.float32),
+                                            low=np.array([-330, -473, -555, -492, -460, -360, -360, -360, -230, -246, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
         while(mirobot.current_pose == None): 
             sleep(1)
 
@@ -39,9 +39,10 @@ class MirobotEnv(gym.Env):
         # creating reward
         self.reward = self.getReward()
         #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
-        p_observation = mirobot.getPoseObservation()
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff])
-        observation = np.append(d_observation, p_observation)
+        posediff_observation = np.array(self.pose_diff)
+        p_observation = mirobot.getPoseObservation()
+        observation = np.append(d_observation,posediff_observation, p_observation)
         # check if terminated 
         if self.goalReached(p_observation):
             self.terminated = True
@@ -49,7 +50,7 @@ class MirobotEnv(gym.Env):
         else: 
             self.terminated = False
         # check if Truncated
-        if p_observation[2] < 10 or action_response == -1:
+        if p_observation[10] < 10 or action_response == -1:
             self.truncated = True
             self.reward = self.reward - 100000
             print('[MirobotEnv] [step] Truncated!')
@@ -73,11 +74,14 @@ class MirobotEnv(gym.Env):
         # generate new goal with random values for x, y, z, r, p, y
         self.goal = np.array(self.generateGoal(), dtype=np.float32)
         # initialize previous distance and orientation difference for the reward function 
-        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
-        self.previous_distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
-        self.previous_orientation_diff = sum(pose_diff[3:])# euclidean distance
+        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
+        self.previous_distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
+        self.previous_orientation_diff = sum(self.pose_diff[3:])# euclidean distance
         #observation
-        observation = mirobot.getPoseObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
+        d_observation = np.array([self.previous_distance, self.previous_orientation_diff])
+        posediff_observation = np.array(self.pose_diff)
+        p_observation = mirobot.getPoseObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
+        observation = np.append(d_observation,posediff_observation, p_observation)
         mirobot.reset_ft_record()
         info = {}
         return observation, info
@@ -98,12 +102,12 @@ class MirobotEnv(gym.Env):
     
 
     def getReward(self): 
-        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
-        distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
+        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
+        distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
             
-        orientation_diff = sum(pose_diff[3:])/3 # mean angle difference
+        orientation_diff = sum(self.pose_diff[3:])/3 # mean angle difference
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
 
@@ -126,12 +130,12 @@ class MirobotEnv(gym.Env):
         return reward
     
     '''def getReward(self): 
-        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
-        distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
+        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
+        distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
         
-        orientation_diff = sum(pose_diff[3:]) # sum of angle differcences
+        orientation_diff = sum(self.pose_diff[3:]) # sum of angle differcences
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
         # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
@@ -145,13 +149,13 @@ class MirobotEnv(gym.Env):
         return  distance_change + orientation_change - force - torque
 
     def getNormalizedReward(self): 
-        pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
+        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         
-        distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
+        distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
         
-        orientation_diff = sum(pose_diff[3:]) # sum of angle differcences
+        orientation_diff = sum(self.pose_diff[3:]) # sum of angle differcences
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
         
