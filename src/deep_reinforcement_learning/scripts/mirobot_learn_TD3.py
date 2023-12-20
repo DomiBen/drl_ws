@@ -2,13 +2,12 @@ from mirobot_env import *
 from stable_baselines3 import TD3
 import os 
 import datetime
-from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
-from stable_baselines3.td3.policies import TD3Policy
+from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 ### 
 TIMESTEPS = 500 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise_gamma0_7"
+MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise_gamma0_99_targetpolicynoise0_2_targetnoiseclip0_5_lr0_0005_policydelay3_learningstarts10"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -26,18 +25,26 @@ print("[mirobot_env] environment: ", env)
 n_actions = env.action_space.shape[-1]
 action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.2 * np.ones(n_actions))
 
-model = TD3(policy=TD3Policy,
+model = TD3("LnMlpPolicy",
             env=env,
             action_noise=action_noise,
             #batch_size=64,
-            #learning_rate=0.01,
+            learning_rate=0.0005,
+            learning_starts=10,
+            #random_exploration=0.025,
             #tau=0.005,
-            gamma=0.7,
+            gamma=0.99,
+            target_policy_noise=0.2,
+            target_noise_clip=0.5,
             #buffer_size=256,
-            #policy_delay=2,
+            policy_delay=3,
             verbose = 1,
+            full_tensorboard_log=True,
             tensorboard_log=logdir)
 
-for i in range(1,EPISODES):
-    model.learn(total_timesteps= TIMESTEPS, reset_num_timesteps= False, tb_log_name=MODELNAME)
-    model.save(f"{models_dir}/{TIMESTEPS*i}")
+try:
+    for i in range(1,EPISODES):
+        model.learn(total_timesteps= TIMESTEPS, reset_num_timesteps= False, tb_log_name=MODELNAME)
+        model.save(f"{models_dir}/{TIMESTEPS*i}")
+except KeyboardInterrupt:
+    print("[MirobotLearn] Keyboard Interrupt")
