@@ -50,6 +50,10 @@ class MirobotEnv(gym.Env):
             self.truncated = True
             self.reward = self.reward - 100000
             print('[MirobotEnv] [step] Truncated!')
+        if np.array_equal(action, self.previous_action):
+            self.truncated = True
+            self.reward = - 100000
+            print('[MirobotEnv] [step] Truncated - Same action was repeated!')
         else: 
             self.truncated = False
         info = {}
