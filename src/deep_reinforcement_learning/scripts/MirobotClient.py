@@ -9,9 +9,6 @@ from tf.transformations import euler_from_quaternion
 from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
 
-
-
-
 class MirobotClient():
     def __init__(self):
         #self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)

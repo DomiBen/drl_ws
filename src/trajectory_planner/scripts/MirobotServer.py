@@ -23,10 +23,10 @@ class ServiceServer():
         self.moveJointSrv = rospy.Service('/MirobotServer/SetJointRelativeCmd', SetJointCmd, self.move_joints)
         self.getposeSrv = rospy.Service('/MirobotServer/GetPoseCmd', GetPoseCmd, self.get_pose)
 
-        self.max_interation_until_timeout = 50
+        self.max_interation_until_timeout = 500
 
         rospy.init_node(NAME)
-        self.rate = rospy.Rate(10)
+        self.rate = rospy.Rate(100)
         rospy.spin()
     
     def move_joints(self, req):
@@ -81,12 +81,12 @@ class ServiceServer():
     def execute_movement(self, msg):
         iteration = 0
         if self.joint_angles_legal(msg):
-            print("[MirobotServer] Start with the execution of the movement")
+            #print("[MirobotServer] Start with the execution of the movement")
             while self.wait_until_reached(msg):
                 if iteration < self.max_interation_until_timeout:
                     self.pub.publish(msg)
                     self.rate.sleep()
-                    print("[MirobotServer] Sending msg: ", iteration)
+                    #print("[MirobotServer] Sending msg: ", iteration)
                     iteration = iteration+1
                 else:
                     print("[MirobotServer] Timeout while executing movement!")
@@ -100,7 +100,7 @@ class ServiceServer():
         for current, goal in zip(mirobot.current_joint_states_rad, target.points[0].positions):
             if abs(current - goal) > 0.2:
                 return True
-        print("[MirobotServer] Goal reached:", mirobot.current_pose, "!")
+        print("[MirobotServer] Movement finished:", mirobot.current_pose, "!")
         return False
 
     def joint_angles_legal(self, msg):
@@ -108,7 +108,7 @@ class ServiceServer():
             if msg.points[0].positions[i] < mirobot.min_angles_rad[i] or msg.points[0].positions[i] > mirobot.max_angles_rad[i]:
                 print("[MirobotServer] Joint angles not allowed: Terminating movement!")
                 return False
-        print("[MirobotServer] Joint angles allowed: Proceed to execution!")
+        #print("[MirobotServer] Joint angles allowed: Proceed to execution!")
         return True
 
 class Mirobot():

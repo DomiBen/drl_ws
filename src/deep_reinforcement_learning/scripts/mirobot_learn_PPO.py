@@ -29,12 +29,11 @@ action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.1 
 model = PPO(policy=ActorCriticPolicy, 
             env=env, 
             #clip_range=0.2,
-            n_steps=128,
+            #n_steps=128,
             learning_rate=0.01,
             ent_coef=0.05,
             batch_size= 64,
             gamma= 1.5,
-            action_noise=action_noise, #Alternativ: SDE 
             verbose = 1,
             tensorboard_log=logdir)
 try:
