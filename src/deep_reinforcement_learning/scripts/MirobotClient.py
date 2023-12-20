@@ -59,7 +59,7 @@ class MirobotClient():
         euler = euler_from_quaternion([data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w])
         self.current_pose = [data.position.x*1000, data.position.y*1000, data.position.z*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
 
-    def getObservation(self):
+    def getPoseObservation(self):
         return np.array(self.current_pose, dtype=np.float32)
     
     def executeAction(self, action):

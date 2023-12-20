@@ -28,25 +28,28 @@ class MirobotEnv(gym.Env):
         # Define action and observation space -> must be gym space object 
         self.action_space = spaces.Box(low=np.append(min_angles_deg, [100]), 
                                        high=np.append(max_angles_deg, [2000]), dtype=np.float32)
-        # Observation Space: all Values between the minimum and maximum angles Are possible; Box with diffent sized Vectors
-        self.observation_space = spaces.Box(high=np.array([326, 246, 429, 360, 360, 360], dtype=np.float32),
-                                            low=np.array([-230, -246, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
+        # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
+        self.observation_space = spaces.Box(high=np.array([330, 437, 326, 246, 429, 360, 360, 360], dtype=np.float32),
+                                            low=np.array([-330, -473, -230, -246, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
         while(mirobot.current_pose == None): 
             sleep(1)
 
     def step(self, action):
         action_response = mirobot.executeAction(action)
-        observation = mirobot.getObservation()
         # creating reward
         self.reward = self.getReward()
+        #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
+        p_observation = mirobot.getPoseObservation()
+        d_observation = np.array([self.previous_distance, self.previous_orientation_diff])
+        observation = np.append(d_observation, p_observation)
         # check if terminated 
-        if self.goalReached(observation):
+        if self.goalReached(p_observation):
             self.terminated = True
             self.reward = self.reward + 100000
         else: 
             self.terminated = False
         # check if Truncated
-        if observation[2] < 0 or action_response == -1:
+        if p_observation[2] < 10 or action_response == -1:
             self.truncated = True
             self.reward = self.reward - 100000
             print('[MirobotEnv] [step] Truncated!')
@@ -56,13 +59,15 @@ class MirobotEnv(gym.Env):
             print('[MirobotEnv] [step] Truncated - Same action was repeated!')
         else: 
             self.truncated = False
+
         info = {}
         self.previous_action = action
+        
         return observation, self.reward, self.terminated, self.truncated, info
 
     def reset(self, seed=None, options=None):
-        self.previous_action = None
         # reset initiates Environment variables
+        self.previous_action = None
         self.terminated = False
         self.truncated = False
         # generate new goal with random values for x, y, z, r, p, y
@@ -72,7 +77,7 @@ class MirobotEnv(gym.Env):
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         self.previous_orientation_diff = sum(pose_diff[3:])# euclidean distance
         #observation
-        observation = mirobot.getObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
+        observation = mirobot.getPoseObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
         mirobot.reset_ft_record()
         info = {}
         return observation, info
@@ -91,23 +96,31 @@ class MirobotEnv(gym.Env):
         print("[MirbotEnv][generateGoal] New goal: ", goal)
         return goal
     
+
     def getReward(self): 
         pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         distance = math.sqrt(sum([pow(x,2) for x in pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
-        
-        orientation_diff = sum(pose_diff[3:]) # sum of angle differcences
+            
+        orientation_diff = sum(pose_diff[3:])/3 # mean angle difference
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
+
         # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
-        force = mirobot.average_force*3.33 + mirobot.peak_force
-        torque = mirobot.average_torque*67 + mirobot.peak_torque*15
+        ft_reward = (mirobot.average_force*3.33 + mirobot.peak_force + mirobot.average_torque*67 + mirobot.peak_torque*15)
+        if distance_change > 1: 
+            dist_reward = 50
+        else:
+            dist_reward = -50
         
-        ft_reward = force + torque
-        dist_reward = distance_change * 10 - distance
-        orientation_reward = orientation_change/ max(distance * 0.05, 0.25)
-        sensor_logger_node.add_data_to_csv(distance, ft_reward, distance_change, orientation_change, dist_reward, orientation_reward, dist_reward + orientation_reward - ft_reward)
+        if orientation_diff > 1:
+            orientation_reward = 50
+        else:
+            orientation_reward = -50
+        orientation_reward = orientation_reward * (20/max(10, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
+
+        sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
 
         reward = dist_reward + orientation_reward - ft_reward
         return reward
@@ -129,7 +142,7 @@ class MirobotEnv(gym.Env):
         
         if distance > 10.0:
             return  distance_change + orientation_change/distance - force - torque
-        return  distance_change + orientation_change - force - torque '''
+        return  distance_change + orientation_change - force - torque
 
     def getNormalizedReward(self): 
         pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
@@ -152,7 +165,8 @@ class MirobotEnv(gym.Env):
         reward = sum(normalized_reward_array[:2]) - sum(normalized_reward_array[2:])
         print('[MirobotEnv] [getNormalizedReward] Overall reward    :', reward)
         return reward
-
+'''
+    
     def goalReached(self, obs):
         for current, goal in zip(obs, self.goal):
             if abs(current - goal) < 0.3:
