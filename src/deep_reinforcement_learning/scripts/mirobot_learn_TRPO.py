@@ -8,7 +8,7 @@ from stable_baselines3.a2c.policies import ActorCriticPolicy
 TIMESTEPS = 1000 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_batchsize64_gamma1_5_buffer256"
+MODELNAME = f"TRPO_{current_time}_OrnsteinUhlenbeckNoise"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -25,10 +25,10 @@ print("[mirobot_env] environment: ", env)
 
 model = TRPO(policy=ActorCriticPolicy,
             env=env,
-            batch_size=64,
-            learning_rate=0.01,
-            gamma=1.5,
-            target_kl =0.05,
+            #batch_size=64,
+            #learning_rate=0.01,
+            #gamma=1.5,
+            #target_kl =0.05,
             verbose = 1,
             tensorboard_log=logdir)
 
