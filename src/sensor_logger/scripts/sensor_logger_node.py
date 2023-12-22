@@ -4,6 +4,7 @@
 import csv
 import os 
 import time 
+import datetime
 
 
 def write_to_csv(f_peak, f_avg, t_peak, t_avg):
@@ -41,10 +42,12 @@ def write_dist(dist, dist_change, orient_change):
 
 def add_data_to_csv(distance, ft_reward, distance_change, orientation_change, distance_reward, orientation_reward, reward):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/log.csv"
-
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/log_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
 
     data = [distance, distance_change, orientation_change, ft_reward,  distance_reward, orientation_reward, reward]
+
+    # Create the directory if it does not exist
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     # Write the data to the CSV file
     with open(file_path, mode='a', newline='') as file:
