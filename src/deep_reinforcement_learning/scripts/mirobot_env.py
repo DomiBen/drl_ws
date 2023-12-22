@@ -52,19 +52,12 @@ class MirobotEnv(gym.Env):
         # check if Truncated
         if p_observation[2] < 10 or action_response == -1:
             self.truncated = True
-<<<<<<< Updated upstream
             self.reward = self.reward - 1000
             print('[MirobotEnv] [step] Truncated!')
         if np.array_equal(action, self.previous_action):
             self.truncated = True
             self.reward = - 1000
-=======
             self.reward = self.reward - 50000
-            print('[MirobotEnv] [step] Truncated!')
-        if np.array_equal(action, self.previous_action):
-            self.truncated = True
-            self.reward = self.reward - 100000
->>>>>>> Stashed changes
             print('[MirobotEnv] [step] Truncated - Same action was repeated!')
         else: 
             self.truncated = False
