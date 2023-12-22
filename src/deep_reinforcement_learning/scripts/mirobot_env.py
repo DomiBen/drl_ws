@@ -29,8 +29,8 @@ class MirobotEnv(gym.Env):
         self.action_space = spaces.Box(low=np.append(min_angles_deg, [100]), 
                                        high=np.append(max_angles_deg, [2000]), dtype=np.float32)
         # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
-        self.observation_space = spaces.Box(high=np.array([330, 437, 555, 492, 460, 360, 360, 360,  326, 246, 429, 360, 360, 360], dtype=np.float32),
-                                            low=np.array([-330, -473, -555, -492, -460, -360, -360, -360, -230, -246, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
+        self.observation_space = spaces.Box(high=np.array([660, 473, 555, 660, 460, 360, 360, 360,  326, 330, 429, 360, 360, 360], dtype=np.float32),
+                                            low=np.array([-660, -473, -555, -660, -460, -360, -360, -360, -230, -330, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
         while(mirobot.current_pose == None): 
             sleep(1)
 
@@ -39,24 +39,24 @@ class MirobotEnv(gym.Env):
         # creating reward
         self.reward = self.getReward()
         #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
-        d_observation = np.array([self.previous_distance, self.previous_orientation_diff])
-        posediff_observation = np.array(self.pose_diff)
+        d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
+        posediff_observation = np.array(self.pose_diff, dtype=np.float32)
         p_observation = mirobot.getPoseObservation()
-        observation = np.append(d_observation,posediff_observation, p_observation)
+        observation = np.concatenate((d_observation, posediff_observation, p_observation))
         # check if terminated 
         if self.goalReached(p_observation):
             self.terminated = True
-            self.reward = self.reward + 100000
+            self.reward = self.reward + 1000
         else: 
             self.terminated = False
         # check if Truncated
-        if p_observation[10] < 10 or action_response == -1:
+        if p_observation[2] < 10 or action_response == -1:
             self.truncated = True
-            self.reward = self.reward - 100000
+            self.reward = self.reward - 1000
             print('[MirobotEnv] [step] Truncated!')
         if np.array_equal(action, self.previous_action):
             self.truncated = True
-            self.reward = - 100000
+            self.reward = - 1000
             print('[MirobotEnv] [step] Truncated - Same action was repeated!')
         else: 
             self.truncated = False
@@ -77,11 +77,12 @@ class MirobotEnv(gym.Env):
         self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
         self.previous_orientation_diff = sum(self.pose_diff[3:])# euclidean distance
-        #observation
-        d_observation = np.array([self.previous_distance, self.previous_orientation_diff])
-        posediff_observation = np.array(self.pose_diff)
-        p_observation = mirobot.getPoseObservation() #returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
-        observation = np.append(d_observation,posediff_observation, p_observation)
+        # observation
+        d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
+        posediff_observation = np.array(self.pose_diff, dtype=np.float32)
+        p_observation = mirobot.getPoseObservation() # returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
+        observation = np.concatenate((d_observation, posediff_observation, p_observation))
+        
         mirobot.reset_ft_record()
         info = {}
         return observation, info
@@ -89,14 +90,17 @@ class MirobotEnv(gym.Env):
    #def close(): 
     
     def generateGoal(self):
-        #first pick random values for the joint angles, between theire minumum and maximum constraints
-        rand_joint_states = [r.uniform(min_angles_rad[0], max_angles_rad[0]), r.uniform(min_angles_rad[1], max_angles_rad[1]), r.uniform(min_angles_rad[2], max_angles_rad[2]), 
-                             r.uniform(min_angles_rad[3], max_angles_rad[3]), r.uniform(min_angles_rad[4], max_angles_rad[4]), r.uniform(min_angles_rad[5], max_angles_rad[5])]
-        # then convert them to cartesian coordinates -> therefore we won't generate unreachable points
-        pose = kdl_kin.forward(rand_joint_states)
-        linear = translation_from_matrix(pose)
-        euler = euler_from_matrix(pose)
-        goal = [linear[0]*1000, linear[1]*1000, linear[2]*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
+        goal = [0, 0, 0, 0, 0, 0]
+        while goal[2] < 10:
+            #first pick random values for the joint angles, between theire minumum and maximum constraints
+            rand_joint_states = [r.uniform(min_angles_rad[0], max_angles_rad[0]), r.uniform(min_angles_rad[1], max_angles_rad[1]), r.uniform(min_angles_rad[2], max_angles_rad[2]), 
+                                r.uniform(min_angles_rad[3], max_angles_rad[3]), r.uniform(min_angles_rad[4], max_angles_rad[4]), r.uniform(min_angles_rad[5], max_angles_rad[5])]
+            # then convert them to cartesian coordinates -> therefore we won't generate unreachable points
+            pose = kdl_kin.forward(rand_joint_states)
+            linear = translation_from_matrix(pose)
+            euler = euler_from_matrix(pose)
+            goal = [linear[0]*1000, linear[1]*1000, linear[2]*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
+        
         print("[MirbotEnv][generateGoal] New goal: ", goal)
         return goal
     
