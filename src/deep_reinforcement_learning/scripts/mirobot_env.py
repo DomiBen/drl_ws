@@ -26,11 +26,10 @@ class MirobotEnv(gym.Env):
     def __init__(self):
         super(MirobotEnv, self).__init__()
         # Define action and observation space -> must be gym space object 
-        self.action_space = spaces.Box(low=np.append(min_angles_deg, [100]), 
-                                       high=np.append(max_angles_deg, [2000]), dtype=np.float32)
+        self.action_space = spaces.MultiDiscrete([3, 3, 3, 3, 3, 3, 10]) # 6 joints with 3 possible actions each (0: -0.0025°, 1: 0°, 2: +0.0025°) and 10 possible speeds (200, 400, 600,..., 2000)
         # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
-        self.observation_space = spaces.Box(high=np.array([660, 473, 555, 660, 460, 360, 360, 360,  326, 330, 429, 360, 360, 360], dtype=np.float32),
-                                            low=np.array([-660, -473, -555, -660, -460, -360, -360, -360, -230, -330, -31, -360, -360, -360], dtype=np.float32), dtype=np.float32)
+        self.observation_space = spaces.Box(high=np.array([660, 473, 555, 660, 460, 360, 360, 360], dtype=np.float32),
+                                            low=np.array([-660, -473, -555, -660, -460, -360, -360, -360], dtype=np.float32), dtype=np.float32)
         while(mirobot.current_pose == None): 
             sleep(1)
 
@@ -42,24 +41,18 @@ class MirobotEnv(gym.Env):
         #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
         posediff_observation = np.array(self.pose_diff, dtype=np.float32)
-        p_observation = mirobot.getPoseObservation()
-        observation = np.concatenate((d_observation, posediff_observation, p_observation))
+        observation = np.concatenate((d_observation, posediff_observation))
         # check if terminated 
-        if self.goalReached(p_observation):
+        if self.goalReached(mirobot.current_pose):
             self.terminated = True
             self.reward = self.reward + 1000
         else: 
             self.terminated = False
         # check if Truncated
-        if p_observation[2] < 10 or action_response == -1:
+        if mirobot.current_pose[2] < 1 or action_response == -1:
             self.truncated = True
             self.reward = self.reward - 1000
             print('[MirobotEnv] [step] Truncated!')
-        if np.array_equal(action, self.previous_action):
-            self.truncated = True
-            self.reward = - 1000
-            self.reward = self.reward - 50000
-            print('[MirobotEnv] [step] Truncated - Same action was repeated!')
         else: 
             self.truncated = False
 
@@ -70,7 +63,6 @@ class MirobotEnv(gym.Env):
 
     def reset(self, seed=None, options=None):
         # reset initiates Environment variables
-        self.previous_action = None
         self.terminated = False
         self.truncated = False
         # generate new goal with random values for x, y, z, r, p, y

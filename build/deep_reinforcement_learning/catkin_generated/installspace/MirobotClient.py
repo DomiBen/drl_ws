@@ -8,7 +8,6 @@ from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
 from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
-from sensor_logger_node.py import write_to_csv
 
 class MirobotClient():
     def __init__(self):
@@ -32,7 +31,6 @@ class MirobotClient():
         rospy.init_node(NAME)
         rospy.wait_for_service("/MirobotServer/SetJointRelativeCmd")
         rospy.wait_for_service("/MirobotServer/SetJointAbsoluteCmd")
-        #print("[MirobotClient] /MirobotServer/SetJointRelativeCmd available")
     
     def force_callback(self, data): 
         if self.record:
@@ -60,11 +58,9 @@ class MirobotClient():
     def pose_callback(self, data):
         euler = euler_from_quaternion([data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w])
         self.current_pose = [data.position.x*1000, data.position.y*1000, data.position.z*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
-
-    def getObservation(self):
-        return np.array(self.current_pose, dtype=np.float32)
     
     def executeAction(self, action):
+        self.reset_ft_record()
         self.record = True
         #Service call
         #print("[MirobotClient] Calling Service")
@@ -78,11 +74,12 @@ class MirobotClient():
             req.jointAngle_4 = action[3]
             req.jointAngle_5 = action[4]
             req.jointAngle_6 = action[5]
+            if math.isnan(action[6]):
+                return -1
             req.speed = round(action[6])
             response = set_joint_service(req)
             self.record = False
-            #print("[MirobotClient] Executed action call sucessfully! ", response)
-            #print("[MirobotClient] avg force: %s \t peak force: %s \n[MirobotClient] avg torque: %s \t peak torque: %s " % (self.average_force, self.peak_force, self.average_torque, self.peak_torque))
+            self.record = False
             return response
         except rospy.ServiceException as e:
             print("[MirobotClient] Service call failed: %s" %e)
@@ -93,4 +90,3 @@ class MirobotClient():
         self.average_force = 0
         self.peak_torque = 0
         self.average_torque = 0
-        write_to_csv(self.peak_force, self.average_force, self.peak_torque, self.average_torque)

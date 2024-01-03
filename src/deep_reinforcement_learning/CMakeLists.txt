@@ -164,7 +164,6 @@ include_directories(
    scripts/env_test.py
    scripts/MirobotClient.py
    scripts/mirobot_env.py
-   scripts/mirobot_learn.py
    scripts/save_env_test.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )

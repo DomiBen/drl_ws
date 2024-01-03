@@ -156,10 +156,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/deep_reinforcement_learning" TYPE PROGRAM FILES "/home/domi/drl_ws/build/deep_reinforcement_learning/catkin_generated/installspace/mirobot_learn.py")
-endif()
-
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/deep_reinforcement_learning" TYPE PROGRAM FILES "/home/domi/drl_ws/build/deep_reinforcement_learning/catkin_generated/installspace/save_env_test.py")
 endif()
 
