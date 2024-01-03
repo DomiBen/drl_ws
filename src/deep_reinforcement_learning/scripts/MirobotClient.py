@@ -66,11 +66,12 @@ class MirobotClient():
         #Service call
         #print("[MirobotClient] Calling Service")
         try:
-            set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointRelativeCmd", SetJointCmd)
+            move_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointRelativeCmd", SetJointCmd)
             req = SetJointCmdRequest()
             # Map the values to the new range
-            mapped_actions = np.interp(action[:5], [0, 1, 2], [-0.0025, 0, 0.0025])
+            mapped_actions = np.interp(action[:6], [0, 1, 2], [-0.25, 0, 0.25])
             # type(action) > np.ndarray
+            print("[MirobotClient] [executeAction] Action: ", mapped_actions)
             req.jointAngle_1 = mapped_actions[0]
             req.jointAngle_2 = mapped_actions[1]
             req.jointAngle_3 = mapped_actions[2]
@@ -80,7 +81,7 @@ class MirobotClient():
             if math.isnan(action[6]):
                 return -1
             req.speed = action[6]*200
-            response = set_joint_service(req)
+            response = move_joint_service(req)
             self.record = False
             return response
         except rospy.ServiceException as e:

@@ -45,13 +45,13 @@ class MirobotEnv(gym.Env):
         # check if terminated 
         if self.goalReached(mirobot.current_pose):
             self.terminated = True
-            self.reward = self.reward + 1000
+            self.reward = self.reward + 500
         else: 
             self.terminated = False
         # check if Truncated
         if mirobot.current_pose[2] < 1 or action_response == -1:
             self.truncated = True
-            self.reward = self.reward - 1000
+            self.reward = self.reward - 500
             print('[MirobotEnv] [step] Truncated!')
         else: 
             self.truncated = False
@@ -74,8 +74,7 @@ class MirobotEnv(gym.Env):
         # observation
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
         posediff_observation = np.array(self.pose_diff, dtype=np.float32)
-        p_observation = mirobot.getPoseObservation() # returns np.array([cart_x, cart_y, cart_z, euler_r, euler_p, euler_y])
-        observation = np.concatenate((d_observation, posediff_observation, p_observation))
+        observation = np.concatenate((d_observation, posediff_observation))
         
         mirobot.reset_ft_record()
         info = {}
@@ -110,13 +109,13 @@ class MirobotEnv(gym.Env):
         self.previous_orientation_diff = orientation_diff
 
         # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
-        ft_reward = (mirobot.average_force*3.33 + mirobot.peak_force + mirobot.average_torque*67 + mirobot.peak_torque*15)
-        if distance_change > 1: 
+        ft_reward = (mirobot.average_force*3.33 + mirobot.peak_force + mirobot.average_torque*67 + mirobot.peak_torque*15)*2.5
+        if distance_change > 0.1: 
             dist_reward = 50
         else:
             dist_reward = 0
         
-        if orientation_diff > 1:
+        if orientation_diff > 0.1:
             orientation_reward = 50
         else:
             orientation_reward = 0

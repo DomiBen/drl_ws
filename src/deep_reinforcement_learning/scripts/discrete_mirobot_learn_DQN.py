@@ -1,13 +1,13 @@
 from mirobot_env import *
-from sb3_contrib import RecurrentPPO
+from stable_baselines3 import DQN
 import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
 ### 
 TIMESTEPS = 500 
-EPISODES = 1000000
+EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"RecurrentPPO_{current_time}_OrnsteinUhlenbeckNoise_lr0_01_entcoef0_05"
+MODELNAME = f"DQN_{current_time}"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs"
 ###
@@ -21,20 +21,9 @@ env = MirobotEnv()
 env.reset()
 print("[mirobot_env] environment: ", env)
 
-n_actions = env.action_space.shape[-1]
-action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.1 * np.ones(n_actions))
-
-model = RecurrentPPO("MlpLstmPolicy",
+model = DQN("MlpPolicy",
             env=env,
-            #clip_range=0.2,
-            #n_steps=16,
-            #batch_size=64,
-            entropy_coef=0.05,
-            learning_rate=0.01,
-            gamma=1.5,
-            #buffer_size=256,
-            #action_noise=action_noise,
-            verbose = 1,
+            verbose=1,
             tensorboard_log=logdir)
 
 for i in range(1,EPISODES):
