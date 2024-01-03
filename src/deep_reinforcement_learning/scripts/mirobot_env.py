@@ -35,6 +35,7 @@ class MirobotEnv(gym.Env):
             sleep(1)
 
     def step(self, action):
+        #print('[MirobotEnv] [step] stepping with action: ', action)
         action_response = mirobot.executeAction(action)
         # creating reward
         self.reward = self.getReward()
@@ -121,12 +122,12 @@ class MirobotEnv(gym.Env):
         if distance_change > 1: 
             dist_reward = 50
         else:
-            dist_reward = -50
+            dist_reward = 0
         
         if orientation_diff > 1:
             orientation_reward = 50
         else:
-            orientation_reward = -50
+            orientation_reward = 0
         orientation_reward = orientation_reward * (20/max(10, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
 
         sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)

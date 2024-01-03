@@ -8,9 +8,8 @@ from stable_baselines3.sac.policies import SACPolicy
 TIMESTEPS = 500 # probably 100000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"SAC_{current_time}_lr_0_005_OrnsteinUhlenbeckActionNoise_0_3_gamma_0_99_entcoef_0_4"
-###
-
+MODELNAME = f"SAC_{current_time}_lr0_001_gamma0_8_NormalActionNoise0_2"
+###ß
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs"
 
@@ -24,18 +23,18 @@ env.reset()
 print("[mirobot_env] environment: ", env)
 
 n_actions = env.action_space.shape[-1]
-action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=0.3 * np.ones(n_actions))
+action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.2 * np.ones(n_actions))
 
 
 model = SAC("MlpPolicy",
             env=env,
             action_noise=action_noise,
-            learning_rate=0.005,
-            gamma=0.99,
+            learning_rate=0.001,
+            gamma=0.8,
             #tau=0.005,
             #target_entropy="auto",
             #buffer_size=256,
-            ent_coef=0.4,
+            #ent_coef=0.08,
             verbose = 1,
             tensorboard_log=logdir)
 

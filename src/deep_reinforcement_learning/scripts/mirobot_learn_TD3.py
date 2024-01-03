@@ -7,7 +7,7 @@ from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 TIMESTEPS = 500 # probably 10000
 EPISODES = 1000000   # probably auch so 1000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TD3_{current_time}_OrnsteinUhlenbeckNoise0_2_lr0_00075_gamma0_999_target_policy_noise0_1_target_noise_clip0_25_delay3"
+MODELNAME = f"TD3_{current_time}_OrnsteinUhlenback0_2_lr0_001_gamma0_9997_trgtplcyn0_15_learningstarts50"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME
@@ -29,12 +29,12 @@ model = TD3("MlpPolicy",
             env=env,
             action_noise=action_noise,
             #batch_size=64,
-            learning_rate=0.00075,
+            learning_rate=0.001,
             learning_starts=50,
             #tau=0.005,
-            gamma=0.999,
-            target_policy_noise=0.1,
-            target_noise_clip=0.25,
+            gamma=0.9997,
+            #target_policy_noise=0.15,
+            #target_noise_clip=0.35,
             #buffer_size=256,
             policy_delay=3,
             verbose = 1,
