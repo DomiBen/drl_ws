@@ -110,12 +110,12 @@ class MirobotEnv(gym.Env):
 
         # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
         ft_reward = (mirobot.average_force*3.33 + mirobot.peak_force + mirobot.average_torque*67 + mirobot.peak_torque*15)*2.5
-        if distance_change > 0.1: 
+        if distance_change > 0.05: 
             dist_reward = 50
         else:
             dist_reward = 0
         
-        if orientation_diff > 0.1:
+        if orientation_diff > 0.05:
             orientation_reward = 50
         else:
             orientation_reward = 0

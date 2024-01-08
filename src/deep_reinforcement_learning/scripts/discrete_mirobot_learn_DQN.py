@@ -1,5 +1,5 @@
 from mirobot_env import *
-from stable_baselines3 import DQN
+from sb3_contrib import TRPO
 import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
@@ -21,7 +21,7 @@ env = MirobotEnv()
 env.reset()
 print("[mirobot_env] environment: ", env)
 
-model = DQN("MlpPolicy",
+model = TRPO("MlpPolicy",
             env=env,
             verbose=1,
             tensorboard_log=logdir)
