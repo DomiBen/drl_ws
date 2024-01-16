@@ -78,9 +78,9 @@ class MirobotClient():
             req.jointAngle_4 = mapped_actions[3]
             req.jointAngle_5 = mapped_actions[4]
             req.jointAngle_6 = mapped_actions[5]
-            if math.isnan(action[6]):
-                return -1
-            req.speed = action[6]*200
+            #if math.isnan(action[6]):
+            #    return -1
+            req.speed = (800 + action[6]*400)
             response = move_joint_service(req)
             self.record = False
             return response
@@ -88,6 +88,21 @@ class MirobotClient():
             print("[MirobotClient] [executeAction] Service call failed: %s" %e)
         self.record = False
         
+    def moveToAbsolutePosition(self, pose):
+        try:
+            move_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
+            req = SetJointCmdRequest()
+            req.jointAngle_1 = pose[0]
+            req.jointAngle_2 = pose[1]
+            req.jointAngle_3 = pose[2]
+            req.jointAngle_4 = pose[3]
+            req.jointAngle_5 = pose[4]
+            req.jointAngle_6 = pose[5]
+            req.speed = 2000
+            response = move_joint_service(req)
+            return response
+        except rospy.ServiceException as e:
+            print("[MirobotClient] [executeAction] Service call failed: %s" %e)
         
     def reset_ft_record(self):
         self.peak_force = 0
