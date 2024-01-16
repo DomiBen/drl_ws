@@ -37,6 +37,8 @@ class MirobotEnv(gym.Env):
         self.pose_counter = 0
         while(mirobot.current_pose == None): 
             sleep(1)
+        mirobot.moveToAbsolutePosition([-38, 52, -11, 114, -10, 117])
+        
         
 
     def step(self, action):
@@ -74,10 +76,10 @@ class MirobotEnv(gym.Env):
         self.truncated = False
         # generate new goal with random values for x, y, z, r, p, y
         self.goal = np.array(self.generateGoal(), dtype=np.float32)
-        if self.goal is POSE_1:
+        '''if self.goal is POSE_1:
             mirobot.moveToAbsolutePosition([-38, 52, -11, 114, -10, 117])
         else:
-            mirobot.moveToAbsolutePosition([26, 30, 11, 180, -38, 153])
+            mirobot.moveToAbsolutePosition([26, 30, 11, 180, -38, 153])'''
         # initialize previous distance and orientation difference for the reward function 
         self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
