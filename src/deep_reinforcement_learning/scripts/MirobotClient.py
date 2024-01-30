@@ -10,6 +10,7 @@ from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
 import numpy as np
 
+
 class MirobotClient():
     def __init__(self):
         #self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
@@ -17,17 +18,17 @@ class MirobotClient():
         self.current_pose = None
         self.record = False
         #For FT-Sensor usage
-        self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_callback)
+        #self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_callback)
         self.force = np.array([0], dtype=np.float32)
         self.peak_force = 0
         self.average_force = 0
-        self.torque_sub = rospy.Subscriber("/torque", Vector3Stamped, self.torque_callback)
+        #self.torque_sub = rospy.Subscriber("/torque", Vector3Stamped, self.torque_callback)
         self.torque = np.array([0], dtype=np.float32)
         self.peak_torque = 0
         self.average_torque = 0
         #For IMU usage
-        #self.lin_sub = rospy.Subscriber("/linacc", Vector3Stamped, self.force_callback)
-        #self.ang_sub = rospy.Subscriber("/angvel", Vector3Stamped, self.torque_callback)
+        self.lin_sub = rospy.Subscriber("/linacc", Vector3Stamped, self.force_callback)
+        self.ang_sub = rospy.Subscriber("/angvel", Vector3Stamped, self.torque_callback)
         #rospy setup 
         rospy.init_node(NAME)
         rospy.wait_for_service("/MirobotServer/SetJointRelativeCmd")
@@ -109,3 +110,5 @@ class MirobotClient():
         self.average_force = 0
         self.peak_torque = 0
         self.average_torque = 0
+
+

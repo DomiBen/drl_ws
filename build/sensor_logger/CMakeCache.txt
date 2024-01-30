@@ -461,9 +461,6 @@ rosgraph_msgs_DIR:PATH=/opt/ros/noetic/share/rosgraph_msgs/cmake
 //The directory containing a CMake configuration file for roslang.
 roslang_DIR:PATH=/opt/ros/noetic/share/roslang/cmake
 
-//The directory containing a CMake configuration file for roslangstd_msgs.
-roslangstd_msgs_DIR:PATH=roslangstd_msgs_DIR-NOTFOUND
-
 //The directory containing a CMake configuration file for rospy.
 rospy_DIR:PATH=/opt/ros/noetic/share/rospy/cmake
 

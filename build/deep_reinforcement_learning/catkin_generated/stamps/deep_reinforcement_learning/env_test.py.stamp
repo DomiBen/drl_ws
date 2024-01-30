@@ -12,7 +12,7 @@ print("ENV: ",env)
 r_list = []
 
 i = 0
-while(i < 100):
+while(i < 1000):
     a  = env.action_space.sample()
     print(a)
     obs, reward, terminated, truncated, info = env.step(a)
@@ -21,4 +21,4 @@ while(i < 100):
     i = i+1
     print("[EnvTest] Reward:", env.reward)
     
-print(env.score)
+#print("Average Reward: ", np.mean(r_list))

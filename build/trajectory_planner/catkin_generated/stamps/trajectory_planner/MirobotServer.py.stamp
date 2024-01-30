@@ -98,7 +98,7 @@ class ServiceServer():
         if mirobot.current_joint_states_rad is None:
             return True
         for current, goal in zip(mirobot.current_joint_states_rad, target.points[0].positions):
-            if abs(current - goal) > 0.2:
+            if abs(current - goal) > 0.002:
                 return True
         print("[MirobotServer] Movement finished:", mirobot.current_pose, "!")
         return False

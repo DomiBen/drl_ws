@@ -8,6 +8,8 @@ from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
 from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
+import numpy as np
+
 
 class MirobotClient():
     def __init__(self):
@@ -65,28 +67,48 @@ class MirobotClient():
         #Service call
         #print("[MirobotClient] Calling Service")
         try:
-            set_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
+            move_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointRelativeCmd", SetJointCmd)
             req = SetJointCmdRequest()
+            # Map the values to the new range
+            mapped_actions = np.interp(action[:6], [0, 1, 2], [-0.25, 0, 0.25])
             # type(action) > np.ndarray
-            req.jointAngle_1 = action[0]
-            req.jointAngle_2 = action[1]
-            req.jointAngle_3 = action[2]
-            req.jointAngle_4 = action[3]
-            req.jointAngle_5 = action[4]
-            req.jointAngle_6 = action[5]
-            if math.isnan(action[6]):
-                return -1
-            req.speed = round(action[6])
-            response = set_joint_service(req)
-            self.record = False
+            #print("[MirobotClient] [executeAction] Action: ", mapped_actions)
+            req.jointAngle_1 = mapped_actions[0]
+            req.jointAngle_2 = mapped_actions[1]
+            req.jointAngle_3 = mapped_actions[2]
+            req.jointAngle_4 = mapped_actions[3]
+            req.jointAngle_5 = mapped_actions[4]
+            req.jointAngle_6 = mapped_actions[5]
+            #if math.isnan(action[6]):
+            #    return -1
+            req.speed = (800 + action[6]*400)
+            response = move_joint_service(req)
             self.record = False
             return response
         except rospy.ServiceException as e:
-            print("[MirobotClient] Service call failed: %s" %e)
+            print("[MirobotClient] [executeAction] Service call failed: %s" %e)
         self.record = False
-
+        
+    def moveToAbsolutePosition(self, pose):
+        try:
+            move_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointAbsoluteCmd", SetJointCmd)
+            req = SetJointCmdRequest()
+            req.jointAngle_1 = pose[0]
+            req.jointAngle_2 = pose[1]
+            req.jointAngle_3 = pose[2]
+            req.jointAngle_4 = pose[3]
+            req.jointAngle_5 = pose[4]
+            req.jointAngle_6 = pose[5]
+            req.speed = 2000
+            response = move_joint_service(req)
+            return response
+        except rospy.ServiceException as e:
+            print("[MirobotClient] [executeAction] Service call failed: %s" %e)
+        
     def reset_ft_record(self):
         self.peak_force = 0
         self.average_force = 0
         self.peak_torque = 0
         self.average_torque = 0
+
+

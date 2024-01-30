@@ -1,14 +1,45 @@
-[  0%] Built target std_msgs_generate_messages_nodejs
+[35m[1mScanning dependencies of target std_msgs_generate_messages_cpp[0m
+[35m[1mScanning dependencies of target _trajectory_planner_generate_messages_check_deps_SetHomeCmd[0m
+[35m[1mScanning dependencies of target _trajectory_planner_generate_messages_check_deps_SetJointCmd[0m
+[35m[1mScanning dependencies of target _trajectory_planner_generate_messages_check_deps_GetPoseCmd[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_py[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_nodejs[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_eus[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_lisp[0m
 [  0%] Built target std_msgs_generate_messages_eus
-[  0%] Built target std_msgs_generate_messages_py
 [  0%] Built target std_msgs_generate_messages_lisp
 [  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _trajectory_planner_generate_messages_check_deps_SetJointCmd
 [  0%] Built target _trajectory_planner_generate_messages_check_deps_SetHomeCmd
 [  0%] Built target _trajectory_planner_generate_messages_check_deps_GetPoseCmd
-[  0%] Built target _trajectory_planner_generate_messages_check_deps_SetJointCmd
-[ 23%] Built target trajectory_planner_generate_messages_py
-[ 47%] Built target trajectory_planner_generate_messages_eus
-[ 70%] Built target trajectory_planner_generate_messages_nodejs
-[ 82%] Built target trajectory_planner_generate_messages_cpp
-[100%] Built target trajectory_planner_generate_messages_lisp
+[35m[1mScanning dependencies of target trajectory_planner_generate_messages_lisp[0m
+[35m[1mScanning dependencies of target trajectory_planner_generate_messages_py[0m
+[35m[1mScanning dependencies of target trajectory_planner_generate_messages_eus[0m
+[35m[1mScanning dependencies of target trajectory_planner_generate_messages_cpp[0m
+[35m[1mScanning dependencies of target trajectory_planner_generate_messages_nodejs[0m
+[  5%] [34m[1mGenerating Python code from SRV trajectory_planner/SetHomeCmd[0m
+[ 17%] [34m[1mGenerating C++ code from trajectory_planner/SetJointCmd.srv[0m
+[ 17%] [34m[1mGenerating Lisp code from trajectory_planner/GetPoseCmd.srv[0m
+[ 23%] [34m[1mGenerating EusLisp code from trajectory_planner/SetHomeCmd.srv[0m
+[ 29%] [34m[1mGenerating Javascript code from trajectory_planner/SetHomeCmd.srv[0m
+[ 35%] [34m[1mGenerating C++ code from trajectory_planner/GetPoseCmd.srv[0m
+[ 47%] [34m[1mGenerating Javascript code from trajectory_planner/SetJointCmd.srv[0m
+[ 41%] [34m[1mGenerating Lisp code from trajectory_planner/SetJointCmd.srv[0m
+[ 58%] [34m[1mGenerating EusLisp code from trajectory_planner/GetPoseCmd.srv[0m
+[ 58%] [34m[1mGenerating EusLisp code from trajectory_planner/SetJointCmd.srv[0m
+[ 64%] [34m[1mGenerating C++ code from trajectory_planner/SetHomeCmd.srv[0m
+[ 76%] [34m[1mGenerating Python code from SRV trajectory_planner/GetPoseCmd[0m
+[ 76%] [34m[1mGenerating Lisp code from trajectory_planner/SetHomeCmd.srv[0m
+[ 82%] [34m[1mGenerating EusLisp manifest code for trajectory_planner[0m
+[ 88%] [34m[1mGenerating Python code from SRV trajectory_planner/SetJointCmd[0m
+[ 94%] [34m[1mGenerating Javascript code from trajectory_planner/GetPoseCmd.srv[0m
+[ 94%] Built target trajectory_planner_generate_messages_lisp
+[ 94%] Built target trajectory_planner_generate_messages_nodejs
+[100%] [34m[1mGenerating Python srv __init__.py for trajectory_planner[0m
+[100%] Built target trajectory_planner_generate_messages_cpp
+[100%] Built target trajectory_planner_generate_messages_py
+[100%] Built target trajectory_planner_generate_messages_eus
+[35m[1mScanning dependencies of target trajectory_planner_generate_messages[0m
 [100%] Built target trajectory_planner_generate_messages

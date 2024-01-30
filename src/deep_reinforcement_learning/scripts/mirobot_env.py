@@ -12,8 +12,8 @@ from sklearn import preprocessing
 import sensor_logger_node
 
 # Poses for the robot to reach
-POSE_1 = [220, 150, 100, 110, -60, -80] 
-POSE_2 = [220, -150, 100, 120, -70, -90]
+POSE_1 = [220, 150, 100, 120, -60, -85]
+POSE_2 = [220, -150, 100, 120, -60, -85]
 
 min_angles_deg = [-110, -35, -120, -180, -200, -360]
 min_angles_rad = [i*math.pi/180 for i in min_angles_deg]
@@ -38,6 +38,7 @@ class MirobotEnv(gym.Env):
         while(mirobot.current_pose == None): 
             sleep(1)
         mirobot.moveToAbsolutePosition([-38, 52, -11, 114, -10, 117])
+        self.stepcount = 0
         
         
 
@@ -64,10 +65,8 @@ class MirobotEnv(gym.Env):
         else: 
             self.truncated = False
 
-        info = {}
-        self.previous_action = action
-        
-                
+        info = {}             
+        self.stepcount = self.stepcount + 1
         return observation, self.reward, self.terminated, self.truncated, info
 
     def reset(self, seed=None, options=None):
@@ -76,10 +75,6 @@ class MirobotEnv(gym.Env):
         self.truncated = False
         # generate new goal with random values for x, y, z, r, p, y
         self.goal = np.array(self.generateGoal(), dtype=np.float32)
-        '''if self.goal is POSE_1:
-            mirobot.moveToAbsolutePosition([-38, 52, -11, 114, -10, 117])
-        else:
-            mirobot.moveToAbsolutePosition([26, 30, 11, 180, -38, 153])'''
         # initialize previous distance and orientation difference for the reward function 
         self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         self.previous_distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
@@ -91,6 +86,7 @@ class MirobotEnv(gym.Env):
         
         mirobot.reset_ft_record()
         info = {}
+        self.stepcount = self.stepcount + 1
         return observation, info
     
     def generateGoal(self):
@@ -122,7 +118,9 @@ class MirobotEnv(gym.Env):
         self.previous_orientation_diff = orientation_diff
 
         # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
-        ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5
+        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5 /2    #for ft usage
+        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2        #for imu usage
+        #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0.05: 
             dist_reward = 50
         else:
@@ -138,42 +136,34 @@ class MirobotEnv(gym.Env):
     
     def goalReached(self, obs):
         for current, goal in zip(obs, self.goal):
-            if abs(current - goal) < 0.3:
+            if abs(current - goal) < 0.2:
                 print('[MirobotEnv] [goalReached] Goal reached!')
                 return True
             return False
-    
-    '''def generateGoal(self):
-        goal = [0, 0, 0, 0, 0, 0]
-        while goal[2] < 10:
-            #first pick random values for the joint angles, between theire minumum and maximum constraints
-            rand_joint_states = [r.uniform(min_angles_rad[0], max_angles_rad[0]), r.uniform(min_angles_rad[1], max_angles_rad[1]), r.uniform(min_angles_rad[2], max_angles_rad[2]), 
-                                r.uniform(min_angles_rad[3], max_angles_rad[3]), r.uniform(min_angles_rad[4], max_angles_rad[4]), r.uniform(min_angles_rad[5], max_angles_rad[5])]
-            # then convert them to cartesian coordinates -> therefore we won't generate unreachable points
-            pose = kdl_kin.forward(rand_joint_states)
-            linear = translation_from_matrix(pose)
-            euler = euler_from_matrix(pose)
-            goal = [linear[0]*1000, linear[1]*1000, linear[2]*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
-        
-        print("[MirbotEnv][generateGoal] New goal: ", goal)
-        return goal'''
-        
-    '''def getReward(self): 
+           
+    def getScaledReward(self): 
         self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
         distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
         distance_change = self.previous_distance - distance
         self.previous_distance = distance
-        
-        orientation_diff = sum(self.pose_diff[3:]) # sum of angle differcences
+            
+        orientation_diff = sum(self.pose_diff[3:])/3 # mean angle difference
         orientation_change = self.previous_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
+
         # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
-        force = mirobot.average_force*3.33 + mirobot.peak_force
-        torque = mirobot.average_torque*67 + mirobot.peak_torque*15
-        
-        sensor_logger_node.write_dist(distance, distance_change, orientation_change)
-        
-        if distance > 10.0:
-            return  distance_change + orientation_change/distance - force - torque
-        return  distance_change + orientation_change - force - torque
-'''
+        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5 /2    #for ft usage
+        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3 #statt 2       #for imu usage
+        #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
+        if distance_change > 0.05: 
+            dist_reward = min(50, 50*1000000/self.stepcount)
+        else:
+            dist_reward = 0
+        if orientation_change > 0.05:
+            orientation_reward = min(50, 50*1000000/self.stepcount)
+        else:
+            orientation_reward = 0
+        orientation_reward = orientation_reward * (20/max(10, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
+        #sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
+        reward = dist_reward + orientation_reward - ft_reward
+        return reward

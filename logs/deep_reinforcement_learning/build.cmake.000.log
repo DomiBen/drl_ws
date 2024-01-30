@@ -35,7 +35,6 @@ Not searching for unused variables given on the command line.
 [36m--[0m Installing devel-space wrapper /home/domi/drl_ws/src/deep_reinforcement_learning/scripts/env_test.py to /home/domi/drl_ws/devel/.private/deep_reinforcement_learning/lib/deep_reinforcement_learning
 [36m--[0m Installing devel-space wrapper /home/domi/drl_ws/src/deep_reinforcement_learning/scripts/MirobotClient.py to /home/domi/drl_ws/devel/.private/deep_reinforcement_learning/lib/deep_reinforcement_learning
 [36m--[0m Installing devel-space wrapper /home/domi/drl_ws/src/deep_reinforcement_learning/scripts/mirobot_env.py to /home/domi/drl_ws/devel/.private/deep_reinforcement_learning/lib/deep_reinforcement_learning
-[36m--[0m Installing devel-space wrapper /home/domi/drl_ws/src/deep_reinforcement_learning/scripts/mirobot_learn.py to /home/domi/drl_ws/devel/.private/deep_reinforcement_learning/lib/deep_reinforcement_learning
 [36m--[0m Installing devel-space wrapper /home/domi/drl_ws/src/deep_reinforcement_learning/scripts/save_env_test.py to /home/domi/drl_ws/devel/.private/deep_reinforcement_learning/lib/deep_reinforcement_learning
 [36m--[0m Configuring done
 [36m--[0m Generating done
