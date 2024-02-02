@@ -23,7 +23,7 @@ print("[mirobot_env] environment: ", env)
 
 model = TRPO("MlpPolicy",
             gamma=0.995,
-            n_steps=2048,
+            n_steps=1024,
             env=env,
             verbose=1,
             tensorboard_log=logdir)
