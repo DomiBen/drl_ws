@@ -12,8 +12,8 @@ from sklearn import preprocessing
 import sensor_logger_node
 
 # Poses for the robot to reach
-POSE_1 = [220, 150, 100, 120, -60, -85]
-POSE_2 = [220, -150, 100, 120, -60, -85]
+POSE_1 = [265, 0, 80, 0, -90, 0]
+POSE_2 = [195, 127, 62, 90, 6.5, -90]
 
 min_angles_deg = [-110, -35, -120, -180, -200, -360]
 min_angles_rad = [i*math.pi/180 for i in min_angles_deg]
@@ -37,7 +37,10 @@ class MirobotEnv(gym.Env):
         self.pose_counter = 0
         while(mirobot.current_pose == None): 
             sleep(1)
-        mirobot.moveToAbsolutePosition([-38, 52, -11, 114, -10, 117])
+        '''while(mirobot.moveToAbsolutePosition([265, 0, 80, 0, -90, 0]) == -1):
+            mirobot.moveToAbsolutePosition([265, 0, 80, 0, -90, 0])
+            sleep(1)'''
+        mirobot.moveToAbsolutePosition([0, 52, -3, 0, -138.5, 0])
         self.stepcount = 0
         
         
@@ -46,7 +49,7 @@ class MirobotEnv(gym.Env):
         #print('[MirobotEnv] [step] stepping with action: ', action)
         action_response = mirobot.executeAction(action)
         # creating reward
-        self.reward = self.getReward()
+        self.reward = self.getScaledReward()
         #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
         posediff_observation = np.array(self.pose_diff, dtype=np.float32)
@@ -83,7 +86,6 @@ class MirobotEnv(gym.Env):
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
         posediff_observation = np.array(self.pose_diff, dtype=np.float32)
         observation = np.concatenate((d_observation, posediff_observation))
-        
         mirobot.reset_ft_record()
         info = {}
         self.stepcount = self.stepcount + 1
@@ -92,10 +94,9 @@ class MirobotEnv(gym.Env):
     def generateGoal(self):
         if self.pose_counter % 2 == 0:
             goal = POSE_1
-            self.pose_counter = self.pose_counter + 1
         else:
             goal = POSE_2
-            self.pose_counter = self.pose_counter + 1
+        self.pose_counter = self.pose_counter + 1
         print("[MirbotEnv][generateGoal] New goal: ", goal)
         return goal
 
@@ -156,14 +157,15 @@ class MirobotEnv(gym.Env):
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3 #statt 2       #for imu usage
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0.05: 
-            dist_reward = min(50, 50*1000000/self.stepcount)
+            dist_reward = min(50, 50*500000/self.stepcount)
         else:
             dist_reward = 0
         if orientation_change > 0.05:
-            orientation_reward = min(50, 50*1000000/self.stepcount)
+            orientation_reward = min(50, 50*500000/self.stepcount)
         else:
             orientation_reward = 0
         orientation_reward = orientation_reward * (20/max(10, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
         #sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
         reward = dist_reward + orientation_reward - ft_reward
+        #print('[MirobotEnv] [getScaledReward] Reward: ', reward)
         return reward

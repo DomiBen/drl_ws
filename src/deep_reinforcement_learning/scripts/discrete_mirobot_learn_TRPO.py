@@ -7,7 +7,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 500 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_discrete_{current_time}_gamma_0995_n_steps_2048"
+MODELNAME = f"TRPO_discrete_{current_time}_gamma_09975"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
@@ -23,7 +23,7 @@ print("[mirobot_env] environment: ", env)
 
 model = TRPO("MlpPolicy",
             gamma=0.995,
-            n_steps=1024,
+            #n_steps=2048,
             env=env,
             verbose=1,
             tensorboard_log=logdir)
