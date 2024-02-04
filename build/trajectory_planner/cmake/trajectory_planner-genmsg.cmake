@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "trajectory_planner: 0 messages, 3 services")
+message(STATUS "trajectory_planner: 0 messages, 4 services")
 
 set(MSG_I_FLAGS "-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -32,6 +32,11 @@ add_custom_target(_trajectory_planner_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "trajectory_planner" "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv" ""
 )
 
+get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" NAME_WE)
+add_custom_target(_trajectory_planner_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "trajectory_planner" "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" ""
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -58,6 +63,12 @@ _generate_srv_cpp(trajectory_planner
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/trajectory_planner
 )
+_generate_srv_cpp(trajectory_planner
+  "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/trajectory_planner
+)
 
 ### Generating Module File
 _generate_module_cpp(trajectory_planner
@@ -76,6 +87,8 @@ add_dependencies(trajectory_planner_generate_messages_cpp _trajectory_planner_ge
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetHomeCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_cpp _trajectory_planner_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv" NAME_WE)
+add_dependencies(trajectory_planner_generate_messages_cpp _trajectory_planner_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_cpp _trajectory_planner_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -107,6 +120,12 @@ _generate_srv_eus(trajectory_planner
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/trajectory_planner
 )
+_generate_srv_eus(trajectory_planner
+  "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/trajectory_planner
+)
 
 ### Generating Module File
 _generate_module_eus(trajectory_planner
@@ -125,6 +144,8 @@ add_dependencies(trajectory_planner_generate_messages_eus _trajectory_planner_ge
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetHomeCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_eus _trajectory_planner_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv" NAME_WE)
+add_dependencies(trajectory_planner_generate_messages_eus _trajectory_planner_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_eus _trajectory_planner_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -156,6 +177,12 @@ _generate_srv_lisp(trajectory_planner
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/trajectory_planner
 )
+_generate_srv_lisp(trajectory_planner
+  "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/trajectory_planner
+)
 
 ### Generating Module File
 _generate_module_lisp(trajectory_planner
@@ -174,6 +201,8 @@ add_dependencies(trajectory_planner_generate_messages_lisp _trajectory_planner_g
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetHomeCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_lisp _trajectory_planner_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv" NAME_WE)
+add_dependencies(trajectory_planner_generate_messages_lisp _trajectory_planner_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_lisp _trajectory_planner_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -205,6 +234,12 @@ _generate_srv_nodejs(trajectory_planner
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/trajectory_planner
 )
+_generate_srv_nodejs(trajectory_planner
+  "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/trajectory_planner
+)
 
 ### Generating Module File
 _generate_module_nodejs(trajectory_planner
@@ -223,6 +258,8 @@ add_dependencies(trajectory_planner_generate_messages_nodejs _trajectory_planner
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetHomeCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_nodejs _trajectory_planner_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv" NAME_WE)
+add_dependencies(trajectory_planner_generate_messages_nodejs _trajectory_planner_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_nodejs _trajectory_planner_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -254,6 +291,12 @@ _generate_srv_py(trajectory_planner
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/trajectory_planner
 )
+_generate_srv_py(trajectory_planner
+  "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/trajectory_planner
+)
 
 ### Generating Module File
 _generate_module_py(trajectory_planner
@@ -272,6 +315,8 @@ add_dependencies(trajectory_planner_generate_messages_py _trajectory_planner_gen
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetHomeCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_py _trajectory_planner_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv" NAME_WE)
+add_dependencies(trajectory_planner_generate_messages_py _trajectory_planner_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv" NAME_WE)
 add_dependencies(trajectory_planner_generate_messages_py _trajectory_planner_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

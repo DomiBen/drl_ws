@@ -62,6 +62,7 @@ find_package(catkin REQUIRED COMPONENTS
   SetJointCmd.srv
   SetHomeCmd.srv
   GetPoseCmd.srv
+  SetCartCmd.srv
 )
 
 ## Generate actions in the 'action' folder

@@ -133,6 +133,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/domi/drl_ws/src/trajectory_planner/srv/SetJointCmd.srv"
     "/home/domi/drl_ws/src/trajectory_planner/srv/SetHomeCmd.srv"
     "/home/domi/drl_ws/src/trajectory_planner/srv/GetPoseCmd.srv"
+    "/home/domi/drl_ws/src/trajectory_planner/srv/SetCartCmd.srv"
     )
 endif()
 

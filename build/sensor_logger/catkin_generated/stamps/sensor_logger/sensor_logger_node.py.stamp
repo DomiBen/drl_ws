@@ -8,11 +8,13 @@ import datetime
 import rospy
 from geometry_msgs.msg import Pose, Vector3Stamped
 
+STARTTIME = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
 def ft_logger(force, torque, linacc, angvel):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_" + STARTTIME + ".csv"
     # Define the data to be written
-    data = [datetime.datetime.now().strftime("%H%M%S"), force, torque, linacc, angvel]
+    data = [datetime.datetime.now().strftime("%H:%M:%S"), force, torque, linacc, angvel]
     # Open the file in append mode
     with open(file_path, mode='a', newline='') as file:
         # Create a CSV writer object
@@ -23,9 +25,9 @@ def ft_logger(force, torque, linacc, angvel):
         
 def write_to_csv(f_peak, f_avg, t_peak, t_avg):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_Data.csv"
     # Define the data to be written
-    data = [datetime.datetime.now().strftime("%H%M%S"), f_peak, f_avg, t_peak, t_avg]
+    data = [datetime.datetime.now().strftime("%H:%M:%S"), f_peak, f_avg, t_peak, t_avg]
     # Open the file in append mode
     with open(file_path, mode='a', newline='') as file:
         # Create a CSV writer object
@@ -36,7 +38,7 @@ def write_to_csv(f_peak, f_avg, t_peak, t_avg):
 
 def write_dist(dist, dist_change, orient_change):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/dist_data_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/dist_data_" + STARTTIME + ".csv"
     # Define the data to be written
     data = [dist, dist_change, orient_change]
     # Open the file in append mode
@@ -49,7 +51,7 @@ def write_dist(dist, dist_change, orient_change):
 
 def add_data_to_csv(distance, ft_reward, distance_change, orientation_change, distance_reward, orientation_reward, reward):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/log_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".csv"
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/log_" + STARTTIME + ".csv"
     data = [distance, distance_change, orientation_change, ft_reward,  distance_reward, orientation_reward, reward]
     # Create the directory if it does not exist
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -73,10 +75,15 @@ class ftLogger():
         self.angvel = 0
         #rospy setup 
         rospy.init_node(NAME)
+        print("ftLogger node started")
+        rate = rospy.Rate(100)
+        while(not rospy.is_shutdown()):
+            self.write_data()
+            rate.sleep()
+        
 
     def force_logger_callback(self, data):
         self.force = data.vector.x + data.vector.y + data.vector.z
-        ft_logger(self.force, self.torque, self.linacc, self.angvel)
     
     def torque_logger_callback(self, data):
         self.torque = data.vector.x + data.vector.y + data.vector.z
@@ -86,7 +93,12 @@ class ftLogger():
         
     def angvel_logger_callback(self, data):
         self.angvel = data.vector.x + data.vector.y + data.vector.z
+    
+    def write_data(self):
+        ft_logger(self.force, self.torque, self.linacc, self.angvel)
 
 if __name__ == '__main__':
-    ftLogger()
-    rospy.spin()
+    try: 
+        STARTTIME = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        ftLogger()
+    except rospy.ROSInterruptException: pass

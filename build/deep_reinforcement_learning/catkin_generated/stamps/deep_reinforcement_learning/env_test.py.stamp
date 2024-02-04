@@ -1,10 +1,10 @@
-from mirobot_env import *
+'''from mirobot_env import *
 from stable_baselines3.common.env_checker import check_env
 import numpy as np
 
 env = MirobotEnv()
-
-#check_env(env)
+env.reset()
+check_env(env)
 
 env.reset()
 print("ENV: ",env)
@@ -19,6 +19,16 @@ while(i < 1000):
     print(obs, reward, terminated, truncated)
     r_list.insert(i, r)
     i = i+1
-    print("[EnvTest] Reward:", env.reward)
+    print("[EnvTest] Reward:", env.reward)'''
     
 #print("Average Reward: ", np.mean(r_list))
+
+
+obs = [220, 150, 100, 120, -60, -85]
+G = [220, -150, 100, 120, -60, -85]
+
+for current, goal in zip(obs, G):
+    #print(abs(current - goal) < 0.2)
+    if abs(current - goal) > 0.2:
+        print("return false")
+print("return true")

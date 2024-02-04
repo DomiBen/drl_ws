@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 NAME = 'MirobotServer'
-
 import math
 import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
@@ -9,8 +8,14 @@ from geometry_msgs.msg import Pose
 #from std_msgs.msg import Duration, Header
 from trajectory_planner.srv import *
 from tf.transformations import euler_from_quaternion
+from urdf_parser_py.urdf import URDF
+from pykdl_utils.kdl_kinematics import KDLKinematics
+
 
 sequence = 0
+#load robopt model from ros poarameter server and creating KDLKinematiocs class
+robot = URDF.from_parameter_server()
+kdl_kin = KDLKinematics(robot, "base_link", "link6")
 
 class ServiceServer(): 
     def __init__(self):
@@ -19,8 +24,12 @@ class ServiceServer():
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
         #Setting up Services
         self.setJointSrv = rospy.Service('/MirobotServer/SetJointAbsoluteCmd', SetJointCmd, self.set_joint_angles)
-        self.setHomeSrv = rospy.Service('/MirobotServer/SetHomeCmd', SetHomeCmd, self.home_robot)
+        self.setCartSrv = rospy.Service('/MirobotServer/SetCartAbsoluteCmd', SetCartCmd, self.set_cartesian_pose)
+        
         self.moveJointSrv = rospy.Service('/MirobotServer/SetJointRelativeCmd', SetJointCmd, self.move_joints)
+        self.moveJointSrv = rospy.Service('/MirobotServer/SetCartRelativeCmd', SetCartCmd, self.move_cartesian)
+        
+        self.setHomeSrv = rospy.Service('/MirobotServer/SetHomeCmd', SetHomeCmd, self.home_robot)
         self.getposeSrv = rospy.Service('/MirobotServer/GetPoseCmd', GetPoseCmd, self.get_pose)
 
         self.max_interation_until_timeout = 500
@@ -45,6 +54,16 @@ class ServiceServer():
         msg = self.get_JointTrajectory(req.jointAngle_1*math.pi/180, req.jointAngle_2*math.pi/180, req.jointAngle_3*math.pi/180, 
                                        req.jointAngle_4*math.pi/180, req.jointAngle_5*math.pi/180, req.jointAngle_6*math.pi/180, 
                                        req.speed*math.pi/180)
+        return self.execute_movement(msg)
+    
+    def set_cartesian_pose(self, req):
+        joint_angles = kdl_kin.inverse([req.x, req.y, req.z, req.a, req.b, req.c])
+        msg = self.get_JointTrajectory(joint_angles[0], joint_angles[1], joint_angles[2], joint_angles[3], joint_angles[4], joint_angles[5], req.speed*math.pi/180)
+        return self.execute_movement(msg)
+
+    def move_cartesian(self, req):
+        joint_angles = kdl_kin.inverse([mirobot.current_pose[0]+req.x, mirobot.current_pose[1]+req.y, mirobot.current_pose[2]+req.z, mirobot.current_pose[3]+req.a, mirobot.current_pose[4]+req.b, mirobot.current_pose[5]+req.c])
+        msg = self.get_JointTrajectory(joint_angles[0], joint_angles[1], joint_angles[2], joint_angles[3], joint_angles[4], joint_angles[5], req.speed*math.pi/180)
         return self.execute_movement(msg)
 
     def get_pose(self, req):
