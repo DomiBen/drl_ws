@@ -4,7 +4,7 @@ import math
 import rospy
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from sensor_msgs.msg import JointState
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, Twist
 #from std_msgs.msg import Duration, Header
 from trajectory_planner.srv import *
 from tf.transformations import euler_from_quaternion
@@ -15,7 +15,7 @@ from pykdl_utils.kdl_kinematics import KDLKinematics
 sequence = 0
 #load robopt model from ros poarameter server and creating KDLKinematiocs class
 robot = URDF.from_parameter_server()
-kdl_kin = KDLKinematics(robot, "base_link", "link6")
+kdl_kin = KDLKinematics(robot, "link1", "link61")
 
 class ServiceServer(): 
     def __init__(self):
@@ -57,18 +57,32 @@ class ServiceServer():
         return self.execute_movement(msg)
     
     def set_cartesian_pose(self, req):
-        joint_angles = kdl_kin.inverse([req.x, req.y, req.z, req.a, req.b, req.c])
+        pose = Twist()
+        pose.linear.x = req.x/1000
+        pose.linear.y = req.y/1000
+        pose.linear.z = req.z/1000
+        pose.angular.x = req.a/180*math.pi
+        pose.angular.y = req.b/180*math.pi
+        pose.angular.z = req.c/180*math.pi
+        joint_angles = kdl_kin.inverse(pose)
         msg = self.get_JointTrajectory(joint_angles[0], joint_angles[1], joint_angles[2], joint_angles[3], joint_angles[4], joint_angles[5], req.speed*math.pi/180)
         return self.execute_movement(msg)
 
     def move_cartesian(self, req):
-        joint_angles = kdl_kin.inverse([mirobot.current_pose[0]+req.x, mirobot.current_pose[1]+req.y, mirobot.current_pose[2]+req.z, mirobot.current_pose[3]+req.a, mirobot.current_pose[4]+req.b, mirobot.current_pose[5]+req.c])
+        pose = Twist()
+        pose.linear.x = req.x/1000 + mirobot.current_pose[0]/1000
+        pose.linear.y = req.y/1000 + mirobot.current_pose[1]/1000
+        pose.linear.z = req.z/1000 + mirobot.current_pose[2]/1000
+        pose.angular.x = req.a/180*math.pi + mirobot.current_pose[3]/180*math.pi
+        pose.angular.y = req.b/180*math.pi + mirobot.current_pose[4]/180*math.pi
+        pose.angular.z = req.c/180*math.pi + mirobot.current_pose[5]/180*math.pi
+        joint_angles = kdl_kin.inverse(pose)
         msg = self.get_JointTrajectory(joint_angles[0], joint_angles[1], joint_angles[2], joint_angles[3], joint_angles[4], joint_angles[5], req.speed*math.pi/180)
         return self.execute_movement(msg)
 
     def get_pose(self, req):
         if mirobot.current_joint_states_deg and mirobot.current_pose is not None:
-            return 1, -1, mirobot.current_pose[0], mirobot.current_pose[1], mirobot.current_pose[2], mirobot.current_pose[3], mirobot.current_pose[4], mirobot.current_pose[5], mirobot.current_joint_states_deg[0], mirobot.current_joint_states_deg[1], mirobot.current_joint_states_deg[2], mirobot.current_joint_states_deg[3], mirobot.current_joint_states_deg[4], mirobot.current_joint_states_deg[5], 0
+            return 1, -1, mirobot.current_pose[0]*1000, mirobot.current_pose[1]*1000, mirobot.current_pose[2]*1000, mirobot.current_pose[3]/math.pi*180, mirobot.current_pose[4]/math.pi*180, mirobot.current_pose[5]/math.pi*180, mirobot.current_joint_states_deg[0], mirobot.current_joint_states_deg[1], mirobot.current_joint_states_deg[2], mirobot.current_joint_states_deg[3], mirobot.current_joint_states_deg[4], mirobot.current_joint_states_deg[5], 0
         return 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0
     
     def get_JointTrajectory(self, j1, j2, j3, j4, j5, j6, v):

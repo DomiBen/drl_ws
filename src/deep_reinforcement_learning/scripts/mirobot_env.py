@@ -23,14 +23,14 @@ max_angles_rad = [i*math.pi/180 for i in max_angles_deg]
 mirobot = MirobotClient()
 #load robot model from ros poarameter server and create KDLKinematiocs class
 robot = URDF.from_parameter_server()
-kdl_kin = KDLKinematics(robot, "base_link", "link6")
+kdl_kin = KDLKinematics(robot, "base_link", "link61")
 
 # Custom Environment that follows gym interface
 class MirobotEnv(gym.Env):
     def __init__(self):
         super(MirobotEnv, self).__init__()
         # Define action and observation space -> must be gym space object 
-        self.action_space = spaces.MultiDiscrete([3, 3, 3, 3, 3, 3, 4]) # 6 joints with 3 possible actions each (0: -0.0025°, 1: 0°, 2: +0.0025°) and 10 possible speeds (200, 400, 600,..., 2000)
+        self.action_space = spaces.MultiDiscrete([3, 3, 3, 3, 3, 3, 4]) # 6 joints with 3 possible actions each (0: -0.25°, 1: 0°, 2: +0.25°) and 4 possible speeds
         # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
         self.observation_space = spaces.Box(high=np.array([660, 473, 555, 660, 460, 360, 360, 360], dtype=np.float32),
                                             low=np.array([-660, -473, -555, -660, -460, -360, -360, -360], dtype=np.float32), dtype=np.float32)
@@ -156,11 +156,11 @@ class MirobotEnv(gym.Env):
         #ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5 /2    #for ft usage
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3 #statt 2       #for imu usage
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
-        if distance_change > 0.05: 
+        if distance_change > 0.02: 
             dist_reward = min(50, 50*500000/self.stepcount)
         else:
             dist_reward = 0
-        if orientation_change > 0.05:
+        if orientation_change > 0.02:
             orientation_reward = min(50, 50*500000/self.stepcount)
         else:
             orientation_reward = 0

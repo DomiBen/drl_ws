@@ -13,13 +13,12 @@ from sensor_msgs.msg import JointState
 #load robopt model from ros poarameter server
 robot = URDF.from_parameter_server()
 # creating KDLKinematiocs class
-kdl_kin = KDLKinematics(robot, "base_link", "link6")
+kdl_kin = KDLKinematics(robot, "base_link", "link61")
 pub = rospy.Publisher('endeffector_pose', Pose, queue_size = 100)
 pose = Pose()
 
 def publishPose():    
-    #setting up ROS
-
+    #setting up ROS node and subscriber
     sub = rospy.Subscriber('joint_states', JointState, callback)
     rospy.init_node('MirobotPosePublisher', anonymous = True)
     rospy.spin()

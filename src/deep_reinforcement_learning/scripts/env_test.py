@@ -2,6 +2,7 @@ from urdf_parser_py.urdf import URDF
 from pykdl_utils.kdl_kinematics import KDLKinematics
 from tf.transformations import quaternion_from_euler
 from geometry_msgs.msg import Twist
+import math
 
 '''from mirobot_env import *
 from stable_baselines3.common.env_checker import check_env
@@ -39,16 +40,32 @@ for current, goal in zip(obs, G):
         print("return false")
 print("return true")
 '''
-pose = Twist()
-pose.linear.x = 265
-pose.linear.y = 0  
-pose.linear.z = 80
-pose.angular.x = 0
-pose.angular.y = -90
-pose.angular.z = 0
-#load robopt model from ros poarameter server and creating KDLKinematiocs class
-robot = URDF.from_parameter_server()
-kdl_kin = KDLKinematics(robot, "base_link", "link6")
+array1 = [265, -27.5, 80, 0, -90, 0]
+array2 = [315.5, 41.25, 76.64, 179.5, -78.6, -103]
 
-joint_angles = kdl_kin.inverse(pose)
-print(joint_angles)
+result = [round(x - y, 2) for x, y in zip(array1, array2)]
+print(result)
+
+array1 = [265, 0, 80, 0, -90, 0]
+array2 = [314.6, 71.9, 76.8, 86.63, -90, 2.8]
+
+result = [round(x - y, 2) for x, y in zip(array1, array2)]
+print(result)
+
+array1 = [265, 27.5, 80, 0, -90, 0]
+array2 = [313.5, 98, 76.64, 179.5, -78.6, -90.2]
+
+result = [round(x - y, 2) for x, y in zip(array1, array2)]
+print(result)
+
+array1 = [170, 122, 62, 90, 6.5, -90]
+array2 = [198.5, 206.5, 58, 180, -26, -10.5]
+
+result = [round(x - y, 2) for x, y in zip(array1, array2)]
+print(result)
+
+array1 = [195, 127, 62, 90, 6.5, -90]
+array2 = [226.5, 210.85, 58, 180, -31.65, -17.81]
+
+result = [round(x - y, 2) for x, y in zip(array1, array2)]
+print(result)
