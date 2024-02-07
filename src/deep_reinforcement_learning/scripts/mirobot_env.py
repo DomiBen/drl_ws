@@ -139,7 +139,7 @@ class MirobotEnv(gym.Env):
             if abs(current - goal) > 0.2:
                 return False
         print('[MirobotEnv] [goalReached] Goal reached!')
-        return False
+        return True
            
     def getScaledReward(self): 
         self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
