@@ -1,0 +1,5 @@
+Symlinking /home/domi/drl_ws/devel/share/sensor_logger/cmake/sensor_loggerConfig-version.cmake
+Symlinking /home/domi/drl_ws/devel/share/sensor_logger/cmake/sensor_loggerConfig.cmake
+Symlinking /home/domi/drl_ws/devel/lib/sensor_logger/sensor_logger_node.py
+Symlinking /home/domi/drl_ws/devel/lib/sensor_logger/cmake.lock
+Symlinking /home/domi/drl_ws/devel/lib/pkgconfig/sensor_logger.pc

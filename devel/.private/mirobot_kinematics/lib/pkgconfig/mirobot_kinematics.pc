@@ -1,0 +1,8 @@
+prefix=/home/domi/drl_ws/devel/.private/mirobot_kinematics
+
+Name: mirobot_kinematics
+Description: Description of mirobot_kinematics
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

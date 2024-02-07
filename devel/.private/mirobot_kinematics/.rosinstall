@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/domi/drl_ws/devel/.private/mirobot_kinematics/setup.sh

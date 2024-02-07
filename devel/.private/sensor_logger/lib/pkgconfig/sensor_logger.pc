@@ -1,0 +1,8 @@
+prefix=/home/domi/drl_ws/devel/.private/sensor_logger
+
+Name: sensor_logger
+Description: Description of sensor_logger
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

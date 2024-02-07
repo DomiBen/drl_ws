@@ -1,0 +1,8 @@
+prefix=/home/domi/drl_ws/devel/.private/trajectory_planner
+
+Name: trajectory_planner
+Description: Description of trajectory_planner
+Version: 0.0.0
+Cflags: -I/home/domi/drl_ws/devel/.private/trajectory_planner/include
+Libs: -L${prefix}/lib 
+Requires: roscpp roslang rospy std_msgs message_runtime
