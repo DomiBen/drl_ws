@@ -1,8 +1,0 @@
-prefix=/home/domi/drl_ws/install
-
-Name: hrl_geom
-Description: Description of hrl_geom
-Version: 0.1.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

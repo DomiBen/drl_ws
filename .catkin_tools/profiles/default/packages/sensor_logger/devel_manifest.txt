@@ -1,7 +1,0 @@
-sensor_logger
-/home/domi/drl_ws/devel/.private/sensor_logger/cmake.lock /home/domi/drl_ws/devel/./cmake.lock
-/home/domi/drl_ws/devel/.private/sensor_logger/share/sensor_logger/cmake/sensor_loggerConfig-version.cmake /home/domi/drl_ws/devel/share/sensor_logger/cmake/sensor_loggerConfig-version.cmake
-/home/domi/drl_ws/devel/.private/sensor_logger/share/sensor_logger/cmake/sensor_loggerConfig.cmake /home/domi/drl_ws/devel/share/sensor_logger/cmake/sensor_loggerConfig.cmake
-/home/domi/drl_ws/devel/.private/sensor_logger/lib/sensor_logger/sensor_logger_node.py /home/domi/drl_ws/devel/lib/sensor_logger/sensor_logger_node.py
-/home/domi/drl_ws/devel/.private/sensor_logger/lib/sensor_logger/cmake.lock /home/domi/drl_ws/devel/lib/sensor_logger/cmake.lock
-/home/domi/drl_ws/devel/.private/sensor_logger/lib/pkgconfig/sensor_logger.pc /home/domi/drl_ws/devel/lib/pkgconfig/sensor_logger.pc

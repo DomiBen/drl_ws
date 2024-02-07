@@ -1,8 +1,0 @@
-prefix=/home/domi/drl_ws/install
-
-Name: mirobot_kinematics
-Description: Description of mirobot_kinematics
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
