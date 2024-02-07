@@ -94,8 +94,10 @@ class MirobotEnv(gym.Env):
     def generateGoal(self):
         if self.pose_counter % 2 == 0:
             goal = POSE_1
+            mirobot.moveToAbsolutePosition([0, 52, -3, 0, -138.5, 0])
         else:
             goal = POSE_2
+            mirobot.moveToAbsolutePosition([36.5, 49, 11, 40, -156, -77])
         self.pose_counter = self.pose_counter + 1
         print("[MirbotEnv][generateGoal] New goal: ", goal)
         return goal
