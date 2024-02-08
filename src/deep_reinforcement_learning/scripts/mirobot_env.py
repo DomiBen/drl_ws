@@ -30,7 +30,7 @@ class MirobotEnv(gym.Env):
     def __init__(self):
         super(MirobotEnv, self).__init__()
         # Define action and observation space -> must be gym space object 
-        self.action_space = spaces.MultiDiscrete([3, 3, 3, 3, 3, 3, 4]) # 6 joints with 3 possible actions each (0: -0.25°, 1: 0°, 2: +0.25°) and 4 possible speeds
+        self.action_space = spaces.MultiDiscrete([3, 3, 3, 3, 3, 3]) # 6 joints with 3 possible actions each (0: -0.25°, 1: 0°, 2: +0.25°) and 4 possible speeds
         # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
         self.observation_space = spaces.Box(high=np.array([660, 473, 555, 660, 460, 360, 360, 360], dtype=np.float32),
                                             low=np.array([-660, -473, -555, -660, -460, -360, -360, -360], dtype=np.float32), dtype=np.float32)

@@ -70,7 +70,7 @@ class MirobotClient():
             move_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointRelativeCmd", SetJointCmd)
             req = SetJointCmdRequest()
             # Map the values to the new range
-            mapped_actions = np.interp(action[:6], [0, 1, 2], [-0.25, 0, 0.25])
+            mapped_actions = np.interp(action, [0, 1, 2], [-1, 0, 1])
             # type(action) > np.ndarray
             #print("[MirobotClient] [executeAction] Action: ", mapped_actions)
             req.jointAngle_1 = mapped_actions[0]
@@ -81,7 +81,7 @@ class MirobotClient():
             req.jointAngle_6 = mapped_actions[5]
             #if math.isnan(action[6]):
             #    return -1
-            req.speed = (800 + action[6]*400)
+            req.speed = 1000
             response = move_joint_service(req)
             self.record = False
             return response
