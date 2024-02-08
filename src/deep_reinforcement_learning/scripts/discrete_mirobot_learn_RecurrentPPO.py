@@ -8,7 +8,7 @@ from stable_baselines3.common.policies import ActorCriticPolicy
 TIMESTEPS = 1000
 EPISODES = 1000000 
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"RecurrentPPO_discrete_{current_time}_gamma0_995"
+MODELNAME = f"RecurrentPPO_discreteV2_{current_time}_gamma0_995"
 ###
 
 models_dir = "drlsaves/models/"+MODELNAME

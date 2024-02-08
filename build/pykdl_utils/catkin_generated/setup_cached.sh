@@ -9,6 +9,7 @@
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/domi/drl_ws/devel/.private/pykdl_utils:$CMAKE_PREFIX_PATH"
 export LD_LIBRARY_PATH="/home/domi/drl_ws/devel/.private/pykdl_utils/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/domi/drl_ws/devel/.private/pykdl_utils/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/domi/drl_ws/build/pykdl_utils'
 export PYTHONPATH="/home/domi/drl_ws/devel/.private/pykdl_utils/lib/python3/dist-packages:$PYTHONPATH"
 export ROSLISP_PACKAGE_DIRECTORIES="/home/domi/drl_ws/devel/.private/pykdl_utils/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"

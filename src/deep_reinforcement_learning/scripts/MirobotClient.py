@@ -88,6 +88,7 @@ class MirobotClient():
         except rospy.ServiceException as e:
             print("[MirobotClient] [executeAction] Service call failed: %s" %e)
         self.record = False
+        return -1
         
     def moveToAbsolutePosition(self, pose):
         try:

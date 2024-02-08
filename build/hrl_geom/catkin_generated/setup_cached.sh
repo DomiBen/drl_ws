@@ -9,6 +9,7 @@
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/domi/drl_ws/devel/.private/hrl_geom:$CMAKE_PREFIX_PATH"
 export LD_LIBRARY_PATH="/home/domi/drl_ws/devel/.private/hrl_geom/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/domi/drl_ws/devel/.private/hrl_geom/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/domi/drl_ws/build/hrl_geom'
 export PYTHONPATH="/home/domi/drl_ws/devel/.private/hrl_geom/lib/python3/dist-packages:$PYTHONPATH"
 export ROSLISP_PACKAGE_DIRECTORIES="/home/domi/drl_ws/devel/.private/hrl_geom/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"

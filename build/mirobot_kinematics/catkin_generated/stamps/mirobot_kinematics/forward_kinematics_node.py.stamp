@@ -1,5 +1,5 @@
  #!/usr/bin/env python
-import queue
+
 import rospy
 from urdf_parser_py.urdf import URDF
 from pykdl_utils.kdl_kinematics import KDLKinematics
@@ -27,13 +27,13 @@ def publishPose():
 def callback(data):
     #representing joint angles in vector
     # forward kinematics returns homogeneous transformation 4x4 numpy.mat
-    kdl_pose = kdl_kin.forward(data.position)
+    kdl_pose = kdl_kin.forward(data.position, end_link="link6", base_link="base_link")
     # extract euler and translation vectors from homogeneous transformation
     # linear position in kartesian coordinates
     point = Point()
     linear = translation_from_matrix(kdl_pose)
-    point.x =  linear[0]
-    point.y =  linear[1]
+    point.x =  linear[0] + 0.0035
+    point.y =  linear[1] - 0.011295241815272498
     point.z =  linear[2]
     pose.position = point
     # angular position in quaternions

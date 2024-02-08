@@ -57,9 +57,9 @@ class MirobotEnv(gym.Env):
         else: 
             self.terminated = False
         # check if Truncated
-        if mirobot.current_pose[2] < 1 or action_response == -1:
+        if mirobot.current_pose[2] < 10 or action_response == -1:
             self.truncated = True
-            self.reward = self.reward - 500
+            self.reward = -500
             print('[MirobotEnv] [step] Truncated!')
         else: 
             self.truncated = False
