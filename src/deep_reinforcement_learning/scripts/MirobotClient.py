@@ -73,7 +73,7 @@ class MirobotClient():
             mapped_actions = np.interp(action, [0, 1, 2], [-1, 0, 1])
             # type(action) > np.ndarray
             #print("[MirobotClient] [executeAction] Action: ", mapped_actions)
-            req.jointAngle_1 = mapped_actions[0]
+            req.jointAngle_1 = mapped_actions[0]/2
             req.jointAngle_2 = mapped_actions[1]
             req.jointAngle_3 = mapped_actions[2]
             req.jointAngle_4 = mapped_actions[3]
