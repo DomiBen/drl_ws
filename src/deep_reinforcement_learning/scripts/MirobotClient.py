@@ -82,7 +82,7 @@ class MirobotClient():
             #if math.isnan(action[6]):
             #    return -1
             req.speed = 1000
-            response = move_joint_service(req)
+            response = move_joint_service(req).result
             self.record = False
             return response
         except rospy.ServiceException as e:
