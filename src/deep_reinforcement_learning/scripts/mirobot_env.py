@@ -13,7 +13,7 @@ import sensor_logger_node
 
 # Poses for the robot to reach
 START = [265, -30, 80, 0, -90, 0]
-GOAL = [170, 120, 62, 0, 0, -90]
+GOAL = [157, 120, 62, 0, 0, 0]
 
 min_angles_deg = [-110, -35, -120, -180, -200, -360]
 min_angles_rad = [i*math.pi/180 for i in min_angles_deg]
