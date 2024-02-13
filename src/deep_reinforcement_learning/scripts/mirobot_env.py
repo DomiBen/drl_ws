@@ -136,8 +136,8 @@ class MirobotEnv(gym.Env):
         return reward
     
     def goalReached(self, obs):
-        for current, goal in zip(obs, self.goal):
-            if abs(current - goal) > 10:                    # 10mm and 10° tolerance for the goalzone 
+        for current, goal in zip(obs[:3], self.goal[:3]):
+            if abs(current - goal) > 15:                    # 15mm tolerance for the goalzone 
                 return False
         print('[MirobotEnv] [goalReached] Goal reached!')
         return True
@@ -157,11 +157,11 @@ class MirobotEnv(gym.Env):
         #ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5 /2    #for ft usage
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
-        if distance_change > 0: 
+        if distance_change > 0.01: 
             dist_reward = min(50, 50*500000/self.stepcount)
         else:
             dist_reward = 0
-        if orientation_change > 0:
+        if orientation_change > 0.01:
             orientation_reward = min(50, 50*500000/self.stepcount)
         else:
             orientation_reward = 0
