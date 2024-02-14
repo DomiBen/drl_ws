@@ -7,7 +7,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 500 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_discreteV2_{current_time}_gamma_09975"
+MODELNAME = f"TRPO_discreteV2_withO_{current_time}_gamma_09975"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
