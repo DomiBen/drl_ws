@@ -3,6 +3,7 @@ from pykdl_utils.kdl_kinematics import KDLKinematics
 from tf.transformations import quaternion_from_euler
 from geometry_msgs.msg import Twist
 import math
+import numpy as np
 
 '''from mirobot_env import *
 from stable_baselines3.common.env_checker import check_env
@@ -29,14 +30,5 @@ while(i < 1000):
     print("[EnvTest] Reward:", env.reward)'''
     
 #print("Average Reward: ", np.mean(r_list))
-
-'''
-obs = [220, 150, 100, 120, -60, -85]
-G = [220, -150, 100, 120, -60, -85]
-
-for current, goal in zip(obs, G):
-    #print(abs(current - goal) < 0.2)
-    if abs(current - goal) > 0.2:
-        print("return false")
-print("return true")
-'''
+action= np.array([1, 1, 4, 1, 1, 1], dtype=np.float32)
+print(np.all(action == 1))
