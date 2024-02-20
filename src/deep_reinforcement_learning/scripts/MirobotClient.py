@@ -15,7 +15,9 @@ class MirobotClient():
     def __init__(self):
         #self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
+        self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_callback)
         self.current_pose = None
+        self.current_joint_states = None
         self.record = False
         #For FT-Sensor usage
         #self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_callback)
@@ -60,6 +62,9 @@ class MirobotClient():
     def pose_callback(self, data):
         euler = euler_from_quaternion([data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w])
         self.current_pose = [data.position.x*1000, data.position.y*1000, data.position.z*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
+    
+    def joint_callback(self, data):
+        self.current_joint_states = [data.position[0]*180/math.pi, data.position[1]*180/math.pi, data.position[2]*180/math.pi, data.position[3]*180/math.pi, data.position[4]*180/math.pi, data.position[5]*180/math.pi]
     
     def executeAction(self, action):
         self.reset_ft_record()
