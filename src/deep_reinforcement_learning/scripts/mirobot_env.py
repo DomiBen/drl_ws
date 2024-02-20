@@ -158,7 +158,7 @@ class MirobotEnv(gym.Env):
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/sensor_data_calculation.ods
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
-        sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
+        #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0.001: 
             dist_reward = 50
         else:
