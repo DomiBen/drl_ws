@@ -16,7 +16,8 @@ class MirobotClient():
         #self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
         self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_callback)
-        self.current_pose = None
+        self.current_point = None
+        self.current_orientation = None
         self.current_joint_states = None
         self.record = False
         #For FT-Sensor usage
@@ -60,6 +61,9 @@ class MirobotClient():
                 self.peak_torque = max(absolute_list)
 
     def pose_callback(self, data):
+        self.current_point = [data.position.x*1000, data.position.y*1000, data.position.z*1000]
+        self.current_orientation = [data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w]
+        
         euler = euler_from_quaternion([data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w])
         self.current_pose = [data.position.x*1000, data.position.y*1000, data.position.z*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
     

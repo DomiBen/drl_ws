@@ -30,5 +30,8 @@ while(i < 1000):
     print("[EnvTest] Reward:", env.reward)'''
     
 #print("Average Reward: ", np.mean(r_list))
-action= np.array([1, 1, 4, 1, 1, 1], dtype=np.float32)
-print(np.all(action == 1))
+angle_diff = [0, 0, 0, 0, 0, 0]
+vector_diff = [0, 0, 0]
+posediff_observation = np.concatenate([vector_diff, angle_diff], dtype=np.float32)
+
+print(posediff_observation)
