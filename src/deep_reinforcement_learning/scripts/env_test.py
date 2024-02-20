@@ -30,8 +30,7 @@ while(i < 1000):
     print("[EnvTest] Reward:", env.reward)'''
     
 #print("Average Reward: ", np.mean(r_list))
-angle_diff = [0, 0, 0, 0, 0, 0]
-vector_diff = [0, 0, 0]
-posediff_observation = np.concatenate([vector_diff, angle_diff], dtype=np.float32)
+orientation_diff = [12, -12, 10]
 
-print(posediff_observation)
+odiffsum = sum([abs(od) for od in orientation_diff])
+print("ODIFFSUM: ", odiffsum)

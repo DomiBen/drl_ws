@@ -1,5 +1,6 @@
 from mirobot_env import *
 from sb3_contrib import TRPO
+import torch as th
 import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
@@ -7,7 +8,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 500 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_discreteV2_withO_{current_time}_gamma_09975"
+MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
@@ -18,11 +19,16 @@ if not os.path.exists(logdir):
 
 env = MirobotEnv()
 env.reset()
+
+policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=[256, 256]))
+
 model = TRPO("MlpPolicy",
             gamma=0.995,
-            #n_steps=2048,
+            #batch_size=20,
+            #learning_rate=0.04,
             env=env,
             verbose=1,
+            policy_kwargs=policy_kwargs,
             tensorboard_log=logdir)
 try:
     for i in range(1,EPISODES):
