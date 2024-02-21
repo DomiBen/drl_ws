@@ -8,7 +8,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 500 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995_batch_32"
+MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995_batch_20"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
@@ -24,7 +24,7 @@ policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[128, 128], vf=
 
 model = TRPO("MlpPolicy",
             gamma=0.995,
-            batch_size=32,
+            batch_size=20,
             #learning_rate=0.04,
             env=env,
             verbose=1,
