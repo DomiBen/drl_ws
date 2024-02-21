@@ -63,6 +63,7 @@ class MirobotEnv(gym.Env):
         if self.goalReached(mirobot.current_point, mirobot.current_orientation):
             self.terminated = True
             self.reward = self.reward + 1000
+            print('[MirobotEnv] [step] Goal reached - Terminated!')
         else: 
             self.terminated = False
         # check if Truncated
@@ -108,7 +109,7 @@ class MirobotEnv(gym.Env):
                 return False
         # difference in orientation in quaternion angles
         for current, goal in zip(orientation, self.goal[3:]):
-            if abs(goal - current) > 0.01:  #0.0059               # 0.0059 tolerance for the goalorientation
+            if abs(goal - current) > 0.019:  #0.0059               # 0.0059 tolerance for the goalorientation
                 return False
         print('[MirobotEnv] [goalReached] Goal reached!')
         return True
@@ -159,16 +160,18 @@ class MirobotEnv(gym.Env):
         # force and torque multiplier calculated in src/sensor_logger/logfiles/sensor_data_calculation.ods
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
-        if distance_change > 0.001: 
+        if distance_change > 0: 
             dist_reward = 50
+            #print('[MirobotEnv] [getReward] Distance Reward!')
         else:
-            dist_reward = 0
+            dist_reward = -20
             
-        if orientation_change > 0.001:
+        if orientation_change > 0:
             orientation_reward = 50
+            #print('[MirobotEnv] [getReward] Orientation Reward!')
         else:
-            orientation_reward = 0
-        # orientation_reward = orientation_reward * (75/max(75, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
+            orientation_reward = -20
+        orientation_reward = orientation_reward * (75/max(50, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
         # sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
         reward = dist_reward + orientation_reward - ft_reward
         # print('[MirobotEnv] [getScaledReward] Reward: ', reward)
