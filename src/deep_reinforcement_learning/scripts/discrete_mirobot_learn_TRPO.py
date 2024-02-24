@@ -8,7 +8,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 500 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995_batch_20"
+MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
@@ -20,16 +20,19 @@ if not os.path.exists(logdir):
 env = MirobotEnv()
 env.reset()
 
-policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[128, 128], vf=[128, 128]))
+policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=[256, 256]))
 
 model = TRPO("MlpPolicy",
             gamma=0.995,
-            batch_size=20,
-            #learning_rate=0.04,
+            batch_size = 512,           # default 128
+            #learning_rate=0.005,       # default 0.001
             env=env,
             verbose=1,
-            policy_kwargs=policy_kwargs,
+            #policy_kwargs=policy_kwargs,
             tensorboard_log=logdir)
+
+#model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000", env=env)
+
 try:
     for i in range(1,EPISODES):
         model.learn(total_timesteps= TIMESTEPS, reset_num_timesteps= False, tb_log_name=MODELNAME)

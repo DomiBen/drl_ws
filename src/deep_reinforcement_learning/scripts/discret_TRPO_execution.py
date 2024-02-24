@@ -16,17 +16,20 @@ logdir = "drlsaves/rllogs/"
 env = MirobotEnv()
 env.reset()
 
-model = TRPO.load("drlsaves/models/TRPO_custom_policy_2021_08_25_14_47_47_gamma_0995_batch_32/500", env=env)
+model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000", env=env)
 
 try:
     for ep in range(EPISODES):
-        obs = env.reset()
+        obs, info = env.reset()
         for i in range(1, 1000):
             action, _states = model.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, info = env.step(action)
             if terminated:
                 print(f"Episode {ep} finished after {i} timesteps")
                 break
+            if truncated:
+                print(f"Episode {ep} truncated after {i} timesteps")
+                break #obs, info = env.reset()
             print("Action: ", action)
             print("Reward: ", reward)
             print("Terminated: ", terminated)

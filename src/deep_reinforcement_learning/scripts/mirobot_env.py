@@ -92,6 +92,7 @@ class MirobotEnv(gym.Env):
         self.angle_diff = [g-c for g, c in zip(self.goal[3:], mirobot.current_orientation)]
         self.previous_orientation_diff = sum([abs(a) for a in self.angle_diff])
         self.min_reached_distance = self.previous_distance
+        self.min_orientation_diff = self.previous_orientation_diff
         # observation: distance to goal | sum of orientation difference | vector difference | orientation difference as quaternion angles | current joint states
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
         posediff_observation = np.concatenate([self.vector_diff, self.angle_diff], dtype=np.float32)
@@ -105,11 +106,11 @@ class MirobotEnv(gym.Env):
     def goalReached(self, point, orientation):
         # distance of the current point to the goal
         for current, goal in zip(point, self.goal[:3]):
-            if abs(goal - current) > 25:    #25                   # 15mm tolerance for the goalzone 
+            if abs(goal - current) > 20:    #25                   # 15mm tolerance for the goalzone 
                 return False
         # difference in orientation in quaternion angles
         for current, goal in zip(orientation, self.goal[3:]):
-            if abs(goal - current) > 0.019:  #0.0059               # 0.0059 tolerance for the goalorientation
+            if abs(goal - current) > 0.075:  #0.0059               # 0.0059 tolerance for the goalorientation
                 return False
         print('[MirobotEnv] [goalReached] Goal reached!')
         return True
@@ -123,8 +124,9 @@ class MirobotEnv(gym.Env):
         
         self.angle_diff = [g-c for g, c in zip(self.goal[3:], mirobot.current_orientation)]
         orientation_diff = sum([abs(a) for a in self.angle_diff])
-        orientation_change = self.previous_orientation_diff - orientation_diff
+        orientation_change = self.min_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
+        self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/sensor_data_calculation.ods
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
@@ -154,8 +156,9 @@ class MirobotEnv(gym.Env):
         
         self.angle_diff = [g-c for g, c in zip(self.goal[3:], mirobot.current_orientation)]
         orientation_diff = sum([abs(a) for a in self.angle_diff])
-        orientation_change = self.previous_orientation_diff - orientation_diff
+        orientation_change = self.min_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
+        self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/sensor_data_calculation.ods
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
