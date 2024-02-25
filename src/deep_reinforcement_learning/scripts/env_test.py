@@ -1,36 +1,39 @@
-from urdf_parser_py.urdf import URDF
-from pykdl_utils.kdl_kinematics import KDLKinematics
-from tf.transformations import quaternion_from_euler
-from geometry_msgs.msg import Twist
-import math
-import numpy as np
-
-'''from mirobot_env import *
-from stable_baselines3.common.env_checker import check_env
-import numpy as np
-
+from mirobot_env import *
+from sb3_contrib import TRPO
+import torch as th
+import os 
+import datetime
+from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
+from sensor_logger_node import *
+### Setting up parameters for the RL task ###
+TIMESTEPS = 500 
+EPISODES = 10000
+current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995_batch_32"
+models_dir = "drlsaves/models/"+MODELNAME
+logdir = "drlsaves/rllogs/"
+###
 
 env = MirobotEnv()
 env.reset()
-check_env(env)
+model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000", env=env)
 
-env.reset()
-print("ENV: ",env)
-
-r_list = []
-
-i = 0
-while(i < 1000):
-    a  = env.action_space.sample()
-    print(a)
-    obs, reward, terminated, truncated, info = env.step(a)
-    print(obs, reward, terminated, truncated)
-    r_list.insert(i, r)
-    i = i+1
-    print("[EnvTest] Reward:", env.reward)'''
-    
-#print("Average Reward: ", np.mean(r_list))
-orientation_diff = [12, -12, 10]
-
-odiffsum = sum([abs(od) for od in orientation_diff])
-print("ODIFFSUM: ", odiffsum)
+try:
+    #start recording sensor data
+    obs, info = env.reset()
+    for i in range(1, 1000):
+        action, _states = model.predict(obs, deterministic=True)
+        sensor_logger_node.log_action(action)
+        obs, reward, terminated, truncated, info = env.step(action)
+        
+        if terminated:
+            print(f"Episode {ep} finished after {i} timesteps")
+            break
+        if truncated:
+            print(f"Episode {ep} truncated after {i} timesteps")
+            break #obs, info = env.reset()
+    #stop recording sensor data
+        
+except KeyboardInterrupt:
+    print("[Mirobot TRPO Execution] Keyboard Interrupt")
+    env.reset()

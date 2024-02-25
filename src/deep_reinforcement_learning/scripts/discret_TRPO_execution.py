@@ -23,6 +23,7 @@ try:
         obs, info = env.reset()
         for i in range(1, 1000):
             action, _states = model.predict(obs, deterministic=True)
+            
             obs, reward, terminated, truncated, info = env.step(action)
             if terminated:
                 print(f"Episode {ep} finished after {i} timesteps")
@@ -42,3 +43,4 @@ try:
 except KeyboardInterrupt:
     print("[Mirobot TRPO Execution] Keyboard Interrupt")
     env.reset()
+    
