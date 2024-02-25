@@ -27,10 +27,10 @@ try:
         obs, reward, terminated, truncated, info = env.step(action)
         
         if terminated:
-            print(f"Episode {ep} finished after {i} timesteps")
+            print(f"Episode finished after {i} timesteps")
             break
         if truncated:
-            print(f"Episode {ep} truncated after {i} timesteps")
+            print(f"Episode truncated after {i} timesteps")
             break #obs, info = env.reset()
     #stop recording sensor data
         
