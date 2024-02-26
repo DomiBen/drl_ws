@@ -2,9 +2,10 @@ from mirobot_env import *
 from sb3_contrib import TRPO
 import torch as th
 import os 
+import csv
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
-from sensor_logger_node import *
+
 ### Setting up parameters for the RL task ###
 TIMESTEPS = 500 
 EPISODES = 10000
@@ -15,15 +16,23 @@ logdir = "drlsaves/rllogs/"
 ###
 
 env = MirobotEnv()
-env.reset()
-model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000", env=env)
+model = TRPO.load("/home/dominik/drl_ws/drlsaves/models/TRPO_custom_policy_2024_02_24_14_10_39_gamma_0995_batch_512_256NN_256NN/300000", env=env)
+
+logfile = "/home/dominik/drl_ws/src/sensor_logger/logfiles/action_log.csv"
+if not os.path.exists(logfile):
+    os.makedirs(os.path.dirname(logfile), exist_ok=True)
 
 try:
     #start recording sensor data
     obs, info = env.reset()
     for i in range(1, 1000):
         action, _states = model.predict(obs, deterministic=True)
-        sensor_logger_node.log_action(action)
+        # Open the file in append mode
+        with open(logfile, mode='a', newline='') as file:
+            # Create a CSV writer object
+            writer = csv.writer(file)
+            writer.writerow(action)
+
         obs, reward, terminated, truncated, info = env.step(action)
         
         if terminated:

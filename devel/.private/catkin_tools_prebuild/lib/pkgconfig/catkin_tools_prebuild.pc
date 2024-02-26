@@ -1,4 +1,4 @@
-prefix=/home/domi/drl_ws/devel/.private/catkin_tools_prebuild
+prefix=/home/dominik/drl_ws/devel/.private/catkin_tools_prebuild
 
 Name: catkin_tools_prebuild
 Description: Description of catkin_tools_prebuild

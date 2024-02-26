@@ -12,8 +12,8 @@ from sklearn import preprocessing
 import sensor_logger_node
 
 # Poses for the robot to reach
-START = [265, -30, 80, 0, -90, 0]
-GOAL = [170, 120, 62, 0, 0, -90]
+START = [258, -31, 80, -0.077, -0.712, -0.087, 0.691]
+GOAL = [156, 116, 56, 0.505, -0.436, -0.546, 0.505]
 
 min_angles_deg = [-110, -35, -120, -180, -200, -360]
 min_angles_rad = [i*math.pi/180 for i in min_angles_deg]
@@ -32,34 +32,44 @@ class MirobotEnv(gym.Env):
         # Define action and observation space -> must be gym space object 
         self.action_space = spaces.MultiDiscrete([3, 3, 3, 3, 3, 3]) # 6 joints with 3 possible actions each (0: -1°, 1: 0°, 2: +1°) and 4 possible speeds
         # Observation Space: distance to Goal, difference in orientation, and all Values within the workingspace of the robot -> Box with diffent sized Vectors
-        self.observation_space = spaces.Box(high=np.array([660, 473, 555, 660, 460, 360, 360, 360], dtype=np.float32),
-                                            low=np.array([-660, -473, -555, -660, -460, -360, -360, -360], dtype=np.float32), dtype=np.float32)
-        self.pose_counter = 0
-        while(mirobot.current_pose == None): 
+        # observation: distance to goal [1] | sum of orientation difference [1] | vector difference [3] | orientation difference as quaternion angles [4] | current joint states [6]
+        self.observation_space = spaces.Box(high=np.array([660,                                 # max distance in mm
+                                                           8,                                   # max orientation difference
+                                                           555, 660, 460,                       # max vector difference in mm
+                                                           2, 2, 2, 2,                          # max orientation difference in quaternion angles
+                                                           160, 70, 60, 180, 30, 360],          # max joint states in degree
+                                                          dtype=np.float32),
+                                            low=np.array([0,                                    # min distance in mm
+                                                          0,                                    # min orientation difference
+                                                          -555, -660, -460,                     # min vector difference in mm
+                                                          -2, -2, -2, -2,                       # min orientation difference in quaternion angles
+                                                          -110, -35, -120, -180, -200, -360],   # min joint states in degree
+                                                         dtype=np.float32), dtype=np.float32)
+        
+        while(mirobot.current_point == None) or (mirobot.current_orientation == None): 
             sleep(1)
         self.stepcount = 0
-        
-        
 
     def step(self, action):
         #print('[MirobotEnv] [step] stepping with action: ', action)
         action_response = mirobot.executeAction(action)
         # creating reward
-        self.reward = self.getScaledReward()
-        #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
-        d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
-        posediff_observation = np.array(self.pose_diff, dtype=np.float32)
-        observation = np.concatenate((d_observation, posediff_observation))
+        self.reward = self.getScaledReward() #TODO: change to getScaledReward() for testing
+        # observation: distance to goal | sum of orientation difference | vector difference | orientation difference as quaternion angles | current joint states
+        d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32) #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
+        posediff_observation = np.concatenate([self.vector_diff, self.angle_diff], dtype=np.float32)
+        observation = np.concatenate((d_observation, posediff_observation, mirobot.current_joint_states))
         # check if terminated 
-        if self.goalReached(mirobot.current_pose):
+        if self.goalReached(mirobot.current_point, mirobot.current_orientation):
             self.terminated = True
-            self.reward = self.reward + 500
+            self.reward = self.reward + 1000
+            print('[MirobotEnv] [step] Goal reached - Terminated!')
         else: 
             self.terminated = False
         # check if Truncated
-        if mirobot.current_pose[2] < 1 or action_response == -1:
+        if mirobot.current_point[2] < 10 or action_response == -1 or np.all(action == 1):
             self.truncated = True
-            self.reward = self.reward - 500
+            self.reward = -1000
             print('[MirobotEnv] [step] Truncated!')
         else: 
             self.truncated = False
@@ -72,101 +82,101 @@ class MirobotEnv(gym.Env):
         # reset initiates Environment variables
         self.terminated = False
         self.truncated = False
-        # generate new goal with random values for x, y, z, r, p, y
+        # generate goal and move robot to start position
         self.goal = np.array(GOAL, dtype=np.float32)
-        mirobot.moveToAbsolutePosition([-6.5, 52, -4, -8.7, -138.5, -5.7])
+        mirobot.moveToAbsolutePosition([-6.5, 52, -4, -9, -140, 5])
+        
         # initialize previous distance and orientation difference for the reward function 
-        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
-        self.previous_distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
-        self.previous_orientation_diff = sum(self.pose_diff[3:])
+        self.vector_diff = [g-c for g, c in zip(self.goal[:3], mirobot.current_point)]
+        self.previous_distance = math.sqrt(sum([pow(x,2) for x in self.vector_diff]))
+        self.angle_diff = [g-c for g, c in zip(self.goal[3:], mirobot.current_orientation)]
+        self.previous_orientation_diff = sum([abs(a) for a in self.angle_diff])
         self.min_reached_distance = self.previous_distance
-        # observation
+        self.min_orientation_diff = self.previous_orientation_diff
+        # observation: distance to goal | sum of orientation difference | vector difference | orientation difference as quaternion angles | current joint states
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
-        posediff_observation = np.array(self.pose_diff, dtype=np.float32)
-        observation = np.concatenate((d_observation, posediff_observation))
+        posediff_observation = np.concatenate([self.vector_diff, self.angle_diff], dtype=np.float32)
+        observation = np.concatenate((d_observation, posediff_observation, mirobot.current_joint_states))
+        
         mirobot.reset_ft_record()
         info = {}
         self.stepcount = self.stepcount + 1
         return observation, info
-    
-    '''def generateGoal(self):
-        if self.pose_counter % 2 == 0:
-            goal = POSE_1
-            mirobot.moveToAbsolutePosition([0, 52, -3, 0, -138.5, 0])
-        else:
-            goal = POSE_2
-            mirobot.moveToAbsolutePosition([36.5, 49, 11, 40, -156, -77])
-        self.pose_counter = self.pose_counter + 1
-        print("[MirbotEnv][generateGoal] New goal: ", goal)
-        return goal'''
-
-    def goto(self, pose):
-        #print('[MirobotEnv] [goto] going to pose: ', pose)
-        goal = pose
-        # then convert them to cartesian coordinates -> therefore we won't generate unreachable points
-        joint_angles = kdl_kin.inverse(goal)
-        mirobot.moveToAbsolutePosition(joint_angles)
         
-
-    def getReward(self): 
-        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
-        distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
-        distance_change = self.previous_distance - distance
-        self.previous_distance = distance
-            
-        orientation_diff = sum(self.pose_diff[3:])/3 # mean angle difference
-        orientation_change = self.previous_orientation_diff - orientation_diff
-        self.previous_orientation_diff = orientation_diff
-        
-        # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5 /2    #for ft usage
-        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
-        #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
-        if distance_change > 0.05: 
-            dist_reward = 50
-        else:
-            dist_reward = 0
-        if orientation_change > 0.05:
-            orientation_reward = 50
-        else:
-            orientation_reward = 0
-        orientation_reward = orientation_reward * (20/max(10, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
-        #sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
-        reward = dist_reward + orientation_reward - ft_reward
-        return reward
-    
-    def goalReached(self, obs):
-        for current, goal in zip(obs, self.goal):
-            if abs(current - goal) > 10:                    # 10mm and 10° tolerance for the goalzone 
+    def goalReached(self, point, orientation):
+        # distance of the current point to the goal
+        for current, goal in zip(point, self.goal[:3]):
+            if abs(goal - current) > 20:    #25                   # 15mm tolerance for the goalzone 
+                return False
+        # difference in orientation in quaternion angles
+        for current, goal in zip(orientation, self.goal[3:]):
+            if abs(goal - current) > 0.075:  #0.0059               # 0.0059 tolerance for the goalorientation
                 return False
         print('[MirobotEnv] [goalReached] Goal reached!')
         return True
            
     def getScaledReward(self): 
-        self.pose_diff = [g-c for g, c in zip(self.goal, mirobot.current_pose)]
-        distance = math.sqrt(sum([pow(x,2) for x in self.pose_diff[:3]]))
+        self.vector_diff = [g-c for g, c in zip(self.goal[:3], mirobot.current_point)]
+        distance = math.sqrt(sum([pow(x,2) for x in self.vector_diff]))
         distance_change = self.min_reached_distance - distance
         self.previous_distance = distance
         self.min_reached_distance =  min(distance, self.min_reached_distance)
-            
-        orientation_diff = sum(self.pose_diff[3:])/3 # mean angle difference
-        orientation_change = self.previous_orientation_diff - orientation_diff
+        
+        self.angle_diff = [g-c for g, c in zip(self.goal[3:], mirobot.current_orientation)]
+        orientation_diff = sum([abs(a) for a in self.angle_diff])
+        orientation_change = self.min_orientation_diff - orientation_diff
         self.previous_orientation_diff = orientation_diff
-
-        # force and torque multiplier calculated in /home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_calculation.ods
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*15)* 5 /2    #for ft usage
+        self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
+        
+        # force and torque multiplier calculated in src/sensor_logger/logfiles/sensor_data_calculation.ods
         ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0: 
-            dist_reward = min(50, 50*500000/self.stepcount)
+            dist_reward = 50
+            #print('[MirobotEnv] [getReward] Distance Reward!')
         else:
-            dist_reward = 0
+            dist_reward = -20
+            
         if orientation_change > 0:
-            orientation_reward = min(50, 50*500000/self.stepcount)
+            orientation_reward = 50
+            #print('[MirobotEnv] [getReward] Orientation Reward!')
         else:
-            orientation_reward = 0
-        orientation_reward = orientation_reward * (20/max(10, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
-        #sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
-        reward = dist_reward + orientation_reward - ft_reward
+            orientation_reward = -20
+        orientation_reward = orientation_reward * (75/max(50, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
+        # sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
+        reward = (dist_reward + orientation_reward)*min(1, 1*500000/self.stepcount) - ft_reward
         #print('[MirobotEnv] [getScaledReward] Reward: ', reward)
+        return reward
+    
+    def getReward(self): 
+        self.vector_diff = [g-c for g, c in zip(self.goal[:3], mirobot.current_point)]
+        distance = math.sqrt(sum([pow(x,2) for x in self.vector_diff]))
+        distance_change = self.min_reached_distance - distance
+        self.previous_distance = distance
+        self.min_reached_distance =  min(distance, self.min_reached_distance)
+        
+        self.angle_diff = [g-c for g, c in zip(self.goal[3:], mirobot.current_orientation)]
+        orientation_diff = sum([abs(a) for a in self.angle_diff])
+        orientation_change = self.min_orientation_diff - orientation_diff
+        self.previous_orientation_diff = orientation_diff
+        self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
+        
+        # force and torque multiplier calculated in src/sensor_logger/logfiles/sensor_data_calculation.ods
+        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3        #for imu usage
+        #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
+        if distance_change > 0: 
+            dist_reward = 50
+            #print('[MirobotEnv] [getReward] Distance Reward!')
+        else:
+            dist_reward = -20
+            
+        if orientation_change > 0:
+            orientation_reward = 50
+            #print('[MirobotEnv] [getReward] Orientation Reward!')
+        else:
+            orientation_reward = -20
+        orientation_reward = orientation_reward * (75/max(50, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
+        # sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
+        reward = dist_reward + orientation_reward - ft_reward
+        # print('[MirobotEnv] [getScaledReward] Reward: ', reward)
         return reward

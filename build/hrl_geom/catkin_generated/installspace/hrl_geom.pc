@@ -1,4 +1,4 @@
-prefix=/home/domi/drl_ws/install
+prefix=/home/dominik/drl_ws/install
 
 Name: hrl_geom
 Description: Description of hrl_geom

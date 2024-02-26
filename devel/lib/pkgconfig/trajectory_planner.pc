@@ -1,1 +1,1 @@
-/home/domi/drl_ws/devel/.private/trajectory_planner/lib/pkgconfig/trajectory_planner.pc
+/home/dominik/drl_ws/devel/.private/trajectory_planner/lib/pkgconfig/trajectory_planner.pc
