@@ -11,8 +11,8 @@ import random as r
 from sklearn import preprocessing
 
 # Poses for the robot to reach
-START = [258, -31, 80, -0.077, -0.712, -0.087, 0.691]
-GOAL = [156, 116, 56, 0.505, -0.436, -0.546, 0.505]
+START = [258, -30, 124, -0.0189, -0.7371, -0.1718, 0.6532]
+GOAL = [140, 135, 60, 0.6553, -0.2651, 0.1444, 0.6923]
 
 min_angles_deg = [-110, -35, -120, -180, -200, -360]
 min_angles_rad = [i*math.pi/180 for i in min_angles_deg]
@@ -83,7 +83,7 @@ class MirobotEnv(gym.Env):
         self.truncated = False
         # generate goal and move robot to start position
         self.goal = np.array(GOAL, dtype=np.float32)
-        mirobot.moveToAbsolutePosition([-6.5, 52, -4, -9, -140, 5])
+        mirobot.moveToAbsolutePosition([-6.5, 40, -5.5, -10.75, -130, 0])
         
         # initialize previous distance and orientation difference for the reward function 
         self.vector_diff = [g-c for g, c in zip(self.goal[:3], mirobot.current_point)]

@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/dominik/drl_ws/devel/.private/sensor_logger:$CMAKE_PREFIX_PATH"
-export PWD='/home/dominik/drl_ws/build/sensor_logger'
-export ROSLISP_PACKAGE_DIRECTORIES="/home/dominik/drl_ws/devel/.private/sensor_logger/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/dominik/drl_ws/src/sensor_logger:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/domi/drl_ws/devel/.private/sensor_logger:$CMAKE_PREFIX_PATH"
+export PWD='/home/domi/drl_ws/build/sensor_logger'
+export ROSLISP_PACKAGE_DIRECTORIES="/home/domi/drl_ws/devel/.private/sensor_logger/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
+export ROS_PACKAGE_PATH="/home/domi/drl_ws/src/sensor_logger:$ROS_PACKAGE_PATH"

@@ -9,7 +9,6 @@ from urdf_parser_py.urdf import URDF
 from MirobotClient import *
 import random as r
 from sklearn import preprocessing
-import sensor_logger_node
 
 # Poses for the robot to reach
 START = [258, -31, 80, -0.077, -0.712, -0.087, 0.691]

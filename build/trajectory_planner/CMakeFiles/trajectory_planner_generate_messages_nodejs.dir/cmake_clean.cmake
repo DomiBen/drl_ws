@@ -1,9 +1,9 @@
 file(REMOVE_RECURSE
-  "/home/dominik/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/GetPoseCmd.js"
-  "/home/dominik/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetCartCmd.js"
-  "/home/dominik/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetGcodeCmd.js"
-  "/home/dominik/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetHomeCmd.js"
-  "/home/dominik/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetJointCmd.js"
+  "/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/GetPoseCmd.js"
+  "/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetCartCmd.js"
+  "/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetGcodeCmd.js"
+  "/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetHomeCmd.js"
+  "/home/domi/drl_ws/devel/.private/trajectory_planner/share/gennodejs/ros/trajectory_planner/srv/SetJointCmd.js"
   "CMakeFiles/trajectory_planner_generate_messages_nodejs"
 )
 

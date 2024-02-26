@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/dominik/drl_ws/devel/.private/mirobot_kinematics:$CMAKE_PREFIX_PATH"
-export PWD='/home/dominik/drl_ws/build/mirobot_kinematics'
-export ROSLISP_PACKAGE_DIRECTORIES="/home/dominik/drl_ws/devel/.private/mirobot_kinematics/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/dominik/drl_ws/src/mirobot_kinematics:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/domi/drl_ws/devel/.private/mirobot_kinematics:$CMAKE_PREFIX_PATH"
+export PWD='/home/domi/drl_ws/build/mirobot_kinematics'
+export ROSLISP_PACKAGE_DIRECTORIES="/home/domi/drl_ws/devel/.private/mirobot_kinematics/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
+export ROS_PACKAGE_PATH="/home/domi/drl_ws/src/mirobot_kinematics:$ROS_PACKAGE_PATH"

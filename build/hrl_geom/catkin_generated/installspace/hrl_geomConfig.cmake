@@ -67,14 +67,14 @@ set(hrl_geom_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(hrl_geom_SOURCE_PREFIX /home/dominik/drl_ws/src/hrl-kdl/hrl_geom)
-  set(hrl_geom_DEVEL_PREFIX /home/dominik/drl_ws/devel/.private/hrl_geom)
+  set(hrl_geom_SOURCE_PREFIX /home/domi/drl_ws/src/hrl-kdl/hrl_geom)
+  set(hrl_geom_DEVEL_PREFIX /home/domi/drl_ws/devel/.private/hrl_geom)
   set(hrl_geom_INSTALL_PREFIX "")
   set(hrl_geom_PREFIX ${hrl_geom_DEVEL_PREFIX})
 else()
   set(hrl_geom_SOURCE_PREFIX "")
   set(hrl_geom_DEVEL_PREFIX "")
-  set(hrl_geom_INSTALL_PREFIX /home/dominik/drl_ws/install)
+  set(hrl_geom_INSTALL_PREFIX /home/domi/drl_ws/install)
   set(hrl_geom_PREFIX ${hrl_geom_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/dominik/drl_ws/install/lib;/home/dominik/mirobot_ws/devel/lib;/home/dominik/drl_ws/devel/lib;/home/dominik/mujoco_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/domi/drl_ws/install/lib;/home/domi/drl_ws/devel/lib;/home/domi/mujoco_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

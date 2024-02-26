@@ -12,7 +12,7 @@ from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
 import numpy as np
 
-LOG_IMU_DATA = True
+LOG_IMU_DATA = False
 
 class MirobotClient():
     def __init__(self):
@@ -40,7 +40,7 @@ class MirobotClient():
         rospy.wait_for_service("/MirobotServer/SetJointRelativeCmd")
         rospy.wait_for_service("/MirobotServer/SetJointAbsoluteCmd")
 
-        self.logfile = "/home/dominik/drl_ws/src/sensor_logger/logfiles/IMU_log.csv"
+        self.logfile = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_log.csv"
         if not os.path.exists(self.logfile):
             os.makedirs(os.path.dirname(self.logfile), exist_ok=True)
 

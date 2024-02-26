@@ -8,9 +8,9 @@ import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
 
 # Define the path to the CSV file
-csv_file_path = "/home/dominik/drl_ws/src/sensor_logger/logfiles/action_log.csv"
+csv_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/action_log_linear_reward.csv"
 mirobot_client = MirobotClient()
-mirobot_client.moveToAbsolutePosition([-6.5, 40, -5.5, -10.75, -130, -8.5])
+mirobot_client.moveToAbsolutePosition([-6.5, 40, -5.5, -10.75, -130, 0])
 # Open the CSV file in read mode
 with open(csv_file_path, mode='r') as file:
     # Create a CSV reader object

@@ -1,8 +1,8 @@
-Symlinking /home/dominik/drl_ws/devel/lib/pkgconfig/deep_reinforcement_learning.pc
-Symlinking /home/dominik/drl_ws/devel/lib/deep_reinforcement_learning/cmake.lock
-Symlinking /home/dominik/drl_ws/devel/lib/deep_reinforcement_learning/save_env_test.py
-Symlinking /home/dominik/drl_ws/devel/lib/deep_reinforcement_learning/MirobotClient.py
-Symlinking /home/dominik/drl_ws/devel/lib/deep_reinforcement_learning/mirobot_env.py
-Symlinking /home/dominik/drl_ws/devel/lib/deep_reinforcement_learning/env_test.py
-Symlinking /home/dominik/drl_ws/devel/share/deep_reinforcement_learning/cmake/deep_reinforcement_learningConfig-version.cmake
-Symlinking /home/dominik/drl_ws/devel/share/deep_reinforcement_learning/cmake/deep_reinforcement_learningConfig.cmake
+Symlinking /home/domi/drl_ws/devel/share/deep_reinforcement_learning/cmake/deep_reinforcement_learningConfig.cmake
+Symlinking /home/domi/drl_ws/devel/share/deep_reinforcement_learning/cmake/deep_reinforcement_learningConfig-version.cmake
+Symlinking /home/domi/drl_ws/devel/lib/deep_reinforcement_learning/save_env_test.py
+Symlinking /home/domi/drl_ws/devel/lib/deep_reinforcement_learning/env_test.py
+Symlinking /home/domi/drl_ws/devel/lib/deep_reinforcement_learning/cmake.lock
+Symlinking /home/domi/drl_ws/devel/lib/deep_reinforcement_learning/MirobotClient.py
+Symlinking /home/domi/drl_ws/devel/lib/deep_reinforcement_learning/mirobot_env.py
+Symlinking /home/domi/drl_ws/devel/lib/pkgconfig/deep_reinforcement_learning.pc

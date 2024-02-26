@@ -16,9 +16,9 @@ logdir = "drlsaves/rllogs/"
 ###
 
 env = MirobotEnv()
-model = TRPO.load("/home/dominik/drl_ws/drlsaves/models/TRPO_custom_policy_2024_02_24_14_10_39_gamma_0995_batch_512_256NN_256NN/300000", env=env)
+model = TRPO.load("/home/domi/drl_ws/drlsaves/models/TRPO_custom_policy_2024_02_24_14_10_39_gamma_0995_batch_512_256NN_256NN/320000", env=env)
 
-logfile = "/home/dominik/drl_ws/src/sensor_logger/logfiles/action_log.csv"
+logfile = "/home/domi/drl_ws/src/sensor_logger/logfiles/action_log.csv"
 if not os.path.exists(logfile):
     os.makedirs(os.path.dirname(logfile), exist_ok=True)
 

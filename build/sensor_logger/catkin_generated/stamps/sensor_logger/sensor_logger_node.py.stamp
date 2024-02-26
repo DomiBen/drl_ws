@@ -25,7 +25,7 @@ def ft_logger(force, torque, linacc, angvel):
         
 def log_imu_data(f_peak, f_avg, t_peak, t_avg):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_log_" + STARTTIME + ".csv"
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_log.csv"
     # Define the data to be written
     data = [datetime.datetime.now().strftime("%H:%M:%S"), f_peak, f_avg, t_peak, t_avg]
     # Open the file in append mode
@@ -36,7 +36,7 @@ def log_imu_data(f_peak, f_avg, t_peak, t_avg):
         writer.writerow(data)
 
 def log_action(action):
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/action_log_" + STARTTIME + ".csv"
+    file_path = "/home/dominik/drl_ws/src/sensor_logger/logfiles/action_log_" + STARTTIME + ".csv"
     # Define the data to be written
     data = [action[0], action[1], action[2], action[3], action[4], action[5]]
     # Open the file in append mode

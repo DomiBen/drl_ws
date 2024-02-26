@@ -4,12 +4,15 @@ NAME = 'MirobotClient'
 import rospy
 import numpy as np
 import math
+import csv
+import os
 from sensor_msgs.msg import JointState
 from tf.transformations import euler_from_quaternion
 from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
 import numpy as np
 
+LOG_IMU_DATA = True
 
 class MirobotClient():
     def __init__(self):
@@ -36,6 +39,11 @@ class MirobotClient():
         rospy.init_node(NAME)
         rospy.wait_for_service("/MirobotServer/SetJointRelativeCmd")
         rospy.wait_for_service("/MirobotServer/SetJointAbsoluteCmd")
+
+        self.logfile = "/home/dominik/drl_ws/src/sensor_logger/logfiles/IMU_log.csv"
+        if not os.path.exists(self.logfile):
+            os.makedirs(os.path.dirname(self.logfile), exist_ok=True)
+
     
     def force_callback(self, data): 
         if self.record:
@@ -93,6 +101,10 @@ class MirobotClient():
             req.speed = 1000
             response = move_joint_service(req).result
             self.record = False
+
+            if LOG_IMU_DATA:
+                self.log_sensor_data(self.peak_force, self.average_force, self.peak_torque, self.average_torque)
+            
             return response
         except rospy.ServiceException as e:
             print("[MirobotClient] [executeAction] Service call failed: %s" %e)
@@ -121,4 +133,13 @@ class MirobotClient():
         self.peak_torque = 0
         self.average_torque = 0
 
-
+    def log_sensor_data(self, f_peak, f_avg, t_peak, t_avg):
+        # Define the file path
+        # Define the data to be written
+        data = [f_peak, f_avg, t_peak, t_avg]
+        # Open the file in append mode
+        with open(self.logfile, mode='a', newline='') as file:
+            # Create a CSV writer object
+            writer = csv.writer(file)
+            # Write the values as a row to the CSV file
+            writer.writerow(data)
