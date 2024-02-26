@@ -1,4 +1,4 @@
-prefix=/home/domi/drl_ws/devel/.private/sensor_logger
+prefix=/home/dominik/drl_ws/devel/.private/sensor_logger
 
 Name: sensor_logger
 Description: Description of sensor_logger

@@ -23,9 +23,9 @@ def ft_logger(force, torque, linacc, angvel):
         writer.writerow(data)
         
         
-def write_to_csv(f_peak, f_avg, t_peak, t_avg):
+def log_imu_data(f_peak, f_avg, t_peak, t_avg):
     # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_Data.csv"
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_log_" + STARTTIME + ".csv"
     # Define the data to be written
     data = [datetime.datetime.now().strftime("%H:%M:%S"), f_peak, f_avg, t_peak, t_avg]
     # Open the file in append mode
@@ -34,20 +34,18 @@ def write_to_csv(f_peak, f_avg, t_peak, t_avg):
         writer = csv.writer(file)
         # Write the values as a row to the CSV file
         writer.writerow(data)
-        
 
-def write_dist(dist, dist_change, orient_change):
-    # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/dist_data_" + STARTTIME + ".csv"
+def log_action(action):
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/action_log_" + STARTTIME + ".csv"
     # Define the data to be written
-    data = [dist, dist_change, orient_change]
+    data = [action[0], action[1], action[2], action[3], action[4], action[5]]
     # Open the file in append mode
     with open(file_path, mode='a', newline='') as file:
         # Create a CSV writer object
         writer = csv.writer(file)
         # Write the values as a row to the CSV file
         writer.writerow(data)
-        
+    
 
 def add_data_to_csv(distance, ft_reward, distance_change, orientation_change, distance_reward, orientation_reward, reward):
     # Define the file path

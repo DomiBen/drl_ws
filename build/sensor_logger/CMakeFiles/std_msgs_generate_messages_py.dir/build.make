@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/domi/drl_ws/src/sensor_logger
+CMAKE_SOURCE_DIR = /home/dominik/drl_ws/src/sensor_logger
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/domi/drl_ws/build/sensor_logger
+CMAKE_BINARY_DIR = /home/dominik/drl_ws/build/sensor_logger
 
 # Utility rule file for std_msgs_generate_messages_py.
 
@@ -67,6 +67,6 @@ CMakeFiles/std_msgs_generate_messages_py.dir/clean:
 .PHONY : CMakeFiles/std_msgs_generate_messages_py.dir/clean
 
 CMakeFiles/std_msgs_generate_messages_py.dir/depend:
-	cd /home/domi/drl_ws/build/sensor_logger && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/domi/drl_ws/src/sensor_logger /home/domi/drl_ws/src/sensor_logger /home/domi/drl_ws/build/sensor_logger /home/domi/drl_ws/build/sensor_logger /home/domi/drl_ws/build/sensor_logger/CMakeFiles/std_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dominik/drl_ws/build/sensor_logger && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dominik/drl_ws/src/sensor_logger /home/dominik/drl_ws/src/sensor_logger /home/dominik/drl_ws/build/sensor_logger /home/dominik/drl_ws/build/sensor_logger /home/dominik/drl_ws/build/sensor_logger/CMakeFiles/std_msgs_generate_messages_py.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/std_msgs_generate_messages_py.dir/depend
 

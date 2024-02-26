@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/domi/drl_ws/devel/.private/sensor_logger/setup.sh
+    local-name: /home/dominik/drl_ws/devel/.private/sensor_logger/setup.sh

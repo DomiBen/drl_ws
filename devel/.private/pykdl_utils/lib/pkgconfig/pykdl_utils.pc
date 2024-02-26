@@ -1,4 +1,4 @@
-prefix=/home/domi/drl_ws/devel/.private/pykdl_utils
+prefix=/home/dominik/drl_ws/devel/.private/pykdl_utils
 
 Name: pykdl_utils
 Description: Description of pykdl_utils

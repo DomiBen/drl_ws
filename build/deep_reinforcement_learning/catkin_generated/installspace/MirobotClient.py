@@ -15,7 +15,10 @@ class MirobotClient():
     def __init__(self):
         #self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
-        self.current_pose = None
+        self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_callback)
+        self.current_point = None
+        self.current_orientation = None
+        self.current_joint_states = None
         self.record = False
         #For FT-Sensor usage
         #self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_callback)
@@ -58,8 +61,14 @@ class MirobotClient():
                 self.peak_torque = max(absolute_list)
 
     def pose_callback(self, data):
+        self.current_point = [data.position.x*1000, data.position.y*1000, data.position.z*1000]
+        self.current_orientation = [data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w]
+        
         euler = euler_from_quaternion([data.orientation.x, data.orientation.y, data.orientation.z, data.orientation.w])
         self.current_pose = [data.position.x*1000, data.position.y*1000, data.position.z*1000, euler[0]*180/math.pi, euler[1]*180/math.pi, euler[2]*180/math.pi]
+    
+    def joint_callback(self, data):
+        self.current_joint_states = [data.position[0]*180/math.pi, data.position[1]*180/math.pi, data.position[2]*180/math.pi, data.position[3]*180/math.pi, data.position[4]*180/math.pi, data.position[5]*180/math.pi]
     
     def executeAction(self, action):
         self.reset_ft_record()
@@ -82,12 +91,13 @@ class MirobotClient():
             #if math.isnan(action[6]):
             #    return -1
             req.speed = 1000
-            response = move_joint_service(req)
+            response = move_joint_service(req).result
             self.record = False
             return response
         except rospy.ServiceException as e:
             print("[MirobotClient] [executeAction] Service call failed: %s" %e)
         self.record = False
+        return -1
         
     def moveToAbsolutePosition(self, pose):
         try:
