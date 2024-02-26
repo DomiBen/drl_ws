@@ -22,21 +22,21 @@ env.reset()
 
 policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=[256, 256]))
 
-model = TRPO("MlpPolicy",
+'''model = TRPO("MlpPolicy",
             gamma=0.995,
             batch_size = 512,           # default 128
             #learning_rate=0.005,       # default 0.001
             env=env,
             verbose=1,
             #policy_kwargs=policy_kwargs,
-            tensorboard_log=logdir)
+            tensorboard_log=logdir)'''
 
-#model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000", env=env)
+model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_25_12_43_29_gamma_0995_batch_512_256NN_256NN_ScaledReward/303000", env=env)
 
 try:
     for i in range(1,EPISODES):
         model.learn(total_timesteps= TIMESTEPS, reset_num_timesteps= False, tb_log_name=MODELNAME)
-        model.save(f"{models_dir}/{TIMESTEPS*i}")
+        model.save(f"{models_dir}/{303000+TIMESTEPS*i}")
 except KeyboardInterrupt:
     print("[MirobotLearn] Keyboard Interrupt")
     env.reset()
