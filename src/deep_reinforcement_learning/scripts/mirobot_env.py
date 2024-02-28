@@ -128,9 +128,9 @@ class MirobotEnv(gym.Env):
         self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3                                                                    #for imu usage, ONLY PEAK VALUES
-        #ft_reward = (mirobot.average_torque + mirobot.average_torque*70)* 2                                                             #for imu usage, ONLY AVG VALUES
-        ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_torque + mirobot.average_torque*70)*2) * 1/2    #for imu usage, ALL VALUES
+        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*20)* 1.5                                                                 #for imu usage, ONLY PEAK VALUES
+        #ft_reward = (mirobot.average_force + mirobot.average_torque*20)* 3                                                             #for imu usage, ONLY AVG VALUES
+        ft_reward = mirobot.peak_force + mirobot.peak_torque * 20 + mirobot.average_force + mirobot.average_torque * 20                 #for imu usage, ALL VALUES
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0: 
             dist_reward = 50
@@ -163,9 +163,12 @@ class MirobotEnv(gym.Env):
         self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3                                                                    #for imu usage, ONLY PEAK VALUES
-        ft_reward = (mirobot.average_torque + mirobot.average_torque*70)* 2                                                             #for imu usage, ONLY AVG VALUES
-        #ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_torque + mirobot.average_torque*70)*2) * 1/2    #for imu usage, ALL VALUES
+        '''
+        OLD VERISONS
+        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3                                                                    #for imu usage, ONLY PEAK VALUES
+        #ft_reward = (mirobot.average_force + mirobot.average_torque*70)* 2                                                             #for imu usage, ONLY AVG VALUES
+        #ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_force + mirobot.average_torque*70)*2) * 1/2    #for imu usage, ALL VALUES
+        '''
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0: 
             dist_reward = 50

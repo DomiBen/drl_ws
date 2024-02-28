@@ -50,7 +50,7 @@ class MirobotClient():
             force_list = [data.vector.x, data.vector.y, data.vector.z]
             absolute_list = [abs(element) for element in force_list]
             # add values to force array
-            self.force = np.append(self.force, [sum(absolute_list)])
+            self.force = np.append(self.force, [sum(absolute_list)/3])
             # calculate average force
             self.average_force = np.mean(self.force)
             # store highest recorded Force
@@ -62,7 +62,7 @@ class MirobotClient():
             torque_list = [data.vector.x, data.vector.y, data.vector.z]
             absolute_list = [abs(element) for element in torque_list]
             # add values to torque array
-            self.torque = np.append(self.torque, [sum(absolute_list)])
+            self.torque = np.append(self.torque, [sum(absolute_list)/3])
             self.average_torque = np.mean(self.torque)
             # store highest recorded torque
             if max(absolute_list) > self.peak_torque:
