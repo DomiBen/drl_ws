@@ -57,7 +57,7 @@ class MirobotEnv(gym.Env):
         # observation: distance to goal | sum of orientation difference | vector difference | orientation difference as quaternion angles | current joint states
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32) #IMPORTATNT: distance and orientation_difference get updated in getReward() function!
         posediff_observation = np.concatenate([self.vector_diff, self.angle_diff], dtype=np.float32)
-        observation = np.concatenate((d_observation, posediff_observation, mirobot.current_joint_states))
+        observation = np.concatenate((d_observation, posediff_observation, mirobot.current_joint_states), dtype=np.float32)
         # check if terminated 
         if self.goalReached(mirobot.current_point, mirobot.current_orientation):
             self.terminated = True
@@ -95,7 +95,7 @@ class MirobotEnv(gym.Env):
         # observation: distance to goal | sum of orientation difference | vector difference | orientation difference as quaternion angles | current joint states
         d_observation = np.array([self.previous_distance, self.previous_orientation_diff], dtype=np.float32)
         posediff_observation = np.concatenate([self.vector_diff, self.angle_diff], dtype=np.float32)
-        observation = np.concatenate((d_observation, posediff_observation, mirobot.current_joint_states))
+        observation = np.concatenate((d_observation, posediff_observation, mirobot.current_joint_states), dtype=np.float32)
         
         mirobot.reset_ft_record()
         info = {}
@@ -129,8 +129,8 @@ class MirobotEnv(gym.Env):
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
         #ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3                                                                    #for imu usage, ONLY PEAK VALUES
-        ft_reward = (mirobot.average_torque + mirobot.average_torque*70)* 2                                                             #for imu usage, ONLY AVG VALUES
-        #ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_torque + mirobot.average_torque*70)*2) * 1/2    #for imu usage, ALL VALUES
+        #ft_reward = (mirobot.average_torque + mirobot.average_torque*70)* 2                                                             #for imu usage, ONLY AVG VALUES
+        ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_torque + mirobot.average_torque*70)*2) * 1/2    #for imu usage, ALL VALUES
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0: 
             dist_reward = 50
@@ -146,7 +146,7 @@ class MirobotEnv(gym.Env):
         orientation_reward = orientation_reward * (75/max(50, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
         # sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
         reward = (dist_reward + orientation_reward)*min(1, 1*500000/self.stepcount) - ft_reward
-        #print('[MirobotEnv] [getScaledReward] Reward: ', reward)
+        # print('[MirobotEnv] [getScaledReward] Reward: ', reward)
         return reward
     
     def getReward(self): 
