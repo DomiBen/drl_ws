@@ -4,21 +4,21 @@ import torch as th
 import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
+from sensor_logger_node import Logger
 ### Setting up parameters for the RL task ###
-TIMESTEPS = 500 
-EPISODES = 10000
+EPISODES = 100
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_custom_policy_{current_time}_gamma_0995_batch_32"
-models_dir = "drlsaves/models/"+MODELNAME
-logdir = "drlsaves/rllogs/"
+MODELNAME = f"TRPO_custom_policy_gamma_0995_batch_32"
+model_dir = "drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000"
 ###
-
+sensor_logger = Logger(MODELNAME)
 env = MirobotEnv()
 env.reset()
 
-model = TRPO.load("drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000", env=env)
+model = TRPO.load(model_dir, env=env)
 
 try:
+    sensor_logger.record = True
     for ep in range(EPISODES):
         obs, info = env.reset()
         for i in range(1, 1000):
@@ -40,6 +40,7 @@ try:
             print("Episode: ", ep)
             print("Timestep: ", i)
             print("\n")
+    sensor_logger.record = False
 except KeyboardInterrupt:
     print("[Mirobot TRPO Execution] Keyboard Interrupt")
     env.reset()

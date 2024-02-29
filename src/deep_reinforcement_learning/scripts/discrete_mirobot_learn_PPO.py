@@ -12,7 +12,6 @@ MODELNAME = f"New_Path_PPO_custom_policy_{current_time}_gamma_0995_batch_512_256
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs"
 ###
-
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
 if not os.path.exists(logdir):
