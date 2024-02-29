@@ -45,58 +45,68 @@ def log_action(action):
         writer = csv.writer(file)
         # Write the values as a row to the CSV file
         writer.writerow(data)
-    
 
-def add_data_to_csv(distance, ft_reward, distance_change, orientation_change, distance_reward, orientation_reward, reward):
-    # Define the file path
-    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/log_" + STARTTIME + ".csv"
-    data = [distance, distance_change, orientation_change, ft_reward,  distance_reward, orientation_reward, reward]
-    # Create the directory if it does not exist
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    # Write the data to the CSV file
-    with open(file_path, mode='a', newline='') as file:
-        # Create a CSV writer object
-        writer = csv.writer(file)
-        # Write the values as a row to the CSV file
-        writer.writerow(data)
 
-class ftLogger():
-    def __init__(self):
+class Logger():
+    def __init__(self, label):
+        self.record = False
+        self.starttime = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        #For Force/Torque Sensor readings
         self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_logger_callback)
         self.force = 0
+        self.max_force = 0
         self.torque_sub = rospy.Subscriber("/torque", Vector3Stamped, self.torque_logger_callback)
         self.torque = 0
-        #For IMU usage
+        self.max_torque = 0
+        #For IMU sensor readings
         self.lin_sub = rospy.Subscriber("/linacc", Vector3Stamped, self.linacc_logger_callback)
         self.linacc = 0
+        self.max_linacc = 0
         self.ang_sub = rospy.Subscriber("/angvel", Vector3Stamped, self.angvel_logger_callback)
         self.angvel = 0
+        self.max_angvel = 0
+        # file paths
+        self.imu_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_recording_" + label + "_" + self.starttime + ".csv"
+        self.ft_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/FT_recording_" + label + "_" + self.starttime + ".csv"
         #rospy setup 
         rospy.init_node(NAME)
         print("ftLogger node started")
         rate = rospy.Rate(100)
         while(not rospy.is_shutdown()):
-            self.write_data()
+            if self.record:
+                self.write_data()
             rate.sleep()
         
 
     def force_logger_callback(self, data):
-        self.force = data.vector.x + data.vector.y + data.vector.z
+        self.force = (data.vector.x + data.vector.y + data.vector.z)/3
+        self.max_force = max(data.vector.x, data.vector.y, data.vector.z)
     
     def torque_logger_callback(self, data):
-        self.torque = data.vector.x + data.vector.y + data.vector.z
+        self.torque = (data.vector.x + data.vector.y + data.vector.z)/3
+        self.max_torque = max(data.vector.x, data.vector.y, data.vector.z)
         
     def linacc_logger_callback(self, data):
-        self.linacc = data.vector.x + data.vector.y + data.vector.z
+        self.linacc = (data.vector.x + data.vector.y + data.vector.z)/3
+        self.max_linacc = max(data.vector.x, data.vector.y, data.vector.z)
         
     def angvel_logger_callback(self, data):
-        self.angvel = data.vector.x + data.vector.y + data.vector.z
+        self.angvel = (data.vector.x + data.vector.y + data.vector.z)/3
+        self.max_angvel = max(data.vector.x, data.vector.y, data.vector.z)
     
     def write_data(self):
-        ft_logger(self.force, self.torque, self.linacc, self.angvel)
+        # Define the data to be written
+        imu_data = [self.linacc, self.max_linacc, self.angvel, self.max_angvel]
+        ft_data = [self.force, self.max_force, self.torque, self.max_torque]
+        # Open the file in append mode
+        with open(self.imu_file_path, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(imu_data)
+        with open(self.ft_file_path, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(ft_data)
 
 if __name__ == '__main__':
     try: 
-        STARTTIME = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        ftLogger()
+        Logger()
     except rospy.ROSInterruptException: pass
