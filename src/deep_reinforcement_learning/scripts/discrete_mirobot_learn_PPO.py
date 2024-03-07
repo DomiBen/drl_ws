@@ -5,10 +5,10 @@ import os
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
 ### Setting up parameters for the RL task ###
-TIMESTEPS = 500
+TIMESTEPS = 1000
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"New_Path_PPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_oldReward_PeakForces"
+MODELNAME = f"New_Path_PPO_custom_policy_{current_time}_gamma_0995_batch_1024_256NN_256NN_oldReward_PeakForces"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs"
 ###

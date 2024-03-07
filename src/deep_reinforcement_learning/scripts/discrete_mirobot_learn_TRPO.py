@@ -5,10 +5,10 @@ import os
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
 ### Setting up parameters for the RL task ###
-TIMESTEPS = 500 
+TIMESTEPS = 1000 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_oldReward_PeakForces"
+MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_noForces"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
@@ -25,7 +25,7 @@ policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=
 model = TRPO("MlpPolicy",
             gamma=0.995,
             batch_size = 512,           # default 128
-            #learning_rate=0.005,       # default 0.001
+            #learning_rate=0.0005,       # default 0.001
             env=env,
             verbose=1,
             policy_kwargs=policy_kwargs,
