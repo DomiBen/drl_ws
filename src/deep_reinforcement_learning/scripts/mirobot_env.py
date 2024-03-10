@@ -166,7 +166,7 @@ class MirobotEnv(gym.Env):
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
         
         #OLD VERSIONS
-        ft_reward = 35
+        ft_reward = 28.8
         #ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 3                                                                    #for imu usage, ONLY PEAK VALUES
         #ft_reward = (mirobot.average_force + mirobot.average_torque*70)* 2                                                             #for imu usage, ONLY AVG VALUES
         #ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_force + mirobot.average_torque*70)*2) * 1/2    #for imu usage, ALL VALUES
