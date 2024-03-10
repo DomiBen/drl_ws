@@ -8,17 +8,17 @@ from sensor_logger_node import Logger
 ### Setting up parameters for the RL task ###
 EPISODES = 100
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_custom_policy_gamma_0995_batch_32"
-model_dir = "drlsaves/models/TRPO_custom_policy_2024_02_22_22_05_05_gamma_0995_batch_512_256_512NN/245000"
+MODELNAME = f"TRPO_custom_policy_gamma_0995_batch_512_256NN"  
+model_dir = "drlsaves/models/New_Path_TRPO_custom_policy_2024_02_26_16_58_00_gamma_0995_batch_512_256NN_256NN_ScaledReward/513000"
 ###
-sensor_logger = Logger(MODELNAME)
+#sensor_logger = Logger(MODELNAME)
 env = MirobotEnv()
 env.reset()
 
 model = TRPO.load(model_dir, env=env)
 
 try:
-    sensor_logger.record = True
+    #sensor_logger.record = True
     for ep in range(EPISODES):
         obs, info = env.reset()
         for i in range(1, 1000):
@@ -40,7 +40,7 @@ try:
             print("Episode: ", ep)
             print("Timestep: ", i)
             print("\n")
-    sensor_logger.record = False
+    #sensor_logger.record = False
 except KeyboardInterrupt:
     print("[Mirobot TRPO Execution] Keyboard Interrupt")
     env.reset()

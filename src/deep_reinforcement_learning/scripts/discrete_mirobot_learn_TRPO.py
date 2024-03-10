@@ -8,7 +8,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 1000 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_peakForces"
+MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_allForces"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###

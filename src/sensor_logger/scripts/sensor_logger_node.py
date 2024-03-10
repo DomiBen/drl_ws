@@ -10,11 +10,11 @@ from geometry_msgs.msg import Pose, Vector3Stamped
 
 STARTTIME = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-def ft_logger(force, torque, linacc, angvel):
+def ft_logger(force, torque):
     # Define the file path
     file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/sensor_data_" + STARTTIME + ".csv"
     # Define the data to be written
-    data = [datetime.datetime.now().strftime("%H:%M:%S"), force, torque, linacc, angvel]
+    data = [datetime.datetime.now().strftime("%H:%M:%S"), force, torque]
     # Open the file in append mode
     with open(file_path, mode='a', newline='') as file:
         # Create a CSV writer object
@@ -69,7 +69,7 @@ class Logger():
         self.imu_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_recording_" + label + "_" + self.starttime + ".csv"
         self.ft_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/FT_recording_" + label + "_" + self.starttime + ".csv"
         #rospy setup 
-        rospy.init_node(NAME)
+        #rospy.init_node(NAME)
         print("ftLogger node started")
         rate = rospy.Rate(100)
         while(not rospy.is_shutdown()):

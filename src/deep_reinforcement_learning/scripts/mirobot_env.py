@@ -9,6 +9,7 @@ from urdf_parser_py.urdf import URDF
 from MirobotClient import *
 import random as r
 from sklearn import preprocessing
+from sensor_logger_node import ft_logger as log
 
 # Poses for the robot to reach
 START = [258, -30, 124, -0.0189, -0.7371, -0.1718, 0.6532]
@@ -128,11 +129,9 @@ class MirobotEnv(gym.Env):
         self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
-        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2    
-        #ft_reward = (mirobot.average_force + mirobot.average_torque*64) # war mal *2
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*20) * 1.5                                                                 #for imu usage, ONLY PEAK VALUES
-        #ft_reward = (mirobot.average_force + mirobot.average_torque*20)                                                             #for imu usage, ONLY AVG VALUES
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque * 60) * 2/3 + mirobot.average_force + mirobot.average_torque * 60                 #for imu usage, ALL VALUES
+        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2    
+        ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_force + mirobot.average_torque*70)*2) * 0.3
+        
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0: 
             dist_reward = 50
@@ -146,7 +145,7 @@ class MirobotEnv(gym.Env):
         else:
             orientation_reward = -20
         orientation_reward = orientation_reward * (75/max(50, distance)) # the further away from the goal, the less important is the orientation; maximum factor is 2 
-        # sensor_logger_node.add_data_to_csv(distance, distance_change, orientation_change, dist_reward, orientation_reward, ft_reward, dist_reward + orientation_reward - ft_reward)
+        #log(ft_reward, compare)
         reward = (dist_reward + orientation_reward)*min(1, 1*500000/self.stepcount) - ft_reward
         # print('[MirobotEnv] [getScaledReward] Reward: ', reward)
         return reward
