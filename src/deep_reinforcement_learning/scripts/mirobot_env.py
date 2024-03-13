@@ -51,7 +51,7 @@ class MirobotEnv(gym.Env):
         self.stepcount = 0
 
     def step(self, action):
-        #print('[MirobotEnv] [step] stepping with action: ', acti on)
+        #print('[MirobotEnv] [step] stepping with action: ', action)
         action_response = mirobot.executeAction(action)
         # creating reward
         self.reward = self.getScaledReward() #TODO: change to getScaledReward() for testing
@@ -129,10 +129,11 @@ class MirobotEnv(gym.Env):
         self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
-        #ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2    
+        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2    
         #ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_force + mirobot.average_torque*70)*2) * 0.3
-        ft_reward = (mirobot.average_force + mirobot.average_torque*70) * 1.08
+        #ft_reward = (mirobot.average_force + mirobot.average_torque*70) * 1.08
         #ft_reward = 28.8
+        
         #sensor_logger_node.write_to_csv(mirobot.average_force, mirobot.peak_force, mirobot.average_torque, mirobot.peak_torque)
         if distance_change > 0: 
             dist_reward = 50

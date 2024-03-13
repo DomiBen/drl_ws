@@ -35,8 +35,7 @@ def log_imu_data(f_peak, f_avg, t_peak, t_avg):
         # Write the values as a row to the CSV file
         writer.writerow(data)
 
-def log_action(action):
-    file_path = "/home/dominik/drl_ws/src/sensor_logger/logfiles/action_log_" + STARTTIME + ".csv"
+def log_action(action, file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/action_log.csv"):
     # Define the data to be written
     data = [action[0], action[1], action[2], action[3], action[4], action[5]]
     # Open the file in append mode
@@ -66,45 +65,44 @@ class Logger():
         self.angvel = 0
         self.max_angvel = 0
         # file paths
-        self.imu_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_recording_" + label + "_" + self.starttime + ".csv"
-        self.ft_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/FT_recording_" + label + "_" + self.starttime + ".csv"
+        self.imu_lin_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_LIN_recording_" + label + "_" + self.starttime + ".csv"
+        self.imu_ang_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_ANG_recording_" + label + "_" + self.starttime + ".csv"
+        self.force_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/T_recording_" + label + "_" + self.starttime + ".csv"
+        self.torque_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/F_recording_" + label + "_" + self.starttime + ".csv"
         #rospy setup 
         #rospy.init_node(NAME)
-        print("ftLogger node started")
-        rate = rospy.Rate(100)
-        while(not rospy.is_shutdown()):
-            if self.record:
-                self.write_data()
-            rate.sleep()
+        print("[sensor_logger_node]: Logger node started!")
+        #self.rate = rospy.Rate(100)
         
 
     def force_logger_callback(self, data):
-        self.force = (data.vector.x + data.vector.y + data.vector.z)/3
-        self.max_force = max(data.vector.x, data.vector.y, data.vector.z)
+        if self.record:
+            with open(self.force_file_path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        writer.writerow(row)
     
     def torque_logger_callback(self, data):
-        self.torque = (data.vector.x + data.vector.y + data.vector.z)/3
-        self.max_torque = max(data.vector.x, data.vector.y, data.vector.z)
+        if self.record:
+            with open(self.torque_file_path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        writer.writerow(row)
         
     def linacc_logger_callback(self, data):
-        self.linacc = (data.vector.x + data.vector.y + data.vector.z)/3
-        self.max_linacc = max(data.vector.x, data.vector.y, data.vector.z)
+        if self.record:
+            with open(self.imu_lin_file_path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        writer.writerow(row)
         
     def angvel_logger_callback(self, data):
-        self.angvel = (data.vector.x + data.vector.y + data.vector.z)/3
-        self.max_angvel = max(data.vector.x, data.vector.y, data.vector.z)
+        if self.record:
+            with open(self.imu_ang_file_path, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        writer.writerow(row)
     
-    def write_data(self):
-        # Define the data to be written
-        imu_data = [self.linacc, self.max_linacc, self.angvel, self.max_angvel]
-        ft_data = [self.force, self.max_force, self.torque, self.max_torque]
-        # Open the file in append mode
-        with open(self.imu_file_path, mode='a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(imu_data)
-        with open(self.ft_file_path, mode='a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(ft_data)
 
 if __name__ == '__main__':
     try: 
