@@ -8,7 +8,7 @@ from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckA
 TIMESTEPS = 1000 
 EPISODES = 10000
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_avgForces"
+MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_256NN_256NN_peakForces"
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
@@ -22,16 +22,16 @@ env.reset()
 
 policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=[256, 256]))
 
-'''model = TRPO("MlpPolicy",
+model = TRPO("MlpPolicy",
             gamma=0.995,
             batch_size = 512,           # default 128
             #learning_rate=0.0005,       # default 0.001
             env=env,
             verbose=1,
             policy_kwargs=policy_kwargs,
-            tensorboard_log=logdir)'''
+            tensorboard_log=logdir)
 
-model = TRPO.load("/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_12_19_06_45_gamma_0995_batch_512_256NN_256NN_avgForces/54000", env=env)
+#model = TRPO.load("/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_12_19_06_45_gamma_0995_batch_512_256NN_256NN_peakForces/54000", env=env)
 
 try:
     for i in range(1,EPISODES):
