@@ -8,11 +8,11 @@ from sensor_logger_node import Logger, log_action
 ### Setting up parameters for the RL task ###
 EPISODES = 1
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-MODELNAME = f"TRPO_nonWorking_peakForces_gamma0995_batch512_256NN"
+MODELNAME = f"TRPO_peakForces"
 
 '''ALLE GENUTZTEN MODELLE HIER:'''
-model_dir = "drlsaves/models/New_Path_TRPO_custom_policy_2024_02_26_16_58_00_gamma_0995_batch_512_256NN_256NN_ScaledReward/440000"
-#model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_02_29_08_14_37_gamma_0995_batch_512_256NN_256NN_oldReward_PeakForces/131000"
+model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_02_11_03_42_gamma_0995_batch_512_256NN_256NN_OldReward_PeakForces/500000"
+#model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_02_29_08_14_37_gamma_0995_batch_512_256NN_256NN_oldReward_PeakForces/145000"
 #model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_12_02_16_21_gamma_0995_batch_512_256NN_256NN_avgForces/120000"
 #model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_10_23_12_08_gamma_0995_batch_512_256NN_256NN_allForces/260000"
 ###
@@ -23,9 +23,9 @@ env.reset()
 model = TRPO.load(model_dir, env=env)
 
 try:
-    #sensor_logger.record = True
     for ep in range(EPISODES):
         obs, info = env.reset()
+        #sensor_logger.record = True
         for i in range(1, 1000):
             action, _states = model.predict(obs, deterministic=True)
             log_action(action)
@@ -36,12 +36,13 @@ try:
             if truncated:
                 print(f"Episode {ep} truncated after {i} timesteps")
                 break 
-        print("Reward: ", reward)
-        print("Terminated: ", terminated)
-        print("Truncated: ", truncated)
-        print("Episode: ", ep)
-        print("\n")
-    sensor_logger.record = False
+        #sensor_logger.record = False
+        #print("Reward: ", reward)
+        #print("Terminated: ", terminated)
+        #print("Truncated: ", truncated)
+        #print("Episode: ", ep)
+        #print("\n")
+    
     
 except KeyboardInterrupt:
     print("[Mirobot TRPO Execution] Keyboard Interrupt")

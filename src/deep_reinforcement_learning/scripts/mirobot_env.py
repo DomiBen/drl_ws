@@ -129,7 +129,7 @@ class MirobotEnv(gym.Env):
         self.min_orientation_diff = min(orientation_diff, self.min_orientation_diff)
         
         # force and torque multiplier calculated in src/sensor_logger/logfiles/IMU_Data_calculation.ods
-        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2    
+        ft_reward = (mirobot.peak_force + mirobot.peak_torque*64)* 2 
         #ft_reward = ((mirobot.peak_force + mirobot.peak_torque*64)*3 + (mirobot.average_force + mirobot.average_torque*70)*2) * 0.3
         #ft_reward = (mirobot.average_force + mirobot.average_torque*70) * 1.08
         #ft_reward = 28.8
