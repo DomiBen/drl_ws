@@ -1,5 +1,5 @@
 build/
 devel/
 logs/
-src/sensor_logger/logfiles/log.csv
+src/sensor_logger/logfiles/
 drlsaves/

@@ -47,7 +47,7 @@ def log_action(action, file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles
 
 
 class Logger():
-    def __init__(self, label):
+    def __init__(self, label = "default"):
         self.record = False
         self.starttime = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         #For Force/Torque Sensor readings
@@ -79,28 +79,28 @@ class Logger():
         if self.record:
             with open(self.force_file_path, mode='a', newline='') as file:
                         writer = csv.writer(file)
-                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        row = [data.vector.x, data.vector.y, data.vector.z]
                         writer.writerow(row)
     
     def torque_logger_callback(self, data):
         if self.record:
             with open(self.torque_file_path, mode='a', newline='') as file:
                         writer = csv.writer(file)
-                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        row = [data.vector.x, data.vector.y, data.vector.z]
                         writer.writerow(row)
         
     def linacc_logger_callback(self, data):
         if self.record:
             with open(self.imu_lin_file_path, mode='a', newline='') as file:
                         writer = csv.writer(file)
-                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        row = [data.vector.x, data.vector.y, data.vector.z]
                         writer.writerow(row)
         
     def angvel_logger_callback(self, data):
         if self.record:
             with open(self.imu_ang_file_path, mode='a', newline='') as file:
                         writer = csv.writer(file)
-                        row = [datetime.datetime.now().strftime("%H:%M:%S"), data.vector.x, data.vector.y, data.vector.z]
+                        row = [data.vector.x, data.vector.y, data.vector.z]
                         writer.writerow(row)
     
 
