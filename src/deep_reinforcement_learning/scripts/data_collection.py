@@ -4,10 +4,11 @@ import torch as th
 import os 
 import csv
 import datetime
-from sensor_logger_node import Logger
+from sensor_logger_node import Logger, log_episode_timesteps
 
 ### Setting up parameters for the RL task ###
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+TITLE = "timestep_logging"
 MODELNAME = f"TRPO_gamma_0995_batch_512_256NN_256NN"
 EPISODES = 100
 ###
@@ -19,7 +20,7 @@ model_dir_3 = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_202
 env = MirobotEnv()
 env.reset()
 
-peak_logger = Logger("LongtermTest_peakForces")
+peak_logger = Logger(TITLE + "_peakForces")
 model = TRPO.load(model_dir_1, env=env)
 for ep in range(EPISODES):
     obs, info = env.reset()
@@ -29,13 +30,15 @@ for ep in range(EPISODES):
         obs, reward, terminated, truncated, info = env.step(action)
         if terminated:
             print(f"Episode {ep} finished after {i} timesteps")
+            log_episode_timesteps(i, model = "TRPO_peakForces")
             break
         if truncated:
             print(f"Episode {ep} truncated after {i} timesteps")
+            log_episode_timesteps(i, model = "TRPO_peakForces")
             break 
     peak_logger.record = False
     
-avg_logger = Logger("LongtermTest_avgForces")
+avg_logger = Logger(TITLE + "_avgForces")
 model = TRPO.load(model_dir_2, env=env)
 for ep in range(EPISODES):
     obs, info = env.reset()
@@ -45,13 +48,15 @@ for ep in range(EPISODES):
         obs, reward, terminated, truncated, info = env.step(action)
         if terminated:
             print(f"Episode {ep} finished after {i} timesteps")
+            log_episode_timesteps(i, model = "TRPO_avgForces")
             break
         if truncated:
             print(f"Episode {ep} truncated after {i} timesteps")
+            log_episode_timesteps(i, model = "TRPO_avgForces")
             break
     avg_logger.record = False
     
-all_logger = Logger("LongtermTest_allForces")
+all_logger = Logger(TITLE + "_allForces")
 model = TRPO.load(model_dir_3, env=env)
 for ep in range(EPISODES):
     obs, info = env.reset()
@@ -61,13 +66,15 @@ for ep in range(EPISODES):
         obs, reward, terminated, truncated, info = env.step(action)
         if terminated:
             print(f"Episode {ep} finished after {i} timesteps")
+            log_episode_timesteps(i, model = "TRPO_allForces")
             break
         if truncated:
             print(f"Episode {ep} truncated after {i} timesteps")
+            log_episode_timesteps(i, model = "TRPO_allForces")
             break 
     all_logger.record = False
     
-reference_logger = Logger("LongtermTest_refForces")
+reference_logger = Logger(TITLE + "_refForces")
 model = TRPO.load(model_dir_3, env=env)
 for ep in range(EPISODES):
     obs, info = env.reset()

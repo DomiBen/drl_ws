@@ -45,6 +45,17 @@ def log_action(action, file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles
         # Write the values as a row to the CSV file
         writer.writerow(data)
 
+def log_episode_timesteps(ep, model = "default"):
+    # Define the data to be written
+    file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/" + model +"_episodes.csv"
+    data = [ep]
+    # Open the file in append mode
+    with open(file_path, mode='a', newline='') as file:
+        # Create a CSV writer object
+        writer = csv.writer(file)
+        # Write the values as a row to the CSV file
+        writer.writerow(data)
+
 
 class Logger():
     def __init__(self, label = "default"):
@@ -65,10 +76,10 @@ class Logger():
         self.angvel = 0
         self.max_angvel = 0
         # file paths
-        self.imu_lin_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_LIN_recording_" + label + "_" + self.starttime + ".csv"
-        self.imu_ang_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_ANG_recording_" + label + "_" + self.starttime + ".csv"
-        self.force_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/T_recording_" + label + "_" + self.starttime + ".csv"
-        self.torque_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/F_recording_" + label + "_" + self.starttime + ".csv"
+        self.imu_lin_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_LIN_recording_" + label + ".csv"
+        self.imu_ang_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_ANG_recording_" + label + ".csv"
+        self.force_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/T_recording_" + label + ".csv"
+        self.torque_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/F_recording_" + label + ".csv"
         #rospy setup 
         #rospy.init_node(NAME)
         print("[sensor_logger_node]: Logger node started!")
