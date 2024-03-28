@@ -1,12 +1,22 @@
 #!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This node is used to log sensor data from the force/torque sensor and the IMU sensor. Additional functions are available to log actions and episode timesteps. 
+The funtions and the logger class can be used with other classes.
+"""
+
 NAME = 'sensor_logger_node'
-#import rospy
 import csv
 import os 
 import time 
 import datetime
 import rospy
-from geometry_msgs.msg import Pose, Vector3Stamped
+from geometry_msgs.msg import Vector3Stamped
 
 STARTTIME = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -80,11 +90,7 @@ class Logger():
         self.imu_ang_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/IMU_ANG_recording_" + label + ".csv"
         self.force_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/T_recording_" + label + ".csv"
         self.torque_file_path = "/home/domi/drl_ws/src/sensor_logger/logfiles/recording/F_recording_" + label + ".csv"
-        #rospy setup 
-        #rospy.init_node(NAME)
         print("[sensor_logger_node]: Logger node started!")
-        #self.rate = rospy.Rate(100)
-        
 
     def force_logger_callback(self, data):
         if self.record:

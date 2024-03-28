@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This Server is used to control the MuJoCo simulation of the Mirobot. The server provides services to set the joint angles and the cartesian pose of the robot.
+"""
+
 NAME = 'MirobotServer'
 import math
 import rospy
@@ -11,14 +21,18 @@ from tf.transformations import euler_from_quaternion
 from urdf_parser_py.urdf import URDF
 from pykdl_utils.kdl_kinematics import KDLKinematics
 
-
 sequence = 0
 #load robopt model from ros poarameter server and creating KDLKinematiocs class
 robot = URDF.from_parameter_server()
 kdl_kin = KDLKinematics(robot, "link1", "link61")
 
-class ServiceServer(): 
+class ServiceServer():
+    ''' 
+    This class provides the services to control the Mirobot. The services are used to set the joint angles and the cartesian pose of the robot. The class also provides a service to move the robot to the home position. 
+    The Cartesian Services are not yet implemented completley and need to be tested.
+    ''' 
     def __init__(self):
+        #setting up Publisher and Subscriber
         self.pub = rospy.Publisher('/joint_position_controller/command', JointTrajectory, queue_size = 10)
         self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
@@ -145,6 +159,7 @@ class ServiceServer():
         return True
 
 class Mirobot():
+    ''' This class stores the current joint states and the current pose of the robot. It also stores the maximum and minimum angles of the robot.'''
     def __init__(self):
         self.min_angles_deg = [-110, -35, -120, -180, -200, -360]
         self.min_angles_rad = [i*math.pi/180 for i in self.min_angles_deg]

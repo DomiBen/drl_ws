@@ -1,25 +1,32 @@
+#!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This script is used to execute the TRPO model on the Mirobot
+"""
 from mirobot_env import *
 from sb3_contrib import TRPO
-import torch as th
-import os 
 import datetime
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
 from sensor_logger_node import Logger, log_action
+
 ### Setting up parameters for the RL task ###
 EPISODES = 1
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 MODELNAME = f"TRPO_peakForces"
-
-'''ALLE GENUTZTEN MODELLE HIER:'''
+### Model to be executed
 model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_02_11_03_42_gamma_0995_batch_512_256NN_256NN_OldReward_PeakForces/500000"
-#model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_02_29_08_14_37_gamma_0995_batch_512_256NN_256NN_oldReward_PeakForces/145000"
 #model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_12_02_16_21_gamma_0995_batch_512_256NN_256NN_avgForces/120000"
 #model_dir = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_10_23_12_08_gamma_0995_batch_512_256NN_256NN_allForces/260000"
 ###
+
 sensor_logger = Logger(MODELNAME)
 env = MirobotEnv()
 env.reset()
-
 model = TRPO.load(model_dir, env=env)
 
 try:
@@ -36,13 +43,6 @@ try:
             if truncated:
                 print(f"Episode {ep} truncated after {i} timesteps")
                 break 
-        #sensor_logger.record = False
-        #print("Reward: ", reward)
-        #print("Terminated: ", terminated)
-        #print("Truncated: ", truncated)
-        #print("Episode: ", ep)
-        #print("\n")
-    
     
 except KeyboardInterrupt:
     print("[Mirobot TRPO Execution] Keyboard Interrupt")

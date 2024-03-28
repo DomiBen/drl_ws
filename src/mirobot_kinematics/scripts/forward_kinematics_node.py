@@ -1,10 +1,18 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This node is used to publish the cartesian pose of the Mirobot. The node subscribes to the joint_states topic and uses the forward kinematics to calculate the cartesian pose.
+"""
 
 import rospy
-import math
 from urdf_parser_py.urdf import URDF
 from pykdl_utils.kdl_kinematics import KDLKinematics
-from tf.transformations import quaternion_from_matrix, euler_from_matrix, quaternion_from_euler
+from tf.transformations import quaternion_from_matrix
 from tf.transformations import translation_from_matrix
 from geometry_msgs.msg import Pose
 from geometry_msgs.msg import Point
@@ -33,6 +41,7 @@ def callback(data):
     # linear position in kartesian coordinates
     point = Point()
     linear = translation_from_matrix(kdl_pose)
+    # linear position in kartesian coordinates, offset to the endeffector
     point.x =  linear[0] + 0.0035
     point.y =  linear[1] - 0.011295241815272498
     point.z =  linear[2]
@@ -40,10 +49,6 @@ def callback(data):
     # angular
     # angular position in quaternions
     quat = Quaternion()
-    
-    '''angular_e = euler_from_matrix(kdl_pose)
-    angular_e = [angular_e[0] - math.pi/2 , angular_e[1], angular_e[2] + math.pi / 2]
-    angular_q = quaternion_from_euler(angular_e[0], angular_e[1], angular_e[2])'''
     
     angular_q = quaternion_from_matrix(kdl_pose)
     
@@ -55,7 +60,7 @@ def callback(data):
     pub.publish(pose)
     pass
 
-if __name__ == '__main__':
+if _s_name__ == '__main__':
     try:
         publishPose()
     except rospy.ROSInterruptException:

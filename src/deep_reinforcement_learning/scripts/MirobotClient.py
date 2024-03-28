@@ -1,4 +1,13 @@
 #!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This script is used to control the Mirobot robot arm via ROS services. It is used to connect it with the deep reinforcement learning environment.
+"""
 NAME = 'MirobotClient'
 
 import rospy
@@ -12,26 +21,26 @@ from geometry_msgs.msg import Pose, Vector3Stamped
 from trajectory_planner.srv import *
 import numpy as np
 
-LOG_IMU_DATA = False
-
 class MirobotClient():
     def __init__(self):
-        #self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
+        # setting up the subscribers
         self.pose_sub = rospy.Subscriber('/endeffector_pose', Pose, self.pose_callback)
         self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.joint_callback)
         self.current_point = None
         self.current_orientation = None
         self.current_joint_states = None
+        # variables for enabling/disabling the force/torque recording
         self.record = False
-        #For FT-Sensor usage
-        #self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_callback)
+        # variables for storing the force/torque values
         self.force = np.array([0], dtype=np.float32)
         self.peak_force = 0
         self.average_force = 0
-        #self.torque_sub = rospy.Subscriber("/torque", Vector3Stamped, self.torque_callback)
         self.torque = np.array([0], dtype=np.float32)
         self.peak_torque = 0
         self.average_torque = 0
+        ## For FT-sensor usage
+        #self.force_sub = rospy.Subscriber("/force", Vector3Stamped, self.force_callback)
+        #self.torque_sub = rospy.Subscriber("/torque", Vector3Stamped, self.torque_callback)
         #For IMU usage
         self.lin_sub = rospy.Subscriber("/linacc", Vector3Stamped, self.force_callback)
         self.ang_sub = rospy.Subscriber("/angvel", Vector3Stamped, self.torque_callback)
@@ -39,12 +48,9 @@ class MirobotClient():
         rospy.init_node(NAME)
         rospy.wait_for_service("/MirobotServer/SetJointRelativeCmd")
         rospy.wait_for_service("/MirobotServer/SetJointAbsoluteCmd")
-
-        self.logfile = "/home/domi/drl_ws/src/sensor_logger/logfiles/IMU_log.csv"
         if not os.path.exists(self.logfile):
             os.makedirs(os.path.dirname(self.logfile), exist_ok=True)
 
-    
     def force_callback(self, data): 
         if self.record:
             force_list = [data.vector.x, data.vector.y, data.vector.z]
@@ -80,31 +86,23 @@ class MirobotClient():
     
     def executeAction(self, action):
         self.reset_ft_record()
-        self.record = True
-        #Service call
-        #print("[MirobotClient] Calling Service")
+        self.record = True #start recording force/torque values
+        #Service call to move the robot joints
         try:
             move_joint_service = rospy.ServiceProxy("/MirobotServer/SetJointRelativeCmd", SetJointCmd)
             req = SetJointCmdRequest()
             # Map the values to the new range
             mapped_actions = np.interp(action, [0, 1, 2], [-1, 0, 1])
-            # type(action) > np.ndarray
-            #print("[MirobotClient] [executeAction] Action: ", mapped_actions)
+            # type(action) -> np.ndarray
             req.jointAngle_1 = mapped_actions[0]/2
             req.jointAngle_2 = mapped_actions[1]
             req.jointAngle_3 = mapped_actions[2]
             req.jointAngle_4 = mapped_actions[3]
             req.jointAngle_5 = mapped_actions[4]
             req.jointAngle_6 = mapped_actions[5]
-            #if math.isnan(action[6]):
-            #    return -1
             req.speed = 1000
             response = move_joint_service(req).result
-            self.record = False
-
-            if LOG_IMU_DATA:
-                self.log_sensor_data(self.peak_force, self.average_force/3, self.peak_torque, self.average_torque/3)
-            
+            self.record = False # stop recording force/torque values
             return response
         except rospy.ServiceException as e:
             print("[MirobotClient] [executeAction] Service call failed: %s" %e)
@@ -132,14 +130,3 @@ class MirobotClient():
         self.average_force = 0
         self.peak_torque = 0
         self.average_torque = 0
-
-    def log_sensor_data(self, f_peak, f_avg, t_peak, t_avg):
-        # Define the file path
-        # Define the data to be written
-        data = [f_peak, f_avg, t_peak, t_avg]
-        # Open the file in append mode
-        with open(self.logfile, mode='a', newline='') as file:
-            # Create a CSV writer object
-            writer = csv.writer(file)
-            # Write the values as a row to the CSV file
-            writer.writerow(data)

@@ -3,7 +3,7 @@ from sb3_contrib import TRPO
 import torch as th
 import os 
 import datetime
-from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
+
 ### Setting up parameters for the RL task ###
 TIMESTEPS = 1000 
 EPISODES = 10000
@@ -12,16 +12,17 @@ MODELNAME = f"New_Path_TRPO_custom_policy_{current_time}_gamma_0995_batch_512_25
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs/"
 ###
-if not os.path.exists(models_dir):
+if not os.path.exists(models_dir):  # create the directory if it does not exist
     os.makedirs(models_dir)
 if not os.path.exists(logdir):
     os.makedirs(logdir)
 
 env = MirobotEnv()
 env.reset()
-
+# defining the policy network
 policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=[256, 256]))
 
+# in case you want to create a new model
 model = TRPO("MlpPolicy",
             gamma=0.995,
             batch_size = 512,           # default 128
@@ -31,6 +32,7 @@ model = TRPO("MlpPolicy",
             policy_kwargs=policy_kwargs,
             tensorboard_log=logdir)
 
+# in case you want to continue training a model
 #model = TRPO.load("/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_12_19_06_45_gamma_0995_batch_512_256NN_256NN_peakForces/54000", env=env)
 
 try:

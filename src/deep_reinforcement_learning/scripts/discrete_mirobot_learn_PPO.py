@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This script is used to train the Mirobot using the PPO algorithm
+"""
+
 from mirobot_env import *
 from stable_baselines3 import PPO
 import torch as th
@@ -12,14 +23,15 @@ MODELNAME = f"New_Path_PPO_custom_policy_{current_time}_gamma_0995_batch_1024_25
 models_dir = "drlsaves/models/"+MODELNAME
 logdir = "drlsaves/rllogs"
 ###
-if not os.path.exists(models_dir):
+
+if not os.path.exists(models_dir):  # create the directory if it does not exist
     os.makedirs(models_dir)
 if not os.path.exists(logdir):
     os.makedirs(logdir)
 
 env = MirobotEnv()
 env.reset()
-
+# defining the policy network
 policy_kwargs = dict(activation_fn= th.nn.ReLU, net_arch=dict(pi=[256, 256], vf=[256, 256]))
 
 model = PPO('MlpPolicy', 
@@ -30,6 +42,7 @@ model = PPO('MlpPolicy',
             policy_kwargs = policy_kwargs,
             verbose = 1,
             tensorboard_log = logdir)
+
 try:
     for i in range(1,EPISODES):
         model.learn(total_timesteps = TIMESTEPS, reset_num_timesteps= False, tb_log_name=MODELNAME)

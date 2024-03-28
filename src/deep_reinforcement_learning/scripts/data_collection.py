@@ -1,8 +1,15 @@
+#!/usr/bin/env python
+# =============================================================================
+# Created By  : Dominik Benchert
+# 
+# Last Update : April 2024
+# License     : BSD-3
+# =============================================================================
+"""
+This script is used to collect Snesordata from the Mirobot using the RL-Models
+"""
 from mirobot_env import *
 from sb3_contrib import TRPO
-import torch as th
-import os 
-import csv
 import datetime
 from sensor_logger_node import Logger, log_episode_timesteps
 
@@ -10,7 +17,7 @@ from sensor_logger_node import Logger, log_episode_timesteps
 current_time = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 TITLE = "timestep_logging"
 MODELNAME = f"TRPO_gamma_0995_batch_512_256NN_256NN"
-EPISODES = 100
+EPISODES = 100  # Number of episodes to run
 ###
 model_dir_1 = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_02_11_03_42_gamma_0995_batch_512_256NN_256NN_OldReward_PeakForces/500000"
 model_dir_2 = "/home/domi/drl_ws/drlsaves/models/New_Path_TRPO_custom_policy_2024_03_12_02_16_21_gamma_0995_batch_512_256NN_256NN_avgForces/120000"
